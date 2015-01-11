@@ -24,8 +24,8 @@ public slots:
     void timedFollowRequest();
 
 private:
-QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
-QTimer *timer = new QTimer(this);
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
+    QTimer *timer = new QTimer(this);
 };
 
 #endif // JSON_H
