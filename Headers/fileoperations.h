@@ -11,12 +11,12 @@ public:
     explicit fileOperations(QObject *parent = 0);
     void writeStreamersToDisk(QStringList);
     ~fileOperations();
+    void readStreamersFromDisk();
 
 signals:
 
 public slots:
 private:
-
 };
 
 #endif // FILEOPERATIONS_H

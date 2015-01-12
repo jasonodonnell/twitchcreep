@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect((&streamsFollowed),SIGNAL(dataReady(QByteArray)),this,SLOT(streamersReady(QByteArray)));
+    connect((&networking),SIGNAL(dataReady(QByteArray)),this,SLOT(requestReady(QByteArray)));
 }
 
 MainWindow::~MainWindow()
@@ -14,8 +14,19 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::streamersReady(QByteArray data)
+void MainWindow::requestReady(QByteArray data)
 {
     QStringList streamers = streamsFollowed.getStreamersList(data);
     streamerFile.writeStreamersToDisk(streamers);
+    streamerFile.readStreamersFromDisk();
+}
+
+void MainWindow::on_actionAdd_User_triggered()
+{
+    qDebug() << "File";
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    delete ui;
 }

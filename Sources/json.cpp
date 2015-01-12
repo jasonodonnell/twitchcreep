@@ -3,26 +3,16 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QObject>
+#include <QStringList>
 
 json::json(QObject *parent) : QObject(parent)
 {
-    QString url = "https://api.twitch.tv/kraken/users/L0veWizard/follows/channels";
-    this->makeRequest(url);
-    connect(networkManager,SIGNAL(finished(QNetworkReply*)),this,SLOT(doneReading(QNetworkReply*)));
-    connect(timer,SIGNAL(timeout()),this,SLOT(timedFollowRequest()));
-    timer->start(60000);
 }
 
 json::~json()
 {
 
 }
-
-void json::makeRequest(QString url)
-{
-    networkManager->get(QNetworkRequest(QUrl(url)));
-}
-
 
 QStringList json::getStreamersList(QByteArray data)
 {
@@ -40,16 +30,4 @@ QStringList json::getStreamersList(QByteArray data)
         streamers << url.value(url.length() - 1);
     }
     return streamers;
-}
-
-void json::doneReading(QNetworkReply *reply)
-{
-    QByteArray replyData = reply->readAll();
-    emit(dataReady(replyData));
-}
-
-void json::timedFollowRequest()
-{
-    QString url = "https://api.twitch.tv/kraken/users/L0veWizard/follows/channels";
-    this->makeRequest(url);
 }
