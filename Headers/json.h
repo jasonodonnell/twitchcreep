@@ -15,6 +15,11 @@ signals:
 public slots:
 
 private:
+<<<<<<< HEAD
+=======
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
+    QTimer *timer = new QTimer(this);
+>>>>>>> master
 };
 
 #endif // JSON_H
