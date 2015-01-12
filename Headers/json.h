@@ -16,10 +16,15 @@ public slots:
 
 private:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
     QTimer *timer = new QTimer(this);
 >>>>>>> master
+=======
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
+    QTimer *timer = new QTimer(this);
+>>>>>>> FETCH_HEAD
 };
 
 #endif // JSON_H
