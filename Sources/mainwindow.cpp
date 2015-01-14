@@ -16,9 +16,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::requestReady(QByteArray data)
 {
-    QStringList streamers = streamsFollowed.getStreamersList(data);
-    streamerFile.writeStreamersToDisk(streamers);
-    streamerFile.readStreamersFromDisk();
+    qDebug() << data;
+    jsonParser.determineDataSource(data);
 }
 
 void MainWindow::on_actionAdd_User_triggered()
@@ -29,4 +28,25 @@ void MainWindow::on_actionAdd_User_triggered()
 void MainWindow::on_actionExit_triggered()
 {
     delete ui;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+   networking.makeFollowRequest("L0veWizard");
+
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    networking.makeFeaturedRequest();
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    networking.makeTopGamesRequest();
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    networking.makeStreamRequest("merlinidota");
 }
