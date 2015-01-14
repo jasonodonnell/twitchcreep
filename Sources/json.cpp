@@ -24,24 +24,10 @@ void json::determineDataSource(QByteArray data)
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
     QJsonObject json = jsonData.object();
     QStringList keys = json.keys();
-
-    if (keys.contains("stream"))
-    {
-        qDebug() << "Stream button";
-    }
-    else if (keys.contains("featured"))
-    {
-        qDebug() << "Featured button";
-    }
-    else if (keys.contains("top"))
-    {
-        qDebug() << "Top button";
-    }
-    else if (keys.contains("follows"))
-    {
-        qDebug() << "Follows button";
-    }
-}
+    //Last value in the array is the type of data.
+    int last = keys.length()-1;
+    qDebug() << keys[last];
+ }
 
 QStringList json::getStreamerList(QByteArray data)
 {
