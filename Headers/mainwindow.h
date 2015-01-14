@@ -22,10 +22,15 @@ private slots:
     void requestReady(QByteArray data);
     void on_actionAdd_User_triggered();
     void on_actionExit_triggered();
+    void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_4_clicked();
 
 private:
     Ui::MainWindow *ui;
-    json streamsFollowed;
+    json jsonParser;
     fileOperations streamerFile;
     networkOperations networking;
 

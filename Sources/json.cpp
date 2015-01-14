@@ -4,6 +4,7 @@
 #include <QJsonArray>
 #include <QObject>
 #include <QStringList>
+#include <QDebug>
 
 json::json(QObject *parent) : QObject(parent)
 {
@@ -14,7 +15,35 @@ json::~json()
 
 }
 
-QStringList json::getStreamersList(QByteArray data)
+//There should definitely be a better way of doing this.  I'm not
+//familiar enough with the framework yet to know.  QSignalMapper
+//looks promising to bind each signal to the object.
+//For now I will just parse the data and determine what kind it is.
+void json::determineDataSource(QByteArray data)
+{
+    QJsonDocument jsonData = QJsonDocument::fromJson(data);
+    QJsonObject json = jsonData.object();
+    QStringList keys = json.keys();
+
+    if (keys.contains("stream"))
+    {
+        qDebug() << "Stream button";
+    }
+    else if (keys.contains("featured"))
+    {
+        qDebug() << "Featured button";
+    }
+    else if (keys.contains("top"))
+    {
+        qDebug() << "Top button";
+    }
+    else if (keys.contains("follows"))
+    {
+        qDebug() << "Follows button";
+    }
+}
+
+QStringList json::getStreamerList(QByteArray data)
 {
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
     QJsonObject json = jsonData.object();
