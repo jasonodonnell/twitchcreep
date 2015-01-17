@@ -32,7 +32,8 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_pushButton_clicked()
 {
-   networking.makeFollowRequest("L0veWizard");
+    qDebug() << networking.checkNetworkConnection();
+    networking.makeFollowRequest("L0veWizard");
 
 }
 
@@ -49,4 +50,10 @@ void MainWindow::on_pushButton_3_clicked()
 void MainWindow::on_pushButton_4_clicked()
 {
     networking.makeStreamRequest("merlinidota");
+
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    networking.checkNetworkConnection();
 }
