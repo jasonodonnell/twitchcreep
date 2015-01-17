@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -7,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     connect((&networking),SIGNAL(dataReady(QByteArray)),this,SLOT(requestReady(QByteArray)));
+    this->changeStatusBar();
+
 
 }
 
@@ -17,8 +20,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::requestReady(QByteArray data)
 {
-    qDebug() << data;
-    jsonParser.determineDataSource(data);
+    QStringList streamers;
+    QString jsonType = jsonParser.determineDataSource(data);
+    qDebug() << jsonType;
+    if (jsonType == "follows")
+        streamers = jsonParser.getStreamerFollowedList(data);
+    else if (jsonType == "featured")
+        jsonParser.getFeaturedStreams(data);
 }
 
 void MainWindow::on_actionAdd_User_triggered()
@@ -33,33 +41,19 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_pushButton_clicked()
 {
-    qDebug() << networking.checkNetworkConnection();
-    networking.makeFollowRequest("L0veWizard");
-
-}
-
-void MainWindow::on_pushButton_2_clicked()
-{
     networking.makeFeaturedRequest();
-}
-
-void MainWindow::on_pushButton_3_clicked()
-{
-    networking.makeTopGamesRequest();
-}
-
-void MainWindow::on_pushButton_4_clicked()
-{
-    networking.makeStreamRequest("merlinidota");
-
-}
-
-void MainWindow::on_pushButton_5_clicked()
-{
-    networking.checkNetworkConnection();
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
     qDebug() << index;
+}
+
+void MainWindow::changeStatusBar()
+{
+    int connection = networking.checkNetworkConnection();
+    if (connection == 0)
+        statusBar()->showMessage(tr("Status: Online"));
+    else
+        statusBar()->showMessage(tr("Status: Offline"));
 }

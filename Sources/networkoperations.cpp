@@ -15,7 +15,6 @@ networkOperations::networkOperations(QObject *parent) : QObject(parent)
 void networkOperations::makeRequest(QString url)
 {
     int connection = this->checkNetworkConnection();
-    qDebug() << connection;
     if (connection == 0)
         networkManager->get(QNetworkRequest(QUrl(url)));
     else
@@ -65,13 +64,9 @@ int networkOperations::checkNetworkConnection()
 {
     QNetworkConfigurationManager mgr;
     if(mgr.isOnline())
-    {
         return 0;
-    }
     else
-    {
         return 1;
-    }
 }
 
 networkOperations::~networkOperations()
