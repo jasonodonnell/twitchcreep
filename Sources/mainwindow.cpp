@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     connect((&networking),SIGNAL(dataReady(QByteArray)),this,SLOT(requestReady(QByteArray)));
+
 }
 
 MainWindow::~MainWindow()
@@ -56,4 +57,9 @@ void MainWindow::on_pushButton_4_clicked()
 void MainWindow::on_pushButton_5_clicked()
 {
     networking.checkNetworkConnection();
+}
+
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    qDebug() << index;
 }
