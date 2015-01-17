@@ -7,8 +7,9 @@ class json : public QObject
     Q_OBJECT
 public:
     explicit json(QObject *parent = 0);
-    void determineDataSource(QByteArray);
-    QStringList getStreamerList(QByteArray);
+    QString determineDataSource(QByteArray);
+    QStringList getStreamerFollowedList(QByteArray);
+    void getFeaturedStreams(QByteArray data);
     ~json();
 
 signals:
@@ -16,11 +17,6 @@ signals:
 public slots:
 
 private:
-<<<<<<< HEAD
-=======
-    QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
-    QTimer *timer = new QTimer(this);
->>>>>>> FETCH_HEAD
 };
 
 #endif // JSON_H

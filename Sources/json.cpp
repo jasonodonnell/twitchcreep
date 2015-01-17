@@ -19,17 +19,17 @@ json::~json()
 //familiar enough with the framework yet to know.  QSignalMapper
 //looks promising to bind each signal to the object.
 //For now I will just parse the data and determine what kind it is.
-void json::determineDataSource(QByteArray data)
+QString json::determineDataSource(QByteArray data)
 {
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
     QJsonObject json = jsonData.object();
     QStringList keys = json.keys();
     //Last value in the array is the type of data.
     int last = keys.length()-1;
-    qDebug() << keys[last];
+    return keys[last];
  }
 
-QStringList json::getStreamerList(QByteArray data)
+QStringList json::getStreamerFollowedList(QByteArray data)
 {
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
     QJsonObject json = jsonData.object();
@@ -46,3 +46,32 @@ QStringList json::getStreamerList(QByteArray data)
     }
     return streamers;
 }
+
+void json::getFeaturedStreams(QByteArray data)
+{
+    QJsonDocument jsonData = QJsonDocument::fromJson(data);
+    QJsonObject json = jsonData.object();
+    QJsonArray array = json["featured"].toArray();
+    for(int i = 0; i != array.count(); ++i)
+    {
+        QJsonObject featured = array[i].toObject();
+        QJsonValue streamVal = featured.value("stream");
+        QJsonObject streamObj = streamVal.toObject();
+
+        QJsonValue channelVal = streamObj.value("channel");
+        QJsonObject channelObj = channelVal.toObject();
+
+        QString game = streamObj.value("game").toString();
+        int viewers = streamObj.value("viewers").toInt();
+        QString status = channelObj.value("status").toString();
+        QString displayName = channelObj.value("display_name").toString();
+        QString logo = channelObj.value("logo").toString();
+        QString url = channelObj.value("url").toString();
+        qDebug() << "###################################";
+        qDebug() << "User:" << displayName << endl <<
+                    "Game:" << game << endl <<
+                    "Status:" << status << endl <<
+                    "Viewers:" << viewers;
+    }
+}
+
