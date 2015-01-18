@@ -20,18 +20,34 @@ MainWindow::~MainWindow()
 
 void MainWindow::requestReady(QByteArray data)
 {
-    QStringList streamers;
     QString jsonType = jsonParser.determineDataSource(data);
-    qDebug() << jsonType;
 
     if (jsonType == "follows")
-        streamers = jsonParser.getStreamerFollowedList(data);
+    {
+        QStringList follows;
+        follows = jsonParser.getStreamerFollowedList(data);
+        qDebug() << follows;
+    }
     else if (jsonType == "featured")
-        jsonParser.getFeaturedStreamData(data);
+    {
+        QList<QStringList> streamerList;
+        streamerList << jsonParser.getFeaturedStreamData(data);
+        qDebug() << streamerList;
+    }
     else if (jsonType == "stream")
-        jsonParser.getStreamData(data);
+    {
+        QStringList streamer;
+        streamer << jsonParser.getStreamData(data);
+        qDebug() << streamer;
+    }
+    else if (jsonType == "top")
+    {
+        QList<QStringList> topGames;
+        topGames << jsonParser.getTopGames(data);
+        qDebug() << topGames;
+    }
     else
-        qDebug() << "Not sure what kind of data this is.";
+        qDebug() << "Unknown data";
 }
 
 void MainWindow::on_actionAdd_User_triggered()
@@ -46,7 +62,11 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_pushButton_clicked()
 {
-    networking.makeStreamRequest("ppd");
+//    networking.makeStreamRequest("dotastarladder_en");
+//    networking.makeStreamRequest("L0veWizard");
+//    networking.makeFeaturedRequest();
+//    networking.makeFollowRequest("L0veWizard");
+    networking.makeTopGamesRequest();
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)

@@ -10,8 +10,9 @@ public:
     QString determineDataSource(QByteArray);
     QStringList getStreamerFollowedList(QByteArray);
     ~json();
-    void getStreamData(QByteArray data);
-    void getFeaturedStreamData(QByteArray data);
+    QStringList getStreamData(QByteArray data);
+    QList<QStringList> getFeaturedStreamData(QByteArray data);
+    QList<QStringList> getTopGames(QByteArray data);
 signals:
 
 public slots:
