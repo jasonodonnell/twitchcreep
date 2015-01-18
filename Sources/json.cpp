@@ -15,10 +15,6 @@ json::~json()
 
 }
 
-//There should definitely be a better way of doing this.  I'm not
-//familiar enough with the framework yet to know.  QSignalMapper
-//looks promising to bind each signal to the object.
-//For now I will just parse the data and determine what kind it is.
 QString json::determineDataSource(QByteArray data)
 {
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
@@ -47,55 +43,91 @@ QStringList json::getStreamerFollowedList(QByteArray data)
     return streamers;
 }
 
-void json::getFeaturedStreamData(QByteArray data)
+QList<QStringList> json::getFeaturedStreamData(QByteArray data)
 {
+    QList<QStringList> streamerList;
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
     QJsonObject json = jsonData.object();
     QJsonArray array = json["featured"].toArray();
-    for(int i = 0; i != array.count(); ++i)
+    if (array.isEmpty() != true)
+        for(int i = 0; i != array.count(); ++i)
+        {
+            QStringList streamer;
+            QJsonObject featured = array[i].toObject();
+            QJsonValue streamVal = featured.value("stream");
+            QJsonObject streamObj = streamVal.toObject();
+
+            QJsonValue channelVal = streamObj.value("channel");
+            QJsonObject channelObj = channelVal.toObject();
+
+            QString game = streamObj.value("game").toString();
+            QString viewers = QString::number(streamObj.value("viewers").toInt());
+            QString status = channelObj.value("status").toString();
+            QString displayName = channelObj.value("display_name").toString();
+            QString logo = channelObj.value("logo").toString();
+            QString url = channelObj.value("url").toString();
+            streamer << game << viewers << status << displayName << logo << url;
+            streamerList << streamer;
+    }
+    return streamerList;
+}
+
+QStringList json::getStreamData(QByteArray data)
+{
+    QJsonDocument jsonData = QJsonDocument::fromJson(data);
+    QJsonObject json = jsonData.object();
+    QJsonValue streamVal = json.value("stream");
+    if (streamVal.isNull())
     {
-        QJsonObject featured = array[i].toObject();
-        QJsonValue streamVal = featured.value("stream");
+        QStringList streamNull;
+        return streamNull;
+    }
+    else
+    {
         QJsonObject streamObj = streamVal.toObject();
 
         QJsonValue channelVal = streamObj.value("channel");
         QJsonObject channelObj = channelVal.toObject();
 
         QString game = streamObj.value("game").toString();
-        int viewers = streamObj.value("viewers").toInt();
+        QString viewers = QString::number(streamObj.value("viewers").toInt());
         QString status = channelObj.value("status").toString();
         QString displayName = channelObj.value("display_name").toString();
         QString logo = channelObj.value("logo").toString();
         QString url = channelObj.value("url").toString();
-        qDebug() << "###################################";
-        qDebug() << "User:" << displayName << endl <<
-                    "Game:" << game << endl <<
-                    "Status:" << status << endl <<
-                    "Viewers:" << viewers;
+        QStringList streamer;
+        streamer << game << viewers << status << displayName << logo << url;
+        return streamer;
     }
 }
 
-void json::getStreamData(QByteArray data)
+QList<QStringList> json::getTopGames(QByteArray data)
 {
+    QList<QStringList> topList;
+
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
     QJsonObject json = jsonData.object();
-    QJsonValue streamVal = json.value("stream");
-    QJsonObject streamObj = streamVal.toObject();
+    QJsonArray array = json["top"].toArray();
 
-    QJsonValue channelVal = streamObj.value("channel");
-    QJsonObject channelObj = channelVal.toObject();
+    if (array.isEmpty() != true)
+        for(int i = 0; i != array.count(); ++i)
+        {
+            QStringList topGames;
+            QJsonObject topObj = array[i].toObject();
+            QString viewers = QString::number(topObj.value("viewers").toInt());
 
-    QString game = streamObj.value("game").toString();
-    int viewers = streamObj.value("viewers").toInt();
-    QString status = channelObj.value("status").toString();
-    QString displayName = channelObj.value("display_name").toString();
-    QString logo = channelObj.value("logo").toString();
-    QString url = channelObj.value("url").toString();
-    qDebug() << "###################################";
-    qDebug() << "User:" << displayName << endl <<
-                "Game:" << game << endl <<
-                "Status:" << status << endl <<
-                "Viewers:" << viewers;
+            QJsonValue gameVal = topObj.value("game");
+            QJsonObject gameObj = gameVal.toObject();
+
+            QString game = gameObj.value("name").toString();
+
+            QJsonValue logoVal = gameObj.value("logo");
+            QJsonObject logoObj = logoVal.toObject();
+
+            QString smallLogo = logoObj.value("small").toString();
+
+            topGames << game << viewers << smallLogo;
+            topList << topGames;
+        }
+    return topList;
 }
-
-
