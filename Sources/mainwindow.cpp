@@ -23,10 +23,15 @@ void MainWindow::requestReady(QByteArray data)
     QStringList streamers;
     QString jsonType = jsonParser.determineDataSource(data);
     qDebug() << jsonType;
+
     if (jsonType == "follows")
         streamers = jsonParser.getStreamerFollowedList(data);
     else if (jsonType == "featured")
-        jsonParser.getFeaturedStreams(data);
+        jsonParser.getFeaturedStreamData(data);
+    else if (jsonType == "stream")
+        jsonParser.getStreamData(data);
+    else
+        qDebug() << "Not sure what kind of data this is.";
 }
 
 void MainWindow::on_actionAdd_User_triggered()
@@ -41,7 +46,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_pushButton_clicked()
 {
-    networking.makeFeaturedRequest();
+    networking.makeStreamRequest("ppd");
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)

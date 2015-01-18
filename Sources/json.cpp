@@ -47,7 +47,7 @@ QStringList json::getStreamerFollowedList(QByteArray data)
     return streamers;
 }
 
-void json::getFeaturedStreams(QByteArray data)
+void json::getFeaturedStreamData(QByteArray data)
 {
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
     QJsonObject json = jsonData.object();
@@ -74,4 +74,28 @@ void json::getFeaturedStreams(QByteArray data)
                     "Viewers:" << viewers;
     }
 }
+
+void json::getStreamData(QByteArray data)
+{
+    QJsonDocument jsonData = QJsonDocument::fromJson(data);
+    QJsonObject json = jsonData.object();
+    QJsonValue streamVal = json.value("stream");
+    QJsonObject streamObj = streamVal.toObject();
+
+    QJsonValue channelVal = streamObj.value("channel");
+    QJsonObject channelObj = channelVal.toObject();
+
+    QString game = streamObj.value("game").toString();
+    int viewers = streamObj.value("viewers").toInt();
+    QString status = channelObj.value("status").toString();
+    QString displayName = channelObj.value("display_name").toString();
+    QString logo = channelObj.value("logo").toString();
+    QString url = channelObj.value("url").toString();
+    qDebug() << "###################################";
+    qDebug() << "User:" << displayName << endl <<
+                "Game:" << game << endl <<
+                "Status:" << status << endl <<
+                "Viewers:" << viewers;
+}
+
 

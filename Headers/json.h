@@ -9,9 +9,9 @@ public:
     explicit json(QObject *parent = 0);
     QString determineDataSource(QByteArray);
     QStringList getStreamerFollowedList(QByteArray);
-    void getFeaturedStreams(QByteArray data);
     ~json();
-
+    void getStreamData(QByteArray data);
+    void getFeaturedStreamData(QByteArray data);
 signals:
 
 public slots:
