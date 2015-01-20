@@ -15,12 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
            mainwindow.cpp \
            json.cpp \
-           fileoperations.cpp \
-    networkoperations.cpp
+    networkoperations.cpp \
+    imageoperations.cpp
 
 HEADERS  += mainwindow.h \
             json.h \
-            fileoperations.h \
-    networkoperations.h
+    networkoperations.h \
+    imageoperations.h
 
 FORMS    += mainwindow.ui

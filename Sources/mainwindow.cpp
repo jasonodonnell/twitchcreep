@@ -49,7 +49,7 @@ void MainWindow::requestReady(QByteArray data)
     }
     else if (jsonType == "image")
     {
-        qDebug() << "Is image";
+        image.saveScaledImage("/Users/Wizard/test", data, 30, 30);
     }
     else
     {

@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "json.h"
-#include "fileoperations.h"
+#include "imageoperations.h"
 #include "networkoperations.h"
 
 namespace Ui {
@@ -29,7 +29,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     json jsonParser;
-    fileOperations streamerFile;
+    imageOperations image;
     networkOperations networking;
 
 };
