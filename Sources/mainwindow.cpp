@@ -20,6 +20,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::requestReady(QByteArray data)
 {
+
     QString jsonType = jsonParser.determineDataSource(data);
 
     if (jsonType == "follows")
@@ -46,8 +47,14 @@ void MainWindow::requestReady(QByteArray data)
         topGames << jsonParser.getTopGames(data);
         qDebug() << topGames;
     }
+    else if (jsonType == "image")
+    {
+        qDebug() << "Is image";
+    }
     else
+    {
         qDebug() << "Unknown data";
+    }
 }
 
 void MainWindow::on_actionAdd_User_triggered()
@@ -66,7 +73,8 @@ void MainWindow::on_pushButton_clicked()
 //    networking.makeStreamRequest("L0veWizard");
 //    networking.makeFeaturedRequest();
 //    networking.makeFollowRequest("L0veWizard");
-    networking.makeTopGamesRequest();
+//    networking.makeTopGamesRequest();
+    networking.makeRequest("http://static-cdn.jtvnw.net/jtv_user_pictures/richard_hammer-profile_image-cbcf6eda2ff6fc2b-300x300.jpeg");
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
