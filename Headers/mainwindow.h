@@ -20,11 +20,11 @@ public:
 
     void changeStatusBar();
 private slots:
-    void requestReady(QByteArray data);
+    void requestReady(QByteArray,QString);
     void on_actionAdd_User_triggered();
     void on_actionExit_triggered();
     void on_pushButton_clicked();
-    void on_tabWidget_currentChanged(int index);
+    void on_tabWidget_currentChanged(int);
 
 private:
     Ui::MainWindow *ui;

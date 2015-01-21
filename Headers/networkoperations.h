@@ -19,8 +19,9 @@ public:
     void makeFollowRequest(QString);
     int checkNetworkConnection();
     void makeRequest(QString url);
+    void makeImageRequest(QString,QString);
 signals:
-    void dataReady(QByteArray);
+    void dataReady(QByteArray,QString);
 public slots:
     void doneReading(QNetworkReply *reply);
     void timedFollowRequest();

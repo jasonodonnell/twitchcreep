@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect((&networking),SIGNAL(dataReady(QByteArray)),this,SLOT(requestReady(QByteArray)));
+    connect((&networking),SIGNAL(dataReady(QByteArray,QString)),this,SLOT(requestReady(QByteArray,QString)));
     this->changeStatusBar();
 
 
@@ -18,10 +18,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::requestReady(QByteArray data)
+void MainWindow::requestReady(QByteArray data, QString requestType)
 {
-
-    QString jsonType = jsonParser.determineDataSource(data);
+    QString jsonType = requestType;
 
     if (jsonType == "follows")
     {
@@ -47,9 +46,11 @@ void MainWindow::requestReady(QByteArray data)
         topGames << jsonParser.getTopGames(data);
         qDebug() << topGames;
     }
-    else if (jsonType == "image")
+    else if (jsonType.contains("image:"))
     {
-        image.saveScaledImage("/Users/Wizard/test", data, 30, 30);
+        QStringList imageFilename = jsonType.split(":");
+        QString saveDir = "/Users/Wizard/" + imageFilename[1];
+        image.saveScaledImage(saveDir, data, 30, 30);
     }
     else
     {
@@ -72,9 +73,8 @@ void MainWindow::on_pushButton_clicked()
 //    networking.makeStreamRequest("dotastarladder_en");
 //    networking.makeStreamRequest("L0veWizard");
 //    networking.makeFeaturedRequest();
-//    networking.makeFollowRequest("L0veWizard");
 //    networking.makeTopGamesRequest();
-    networking.makeRequest("http://static-cdn.jtvnw.net/jtv_user_pictures/richard_hammer-profile_image-cbcf6eda2ff6fc2b-300x300.jpeg");
+    networking.makeImageRequest("http://static-cdn.jtvnw.net/jtv_user_pictures/richard_hammer-profile_image-cbcf6eda2ff6fc2b-300x300.jpeg","richard_hammer");
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
