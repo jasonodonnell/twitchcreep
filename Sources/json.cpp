@@ -15,23 +15,6 @@ json::~json()
 
 }
 
-QString json::determineDataSource(QByteArray data)
-{
-    QJsonDocument jsonData = QJsonDocument::fromJson(data);
-    if (!jsonData.isEmpty())
-    {
-        QJsonObject json = jsonData.object();
-        QStringList keys = json.keys();
-        //Last value in the array is the type of data.
-        int last = keys.length()-1;
-        return keys[last];
-    }
-    else
-    {
-        return "image";
-    }
- }
-
 QStringList json::getStreamerFollowedList(QByteArray data)
 {
     QJsonDocument jsonData = QJsonDocument::fromJson(data);

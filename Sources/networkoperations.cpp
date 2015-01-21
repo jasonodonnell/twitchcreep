@@ -24,13 +24,15 @@ void networkOperations::makeRequest(QString url)
 void networkOperations::doneReading(QNetworkReply *reply)
 {
     QByteArray replyData = reply->readAll();
-    emit(dataReady(replyData));
+    QString requestType = this->objectName();
+    emit(dataReady(replyData,requestType));
 }
 
 void networkOperations::timedFollowRequest()
 {
     QString username = "L0veWizard";
     QString url = "https://api.twitch.tv/kraken/users/" + username + "/follows/channels";
+    this->setObjectName("follow");
     this->makeRequest(url);
 
 }
@@ -38,24 +40,35 @@ void networkOperations::timedFollowRequest()
 void networkOperations::makeFollowRequest(QString username)
 {
     QString url = "https://api.twitch.tv/kraken/users/" + username + "/follows/channels";
+    this->setObjectName("follow");
     this->makeRequest(url);
 }
 
 void networkOperations::makeStreamRequest(QString username)
 {
     QString url = "https://api.twitch.tv/kraken/streams/" + username;
+    this->setObjectName("stream");
     this->makeRequest(url);
 }
 
 void networkOperations::makeFeaturedRequest()
 {
     QString url = "https://api.twitch.tv/kraken/streams/featured";
+    this->setObjectName("featured");
     this->makeRequest(url);
 }
 
 void networkOperations::makeTopGamesRequest()
 {
     QString url = "https://api.twitch.tv/kraken/games/top";
+    this->setObjectName("top");
+    this->makeRequest(url);
+}
+
+void networkOperations::makeImageRequest(QString url,QString username)
+{
+    QString imageFilename = "image:" + username;
+    this->setObjectName(imageFilename);
     this->makeRequest(url);
 }
 
