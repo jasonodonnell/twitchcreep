@@ -5,6 +5,8 @@
 #include "json.h"
 #include "imageoperations.h"
 #include "networkoperations.h"
+#include <QDebug>
+#include <QListView>
 
 namespace Ui {
 class MainWindow;
@@ -19,6 +21,8 @@ public:
     ~MainWindow();
 
     void changeStatusBar();
+    void addItemToListView(int,QList<QStringList>);
+    void tabRequest(int);
 private slots:
     void requestReady(QByteArray,QString);
     void on_actionAdd_User_triggered();

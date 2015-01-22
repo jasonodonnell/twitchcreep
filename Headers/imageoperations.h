@@ -1,6 +1,9 @@
 #ifndef IMAGEOPERATIONS_H
 #define IMAGEOPERATIONS_H
 #include <QObject>
+#include <QImage>
+#include <QFile>
+#include <QDebug>
 
 class imageOperations : public QObject
 {
