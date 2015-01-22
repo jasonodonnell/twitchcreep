@@ -2,11 +2,15 @@
 
 networkOperations::networkOperations(QObject *parent) : QObject(parent)
 {
+    //Signal-slot connection for network reply, when its finished, activates doneReading (passess the reply)
     connect(networkManager,SIGNAL(finished(QNetworkReply*)),this,SLOT(doneReading(QNetworkReply*)));
+    //Timer thread that makes a request every 60 seconds in the background.
+    //Will have 5 second threads for active tab windows.
     connect(timer,SIGNAL(timeout()),this,SLOT(timedFollowRequest()));
     timer->start(60000);
 }
 
+//Makes the network request to twitch api
 void networkOperations::makeRequest(QString url)
 {
     int connection = this->checkNetworkConnection();
@@ -16,6 +20,8 @@ void networkOperations::makeRequest(QString url)
         qDebug() << "Not connected to internet";
 }
 
+//Slot that is activated after finished signal is fired.  Reads
+//data into a byte array, sets the objectname and emits a signal.
 void networkOperations::doneReading(QNetworkReply *reply)
 {
     QByteArray replyData = reply->readAll();

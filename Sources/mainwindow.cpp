@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //Signal-slot connection that is triggered by doneReading in networking after a web request is made.
     connect((&networking),SIGNAL(dataReady(QByteArray,QString)),this,SLOT(requestReady(QByteArray,QString)));
     this->tabRequest(ui->tabWidget->currentIndex());
 }
@@ -15,6 +16,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+//Slot that is called after data is finished reading from the network request.
+//When the request is made, setObjectName is called so the sender can be identified.
 void MainWindow::requestReady(QByteArray data, QString requestType)
 {
     QString jsonType = requestType;
@@ -22,7 +25,6 @@ void MainWindow::requestReady(QByteArray data, QString requestType)
     {
         QStringList follows;
         follows = jsonParser.getStreamerFollowedList(data);
-        follows;
     }
     else if (jsonType == "featured")
     {
@@ -64,29 +66,22 @@ void MainWindow::on_actionExit_triggered()
     delete ui;
 }
 
+//Makes the appropriate web request based on current tab.
+//This will be expanded with timer threads so the current
+//open tab auto updates.
 void MainWindow::tabRequest(int index)
 {
     QString username = "L0veWizard";
     if (index == 0)
-    {
         networking.makeFeaturedRequest();
-    }
     else if (index == 1)
-    {
         networking.makeTopGamesRequest();
-    }
     else if (index == 2)
-    {
         networking.makeFollowRequest(username);
-    }
     else if (index == 3)
-    {
         networking.makeStreamRequest(username);
-    }
     else
-    {
         qDebug() << "I don't know this index";
-    }
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -99,6 +94,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     this->tabRequest(index);
 }
 
+//Adds items to the list view
 void MainWindow::addItemToListView(int index, QList<QStringList> streams)
 {
     ui->listWidget->clear();
