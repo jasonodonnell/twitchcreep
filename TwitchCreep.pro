@@ -16,13 +16,11 @@ SOURCES += main.cpp\
            mainwindow.cpp \
            json.cpp \
     networkoperations.cpp \
-    imageoperations.cpp \
-    view.cpp
+    imageoperations.cpp 
 
 HEADERS  += mainwindow.h \
             json.h \
     networkoperations.h \
-    imageoperations.h \
-    view.h
+    imageoperations.h 
 
 FORMS    += mainwindow.ui
