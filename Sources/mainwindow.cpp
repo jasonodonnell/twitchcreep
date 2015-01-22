@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -8,9 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     connect((&networking),SIGNAL(dataReady(QByteArray,QString)),this,SLOT(requestReady(QByteArray,QString)));
-    this->changeStatusBar();
-
-
+    this->tabRequest(ui->tabWidget->currentIndex());
 }
 
 MainWindow::~MainWindow()
@@ -21,18 +18,17 @@ MainWindow::~MainWindow()
 void MainWindow::requestReady(QByteArray data, QString requestType)
 {
     QString jsonType = requestType;
-
     if (jsonType == "follows")
     {
         QStringList follows;
         follows = jsonParser.getStreamerFollowedList(data);
-        qDebug() << follows;
+        follows;
     }
     else if (jsonType == "featured")
     {
         QList<QStringList> streamerList;
-        streamerList << jsonParser.getFeaturedStreamData(data);
-        qDebug() << streamerList;
+        streamerList = jsonParser.getFeaturedStreamData(data);
+        addItemToListView(0,streamerList);
     }
     else if (jsonType == "stream")
     {
@@ -68,18 +64,55 @@ void MainWindow::on_actionExit_triggered()
     delete ui;
 }
 
+void MainWindow::tabRequest(int index)
+{
+    QString username = "L0veWizard";
+    if (index == 0)
+    {
+        networking.makeFeaturedRequest();
+    }
+    else if (index == 1)
+    {
+        networking.makeTopGamesRequest();
+    }
+    else if (index == 2)
+    {
+        networking.makeFollowRequest(username);
+    }
+    else if (index == 3)
+    {
+        networking.makeStreamRequest(username);
+    }
+    else
+    {
+        qDebug() << "I don't know this index";
+    }
+}
+
 void MainWindow::on_pushButton_clicked()
 {
-//    networking.makeStreamRequest("dotastarladder_en");
-//    networking.makeStreamRequest("L0veWizard");
-//    networking.makeFeaturedRequest();
-//    networking.makeTopGamesRequest();
-    networking.makeImageRequest("http://static-cdn.jtvnw.net/jtv_user_pictures/richard_hammer-profile_image-cbcf6eda2ff6fc2b-300x300.jpeg","richard_hammer");
+    qDebug() << "Button";
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
-    qDebug() << index;
+    this->tabRequest(index);
+}
+
+void MainWindow::addItemToListView(int index, QList<QStringList> streams)
+{
+    ui->listWidget->clear();
+    foreach (QStringList streamData, streams)
+    {
+        QString displayName = streamData[0];
+        QString game = streamData[1];
+        QString viewers = streamData[2];
+        QString status = streamData[3];
+        QString stream = displayName + ": (" + viewers + ") " + game;
+        ui->listWidget->addItem(stream);
+    }
+    ui->listWidget->sortItems();
+
 }
 
 void MainWindow::changeStatusBar()

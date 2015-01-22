@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Twitch Creep</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -26,7 +26,7 @@
          <bool>true</bool>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -34,17 +34,7 @@
          </attribute>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QListView" name="listView"/>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="tab_3">
-         <attribute name="title">
-          <string>Followed</string>
-         </attribute>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QListView" name="listView_2"/>
+           <widget class="QListWidget" name="listWidget"/>
           </item>
          </layout>
         </widget>
@@ -52,9 +42,19 @@
          <attribute name="title">
           <string>Top Games</string>
          </attribute>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QListWidget" name="listWidget_2"/>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_3">
+         <attribute name="title">
+          <string>Followed</string>
+         </attribute>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <widget class="QListView" name="listView_3"/>
+           <widget class="QListWidget" name="listWidget_3"/>
           </item>
          </layout>
         </widget>
@@ -64,7 +64,7 @@
          </attribute>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QListView" name="listView_4"/>
+           <widget class="QListWidget" name="listWidget_4"/>
           </item>
          </layout>
         </widget>

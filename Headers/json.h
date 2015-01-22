@@ -1,6 +1,11 @@
 #ifndef JSONRETRIEVER_H
 #define JSONRETRIEVER_H
 #include <QObject>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QStringList>
+#include <QDebug>
 
 class json : public QObject
 {

@@ -1,7 +1,4 @@
-#include "imageoperations.h"
-#include <QImage>
-#include <QFile>
-#include <QDebug>
+#include "imageoperations.h";
 
 imageOperations::imageOperations(QObject *parent) : QObject(parent)
 {

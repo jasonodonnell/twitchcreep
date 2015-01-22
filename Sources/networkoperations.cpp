@@ -1,15 +1,10 @@
 #include "networkoperations.h"
-#include <QNetworkAccessManager>
-#include <QNetworkConfigurationManager>
-#include <QNetworkConfiguration>
 
 networkOperations::networkOperations(QObject *parent) : QObject(parent)
 {
-    QString username = "L0veWizard";
     connect(networkManager,SIGNAL(finished(QNetworkReply*)),this,SLOT(doneReading(QNetworkReply*)));
     connect(timer,SIGNAL(timeout()),this,SLOT(timedFollowRequest()));
     timer->start(60000);
-
 }
 
 void networkOperations::makeRequest(QString url)
@@ -31,10 +26,12 @@ void networkOperations::doneReading(QNetworkReply *reply)
 void networkOperations::timedFollowRequest()
 {
     QString username = "L0veWizard";
-    QString url = "https://api.twitch.tv/kraken/users/" + username + "/follows/channels";
-    this->setObjectName("follow");
-    this->makeRequest(url);
-
+    if (!username.isNull())
+    {
+        QString url = "https://api.twitch.tv/kraken/users/" + username + "/follows/channels";
+        this->setObjectName("follow");
+        this->makeRequest(url);
+    }
 }
 
 void networkOperations::makeFollowRequest(QString username)

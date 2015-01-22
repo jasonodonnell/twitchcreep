@@ -1,9 +1,10 @@
 #ifndef NETWORKOPERATIONS_H
 #define NETWORKOPERATIONS_H
 #include <QNetworkAccessManager>
+#include <QNetworkConfiguration>
+#include <QNetworkConfigurationManager>
 #include <QNetworkReply>
 #include <QTimer>
-
 #include <QObject>
 
 class networkOperations : public QObject
@@ -18,7 +19,7 @@ public:
     void makeStreamRequest(QString);
     void makeFollowRequest(QString);
     int checkNetworkConnection();
-    void makeRequest(QString url);
+    void makeRequest(QString);
     void makeImageRequest(QString,QString);
 signals:
     void dataReady(QByteArray,QString);

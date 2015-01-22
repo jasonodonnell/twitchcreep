@@ -1,10 +1,5 @@
 #include "json.h"
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <QJsonArray>
-#include <QObject>
-#include <QStringList>
-#include <QDebug>
+
 
 json::json(QObject *parent) : QObject(parent)
 {
@@ -56,7 +51,7 @@ QList<QStringList> json::getFeaturedStreamData(QByteArray data)
             QString displayName = channelObj.value("display_name").toString();
             QString logo = channelObj.value("logo").toString();
             QString url = channelObj.value("url").toString();
-            streamer << game << viewers << status << displayName << logo << url;
+            streamer << displayName << game << viewers << status << logo << url;
             streamerList << streamer;
     }
     return streamerList;
