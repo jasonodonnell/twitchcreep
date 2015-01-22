@@ -16,11 +16,19 @@ SOURCES += main.cpp\
            mainwindow.cpp \
            json.cpp \
     networkoperations.cpp \
+<<<<<<< HEAD
     imageoperations.cpp
+=======
+    imageoperations.cpp 
+>>>>>>> FETCH_HEAD
 
 HEADERS  += mainwindow.h \
             json.h \
     networkoperations.h \
+<<<<<<< HEAD
     imageoperations.h
+=======
+    imageoperations.h 
+>>>>>>> FETCH_HEAD
 
 FORMS    += mainwindow.ui
