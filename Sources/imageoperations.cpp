@@ -11,7 +11,7 @@ imageOperations::~imageOperations()
 }
 
 //This receives a QByteArray that is an image, the image is resized to 30x30
-//then saved as the filename.
+//then saved with username as the filename.
 void imageOperations::saveScaledImage(QString filename, QByteArray data, int width, int height)
 {
     QImage image = QImage::fromData(data);
