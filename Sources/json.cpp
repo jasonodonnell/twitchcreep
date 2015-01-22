@@ -9,7 +9,8 @@ json::~json()
 {
 
 }
-
+//Returns a QStringList of all the streamers followed by a user.
+//The json object is very nested so some unpacking is required.
 QStringList json::getStreamerFollowedList(QByteArray data)
 {
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
@@ -28,6 +29,8 @@ QStringList json::getStreamerFollowedList(QByteArray data)
     return streamers;
 }
 
+//Returns a QList<QStringList> of all the featured streams.
+//The json object is very nested so some unpacking is required.
 QList<QStringList> json::getFeaturedStreamData(QByteArray data)
 {
     QList<QStringList> streamerList;
@@ -57,6 +60,8 @@ QList<QStringList> json::getFeaturedStreamData(QByteArray data)
     return streamerList;
 }
 
+//Returns a QStringList of a stream.
+//The json object is very nested so some unpacking is required.
 QStringList json::getStreamData(QByteArray data)
 {
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
@@ -86,6 +91,8 @@ QStringList json::getStreamData(QByteArray data)
     }
 }
 
+//Returns a QStringList of all the top games being played.
+//The json object is very nested so some unpacking is required.
 QList<QStringList> json::getTopGames(QByteArray data)
 {
     QList<QStringList> topList;
