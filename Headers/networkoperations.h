@@ -21,6 +21,7 @@ public:
     int checkNetworkConnection();
     void makeRequest(QString);
     void makeImageRequest(QString,QString);
+    void makeStreamRequestFromList(QStringList usernames);
 signals:
     void dataReady(QByteArray,QString);
 public slots:

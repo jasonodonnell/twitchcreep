@@ -18,6 +18,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    QList<QStringList> followsList;
     ~MainWindow();
 
     void changeStatusBar();
@@ -27,7 +28,6 @@ private slots:
     void requestReady(QByteArray,QString);
     void on_actionAdd_User_triggered();
     void on_actionExit_triggered();
-    void on_pushButton_clicked();
     void on_tabWidget_currentChanged(int);
 
 private:
