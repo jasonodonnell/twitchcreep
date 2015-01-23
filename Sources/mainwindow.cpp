@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+QList<QStringList> followsList;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -9,8 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //Signal-slot connection that is triggered by doneReading in networking after a web request is made.
     connect((&networking),SIGNAL(dataReady(QByteArray,QString)),this,SLOT(requestReady(QByteArray,QString)));
     this->tabRequest(ui->tabWidget->currentIndex());
+    this->changeStatusBar();
 }
-
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -25,24 +26,46 @@ void MainWindow::requestReady(QByteArray data, QString requestType)
     {
         QStringList follows;
         follows = jsonParser.getStreamerFollowedList(data);
+        networking.makeStreamRequestFromList(follows);
+    }
+    //I should be shot for writing this.. all of this will be cleaned up once the database is
+    //created.
+    else if (jsonType == "followList")
+    {
+        QStringList streamData = jsonParser.getStreamData(data);
+        QStringList currentStreamList;
+        foreach(QStringList stream,followsList)
+            currentStreamList << stream[0];
+        if(!streamData.isEmpty() && !currentStreamList.contains(streamData[0]))
+            followsList << streamData;
+    }
+    else if (jsonType == "followListEnd")
+    {
+        QStringList streamData = jsonParser.getStreamData(data);
+        QStringList currentStreamList;
+        foreach(QStringList stream,followsList)
+            currentStreamList << stream[0];
+        if(!streamData.isEmpty() && !currentStreamList.contains(streamData[0]))
+        {
+            followsList << streamData;
+            this->addItemToListView(2,followsList);
+        }
     }
     else if (jsonType == "featured")
     {
         QList<QStringList> streamerList;
-        streamerList = jsonParser.getFeaturedStreamData(data);
+        streamerList << jsonParser.getFeaturedStreamData(data);
         addItemToListView(0,streamerList);
     }
     else if (jsonType == "stream")
     {
         QStringList streamer;
         streamer << jsonParser.getStreamData(data);
-        qDebug() << streamer;
     }
     else if (jsonType == "top")
     {
         QList<QStringList> topGames;
         topGames << jsonParser.getTopGames(data);
-        qDebug() << topGames;
     }
     else if (jsonType.contains("image:"))
     {
@@ -84,11 +107,6 @@ void MainWindow::tabRequest(int index)
         qDebug() << "I don't know this index";
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-    qDebug() << "Button";
-}
-
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
     this->tabRequest(index);
@@ -97,18 +115,62 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 //Adds items to the list view
 void MainWindow::addItemToListView(int index, QList<QStringList> streams)
 {
-    ui->listWidget->clear();
-    foreach (QStringList streamData, streams)
+    if(index == 0)
     {
-        QString displayName = streamData[0];
-        QString game = streamData[1];
-        QString viewers = streamData[2];
-        QString status = streamData[3];
-        QString stream = displayName + ": (" + viewers + ") " + game;
-        ui->listWidget->addItem(stream);
+        ui->listWidget->clear();
+        foreach (QStringList streamData, streams)
+        {
+            QString displayName = streamData[0];
+            QString game = streamData[1];
+            QString viewers = streamData[2];
+            QString status = streamData[3];
+            QString stream = displayName + ": (" + viewers + ") " + game;
+            ui->listWidget->addItem(stream);
+        }
+        ui->listWidget->sortItems();
     }
-    ui->listWidget->sortItems();
-
+    else if(index == 1)
+    {
+        ui->listWidget_2->clear();
+        foreach (QStringList streamData, streams)
+        {
+            QString displayName = streamData[0];
+            QString game = streamData[1];
+            QString viewers = streamData[2];
+            QString status = streamData[3];
+            QString stream = displayName + ": (" + viewers + ") " + game;
+            ui->listWidget_2->addItem(stream);
+        }
+        ui->listWidget_2->sortItems();
+    }
+    else if(index == 2)
+    {
+        ui->listWidget_3->clear();
+        foreach (QStringList streamData, streams)
+        {
+            QString displayName = streamData[0];
+            QString game = streamData[1];
+            QString viewers = streamData[2];
+            QString status = streamData[3];
+            QString stream = displayName + ": (" + viewers + ") " + game;
+            ui->listWidget_3->addItem(stream);
+        }
+        ui->listWidget_3->sortItems();
+    }
+    else if(index == 3)
+    {
+        ui->listWidget_4->clear();
+        foreach (QStringList streamData, streams)
+        {
+            QString displayName = streamData[0];
+            QString game = streamData[1];
+            QString viewers = streamData[2];
+            QString status = streamData[3];
+            QString stream = displayName + ": (" + viewers + ") " + game;
+            ui->listWidget_4->addItem(stream);
+        }
+        ui->listWidget_4->sortItems();
+    }
 }
 
 void MainWindow::changeStatusBar()

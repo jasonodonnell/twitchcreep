@@ -86,7 +86,7 @@ QStringList json::getStreamData(QByteArray data)
         QString logo = channelObj.value("logo").toString();
         QString url = channelObj.value("url").toString();
         QStringList streamer;
-        streamer << game << viewers << status << displayName << logo << url;
+        streamer << displayName << game << viewers << status << logo << url;
         return streamer;
     }
 }

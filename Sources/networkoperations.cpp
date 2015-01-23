@@ -43,7 +43,7 @@ void networkOperations::timedFollowRequest()
 void networkOperations::makeFollowRequest(QString username)
 {
     QString url = "https://api.twitch.tv/kraken/users/" + username + "/follows/channels";
-    this->setObjectName("follow");
+    this->setObjectName("follows");
     this->makeRequest(url);
 }
 
@@ -53,6 +53,25 @@ void networkOperations::makeStreamRequest(QString username)
     this->setObjectName("stream");
     this->makeRequest(url);
 }
+
+void networkOperations::makeStreamRequestFromList(QStringList usernames)
+{
+    foreach(QString username,usernames)
+    {
+        QString url = "https://api.twitch.tv/kraken/streams/" + username;
+        if(!usernames.last().contains(username))
+        {
+            this->setObjectName("followList");
+            this->makeRequest(url);
+        }
+        else
+        {
+            this->setObjectName("followListEnd");
+            this->makeRequest(url);
+        }
+    }
+}
+
 
 void networkOperations::makeFeaturedRequest()
 {
