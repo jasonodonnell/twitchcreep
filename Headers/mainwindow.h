@@ -2,11 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDebug>
+#include <QListView>
 #include "json.h"
 #include "imageoperations.h"
 #include "networkoperations.h"
-#include <QDebug>
-#include <QListView>
+#include "database.h"
 
 namespace Ui {
 class MainWindow;
@@ -35,6 +36,7 @@ private:
     json jsonParser;
     imageOperations image;
     networkOperations networking;
+    database db;
 
 };
 

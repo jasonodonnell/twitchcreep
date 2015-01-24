@@ -152,7 +152,7 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
             QString game = streamData[1];
             QString viewers = streamData[2];
             QString status = streamData[3];
-            QString stream = displayName + ": (" + viewers + ") " + game;
+            QString stream = displayName + ": (" + viewers + ") " + game + " \n" + status + "\n";
             ui->listWidget_3->addItem(stream);
         }
         ui->listWidget_3->sortItems();
