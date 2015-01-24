@@ -115,17 +115,11 @@ QList<QStringList> database::retreiveStreamList(QString requestType)
     if(checkDBConnection())
     {
         if(requestType == "follow")
-        {
             queryString = "SELECT username,game,viewers,status,logo,url FROM stream_data WHERE followed='true';";
-        }
         else if(requestType == "featured")
-        {
             queryString = "SELECT username,game,viewers,status,logo,url FROM stream_data WHERE featured='true';";
-        }
         else if(requestType == "top")
-        {
             queryString = "SELECT username,game,viewers,status,logo,url FROM stream_data WHERE top='true';";
-        }
 
         QSqlQuery query(this->db);
         if(query.exec(queryString))
