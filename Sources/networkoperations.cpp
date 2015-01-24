@@ -13,8 +13,7 @@ networkOperations::networkOperations(QObject *parent) : QObject(parent)
 //Makes the network request to twitch api
 void networkOperations::makeRequest(QString url)
 {
-    int connection = this->checkNetworkConnection();
-    if (connection == 0)
+    if(this->checkNetworkConnection())
         networkManager->get(QNetworkRequest(QUrl(url)));
     else
         qDebug() << "Not connected to internet";
@@ -59,16 +58,8 @@ void networkOperations::makeStreamRequestFromList(QStringList usernames)
     foreach(QString username,usernames)
     {
         QString url = "https://api.twitch.tv/kraken/streams/" + username;
-        if(!usernames.last().contains(username))
-        {
-            this->setObjectName("followList");
-            this->makeRequest(url);
-        }
-        else
-        {
-            this->setObjectName("followListEnd");
-            this->makeRequest(url);
-        }
+        this->setObjectName("followList");
+        this->makeRequest(url);
     }
 }
 
@@ -95,13 +86,13 @@ void networkOperations::makeImageRequest(QString url,QString username)
 }
 
 
-int networkOperations::checkNetworkConnection()
+bool networkOperations::checkNetworkConnection()
 {
     QNetworkConfigurationManager mgr;
     if(mgr.isOnline())
-        return 0;
+        return true;
     else
-        return 1;
+        return false;
 }
 
 networkOperations::~networkOperations()
