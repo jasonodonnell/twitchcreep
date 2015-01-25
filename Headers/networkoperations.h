@@ -18,7 +18,7 @@ public:
     void makeFeaturedRequest();
     void makeStreamRequest(QString);
     void makeFollowRequest(QString);
-    int checkNetworkConnection();
+    bool checkNetworkConnection();
     void makeRequest(QString);
     void makeImageRequest(QString,QString);
     void makeStreamRequestFromList(QStringList usernames);

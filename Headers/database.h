@@ -10,9 +10,14 @@ class database : public QObject
     Q_OBJECT
 public:
     explicit database(QObject *parent = 0);
+    QSqlDatabase db;
     ~database();
 
     void initTables();
+    void storeStreamData(QStringList streamData, QString requestType);
+    bool checkDBConnection();
+    bool checkIfStreamExists(QString username);
+    QList<QStringList> retreiveStreamList(QString requestType);
 signals:
 
 public slots:

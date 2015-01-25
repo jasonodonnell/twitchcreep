@@ -7,11 +7,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //Signal-slot connection that is triggered by doneReading in networking after a web request is made.
     connect((&networking),SIGNAL(dataReady(QByteArray,QString)),this,SLOT(requestReady(QByteArray,QString)));
-    connect(timer,SIGNAL(timeout()),this,SLOT(timedTabRefresh()));
-    timer->start(3000);
-    this->tabRequest(ui->tabWidget->currentIndex());
+
+    ui->tabWidget->setCurrentIndex(0);
+
+    //Signal-slot connection that is triggered by doneReading in networking after a web request is made.
+    connect(requestTimer,SIGNAL(timeout()),this,SLOT(timedDataRequest()));
+    requestTimer->start(10000);
+    connect(readTimer,SIGNAL(timeout()),this,SLOT(timedDatabaseRead()));
+    readTimer->start(500);
+    this->timedDataRequest();
     this->changeStatusBar();
 }
 MainWindow::~MainWindow()
@@ -65,20 +70,36 @@ void MainWindow::requestReady(QByteArray data, QString requestType)
     }
 }
 
-void MainWindow::timedTabRefresh()
+void MainWindow::timedDataRequest()
 {
     int tabIndex = ui->tabWidget->currentIndex();
     QList<QStringList> streamDataList;
+    QString username = "L0veWizard";
     if(tabIndex == 0)
+        networking.makeFeaturedRequest();
+    else if(tabIndex == 1)
+        qDebug() << "Todo";
+    else if(tabIndex == 2)
+        networking.makeFollowRequest(username);
+    else if(tabIndex == 3)
+        qDebug() << "Todo";
+}
+
+void MainWindow::timedDatabaseRead()
+{
+    int tabIndex = ui->tabWidget->currentIndex();
+    QList<QStringList> streamDataList;
+    QString username = "L0veWizard";
+    if(tabIndex == 0){
         streamDataList = db.retreiveStreamList("featured");
         if(!streamDataList.isEmpty())
             this->addItemToListView(0,streamDataList);
+    }
     else if(tabIndex == 1)
         qDebug() << "Todo";
     else if(tabIndex == 2)
     {
         streamDataList = db.retreiveStreamList("follow");
-        qDebug() << streamDataList.isEmpty();
         if(!streamDataList.isEmpty())
             this->addItemToListView(2,streamDataList);
     }
@@ -94,27 +115,9 @@ void MainWindow::on_actionExit_triggered()
     delete ui;
 }
 
-//Makes the appropriate web request based on current tab.
-//This will be expanded with timer threads so the current
-//open tab auto updates.
-void MainWindow::tabRequest(int index)
+void MainWindow::on_tabWidget_currentChanged()
 {
-    QString username = "L0veWizard";
-    if (index == 0)
-        networking.makeFeaturedRequest();
-    else if (index == 1)
-        networking.makeTopGamesRequest();
-    else if (index == 2)
-        networking.makeFollowRequest(username);
-    else if (index == 3)
-        networking.makeStreamRequest(username);
-    else
-        qDebug() << "I don't know this index";
-}
-
-void MainWindow::on_tabWidget_currentChanged(int index)
-{
-    this->tabRequest(index);
+    this->timedDataRequest();
 }
 
 //Adds items to the list view

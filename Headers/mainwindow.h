@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QDebug>
 #include <QListView>
+#include <QTimer>
 #include "json.h"
 #include "imageoperations.h"
 #include "networkoperations.h"
@@ -24,12 +25,15 @@ public:
 
     void changeStatusBar();
     void addItemToListView(int,QList<QStringList>);
-    void tabRequest(int);
+    //void tabRequest(int);
+
 private slots:
     void requestReady(QByteArray,QString);
     void on_actionAdd_User_triggered();
     void on_actionExit_triggered();
-    void on_tabWidget_currentChanged(int);
+    void on_tabWidget_currentChanged();
+    void timedDataRequest();
+    void timedDatabaseRead();
 
 private:
     Ui::MainWindow *ui;
@@ -37,6 +41,8 @@ private:
     imageOperations image;
     networkOperations networking;
     database db;
+    QTimer *requestTimer = new QTimer(this);
+    QTimer *readTimer = new QTimer(this);
 
 };
 
