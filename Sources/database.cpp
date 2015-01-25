@@ -40,12 +40,13 @@ void database::storeStreamData(QStringList streamData, QString requestType)
 {
     if(checkDBConnection())
     {
+
         QString username = streamData[0];
-        QString game = "'" + streamData[1] + "'";
+        QString game = "'" + streamData[1].replace("'","\'") + "'";
         QString viewers = streamData[2];
-        QString status = "'" + streamData[3] + "'";
-        QString logo = "'" + streamData[4] + "'";
-        QString url = "'" + streamData[5] + "'";
+        QString status = "'" + streamData[3].replace("'","") + "'";
+        QString logo = "'" + streamData[4].replace("'","") +  "'";
+        QString url = "'" + streamData[5].replace("'","") + "'";
         QString followed = "'false'";
         QString featured = "'false'";
         QString top = "'false'";
@@ -61,8 +62,6 @@ void database::storeStreamData(QStringList streamData, QString requestType)
             QString queryString = "INSERT INTO stream_data (username, game, viewers, status, logo, url, followed, featured, top) ";
             queryString = queryString + "VALUES (" + username + game + "," + viewers + "," + status + "," + logo + "," + url + ",";
             queryString = queryString + followed + "," + featured + "," + top + ");";
-            queryString = queryString.replace("'","\'");
-            queryString = queryString.replace(":","\:");
             QSqlQuery query(this->db);
             if(!query.exec(queryString))
                 qDebug() << query.lastError();
@@ -77,13 +76,11 @@ void database::storeStreamData(QStringList streamData, QString requestType)
             queryString = queryString + "featured = " + featured + ',';
             queryString = queryString + "top = " + top + ' ';
             queryString = queryString + "WHERE username=" + username;
-            queryString = queryString.replace("'","\'");
-            queryString = queryString.replace(":","\:");
+
             QSqlQuery query(this->db);
             if(!query.exec(queryString))
                 qDebug() << query.lastError();
         }
-
     }
 }
 
