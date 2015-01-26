@@ -44,6 +44,7 @@ private:
     QTimer *requestTimer = new QTimer(this);
     QTimer *readTimer = new QTimer(this);
 
+    void createSignalSlots();
 };
 
 #endif // MAINWINDOW_H

@@ -7,21 +7,24 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect((&networking),SIGNAL(dataReady(QByteArray,QString)),this,SLOT(requestReady(QByteArray,QString)));
-
     ui->tabWidget->setCurrentIndex(0);
-
-    //Signal-slot connection that is triggered by doneReading in networking after a web request is made.
-    connect(requestTimer,SIGNAL(timeout()),this,SLOT(timedDataRequest()));
-    requestTimer->start(10000);
-    connect(readTimer,SIGNAL(timeout()),this,SLOT(timedDatabaseRead()));
-    readTimer->start(500);
+    this->createSignalSlots();
     this->timedDataRequest();
     this->changeStatusBar();
 }
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::createSignalSlots()
+{
+    //Signal-slot connection that is triggered by doneReading in networking after a web request is made.
+    connect((&networking),SIGNAL(dataReady(QByteArray,QString)),this,SLOT(requestReady(QByteArray,QString)));
+    connect(requestTimer,SIGNAL(timeout()),this,SLOT(timedDataRequest()));
+    connect(readTimer,SIGNAL(timeout()),this,SLOT(timedDatabaseRead()));
+    requestTimer->start(10000);
+    readTimer->start(500);
 }
 
 //Slot that is called after data is finished reading from the network request.
@@ -57,12 +60,12 @@ void MainWindow::requestReady(QByteArray data, QString requestType)
     {
         QList<QStringList> topGames;
         topGames << jsonParser.getTopGames(data);
+        db.storeTopData(topGames);
     }
     else if (jsonType.contains("image:"))
     {
         QStringList imageFilename = jsonType.split(":");
-        QString saveDir = "/Users/Wizard/" + imageFilename[1];
-        image.saveScaledImage(saveDir, data, 30, 30);
+
     }
     else
     {
@@ -78,7 +81,7 @@ void MainWindow::timedDataRequest()
     if(tabIndex == 0)
         networking.makeFeaturedRequest();
     else if(tabIndex == 1)
-        qDebug() << "Todo";
+        networking.makeTopGamesRequest();
     else if(tabIndex == 2)
         networking.makeFollowRequest(username);
     else if(tabIndex == 3)
@@ -89,6 +92,7 @@ void MainWindow::timedDatabaseRead()
 {
     int tabIndex = ui->tabWidget->currentIndex();
     QList<QStringList> streamDataList;
+    QList<QStringList> topDataList;
     QString username = "L0veWizard";
     if(tabIndex == 0){
         streamDataList = db.retreiveStreamList("featured");
@@ -96,7 +100,11 @@ void MainWindow::timedDatabaseRead()
             this->addItemToListView(0,streamDataList);
     }
     else if(tabIndex == 1)
-        qDebug() << "Todo";
+    {
+        topDataList = db.retrieveTopList();
+        if(!topDataList.isEmpty())
+            this->addItemToListView(1,topDataList);
+    }
     else if(tabIndex == 2)
     {
         streamDataList = db.retreiveStreamList("follow");
@@ -137,20 +145,18 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
         }
         ui->listWidget->sortItems();
     }
-//    else if(index == 1)
-//    {
-//        ui->listWidget_2->clear();
-//        foreach (QStringList streamData, streams)
-//        {
-//            QString displayName = streamData[0];
-//            QString game = streamData[1];
-//            QString viewers = streamData[2];
-//            QString status = streamData[3];
-//            QString stream = displayName + ": (" + viewers + ") " + game;
-//            ui->listWidget_2->addItem(stream);
-//        }
-//        ui->listWidget_2->sortItems();
-//    }
+    else if(index == 1)
+    {
+        ui->listWidget_2->clear();
+        foreach (QStringList streamData, streams)
+        {
+            QString game = streamData[0];
+            QString viewers = streamData[1];
+            QString stream = game + ": (" + viewers + ") ";
+            ui->listWidget_2->addItem(stream);
+        }
+        ui->listWidget_2->sortItems();
+    }
     else if(index == 2)
     {
         ui->listWidget_3->clear();
@@ -165,20 +171,6 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
         }
         ui->listWidget_3->sortItems();
     }
-//    else if(index == 3)
-//    {
-//        ui->listWidget_4->clear();
-//        foreach (QStringList streamData, streams)
-//        {
-//            QString displayName = streamData[0];
-//            QString game = streamData[1];
-//            QString viewers = streamData[2];
-//            QString status = streamData[3];
-//            QString stream = displayName + ": (" + viewers + ") " + game;
-//            ui->listWidget_4->addItem(stream);
-//        }
-//        ui->listWidget_4->sortItems();
-//    }
 }
 
 void MainWindow::changeStatusBar()

@@ -8,6 +8,7 @@
 class database : public QObject
 {
     Q_OBJECT
+    bool checkIfTopExists(QString game);
 public:
     explicit database(QObject *parent = 0);
     QSqlDatabase db;
@@ -18,6 +19,8 @@ public:
     bool checkDBConnection();
     bool checkIfStreamExists(QString username);
     QList<QStringList> retreiveStreamList(QString requestType);
+    void storeTopData(QList<QStringList> topData);
+    QList<QStringList> retrieveTopList();
 signals:
 
 public slots:
