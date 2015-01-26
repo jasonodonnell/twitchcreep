@@ -21,6 +21,10 @@ void database::initTables()
             qDebug() << query.lastError();
         else
             qDebug() << "Truncated";
+        if(!query.exec("DELETE FROM top_data;"))
+            qDebug() << query.lastError();
+        else
+            qDebug() << "Truncated";
         checkIfStreamExists("L0veWizard");
     }
 }
@@ -36,11 +40,42 @@ bool database::checkDBConnection()
     }
 }
 
+void database::storeTopData(QList<QStringList> topData)
+{
+    if(checkDBConnection())
+    {
+        foreach(QStringList top, topData)
+        {
+            QString game = "'" + top[0] + "'";
+            QString viewers = top[1];
+            QString logo = "'" + top[2] + "'";
+
+            if(!checkIfTopExists(game))
+            {
+                QString queryString = "INSERT INTO top_data (game, viewers, logo) ";
+                queryString = queryString + "VALUES (" + game + "," + viewers + "," + logo + ");";
+                QSqlQuery query(this->db);
+                if(!query.exec(queryString))
+                    qDebug() << query.lastError();
+            }
+            else
+            {
+                QString queryString = "UPDATE top_data SET game = " + game + ',';
+                queryString = queryString + "viewers = " + viewers + ',';
+                queryString = queryString + "logo = " +  logo + ' ';
+                queryString = queryString + "WHERE game=" + game;
+                QSqlQuery query(this->db);
+                if(!query.exec(queryString))
+                    qDebug() << query.lastError();
+            }
+        }
+    }
+}
+
 void database::storeStreamData(QStringList streamData, QString requestType)
 {
     if(checkDBConnection())
     {
-
         QString username = streamData[0];
         QString game = "'" + streamData[1].replace("'","\'") + "'";
         QString viewers = streamData[2];
@@ -105,6 +140,28 @@ bool database::checkIfStreamExists(QString username)
     }
 }
 
+bool database::checkIfTopExists(QString game)
+{
+    QString queryString = "SELECT count(game) FROM top_data WHERE game=" + game + ";";
+    QSqlQuery query(this->db);
+    if(!query.exec(queryString))
+    {
+        qDebug() << query.lastError();
+        return false;
+    }
+    else
+    {
+        while(query.next())
+        {
+            if(query.value(0).toInt() > 0)
+                return true;
+            else
+                return false;
+        }
+    }
+}
+
+
 QList<QStringList> database::retreiveStreamList(QString requestType)
 {
     QList<QStringList> streamDataList;
@@ -126,6 +183,28 @@ QList<QStringList> database::retreiveStreamList(QString requestType)
                 QStringList streamData;
                 streamData << query.value(0).toString() << query.value(1).toString() << query.value(2).toString();
                 streamData << query.value(3).toString() << query.value(4).toString() << query.value(5).toString();
+                streamDataList << streamData;
+            }
+        }
+    }
+    return streamDataList;
+}
+
+QList<QStringList> database::retrieveTopList()
+{
+    QList<QStringList> streamDataList;
+    QString queryString;
+    if(checkDBConnection())
+    {
+        queryString = "SELECT game,viewers,logo FROM top_data;";
+
+        QSqlQuery query(this->db);
+        if(query.exec(queryString))
+        {
+            while(query.next())
+            {
+                QStringList streamData;
+                streamData << query.value(0).toString() << query.value(1).toString() << query.value(2).toString();
                 streamDataList << streamData;
             }
         }
