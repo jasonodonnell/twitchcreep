@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
+    ui->radioButton->setChecked(true);
     this->createSignalSlots();
     this->timedDataRequest();
     this->changeStatusBar();
