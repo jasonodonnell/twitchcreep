@@ -78,13 +78,21 @@ void networkOperations::makeTopGamesRequest()
     this->makeRequest(url);
 }
 
-void networkOperations::makeImageRequest(QString url,QString username)
+void networkOperations::makeStreamImageRequest(QStringList streamDataList)
 {
-    QString imageFilename = "image:" + username;
-    this->setObjectName(imageFilename);
+    QString objectName = "streamImage:" + streamDataList[0];
+    QString url = streamDataList[4];
+    this->setObjectName(objectName);
     this->makeRequest(url);
 }
 
+void networkOperations::makeTopImageRequest(QStringList topDataList)
+{
+    QString objectName = "topImage:" + topDataList[0];
+    QString url = topDataList[4];
+    this->setObjectName(objectName);
+    this->makeRequest(url);
+}
 
 bool networkOperations::checkNetworkConnection()
 {

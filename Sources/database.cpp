@@ -46,26 +46,28 @@ void database::storeTopData(QList<QStringList> topData)
     {
         foreach(QStringList top, topData)
         {
-            QString game = "'" + top[0] + "'";
+            QString game = top[0];
             QString viewers = top[1];
-            QString logo = "'" + top[2] + "'";
+            QString logo = top[2];
 
             if(!checkIfTopExists(game))
             {
-                QString queryString = "INSERT INTO top_data (game, viewers, logo) ";
-                queryString = queryString + "VALUES (" + game + "," + viewers + "," + logo + ");";
                 QSqlQuery query(this->db);
-                if(!query.exec(queryString))
+                query.prepare("INSERT INTO top_data (game, viewers, logo) VALUES (:game, :viewers, :logo)");
+                query.bindValue(":game",game);
+                query.bindValue(":viewers",viewers);
+                query.bindValue(":logo",logo);
+                if(!query.exec())
                     qDebug() << query.lastError();
             }
             else
             {
-                QString queryString = "UPDATE top_data SET game = " + game + ',';
-                queryString = queryString + "viewers = " + viewers + ',';
-                queryString = queryString + "logo = " +  logo + ' ';
-                queryString = queryString + "WHERE game=" + game;
                 QSqlQuery query(this->db);
-                if(!query.exec(queryString))
+                query.prepare("UPDATE top_data SET game = :game, viewers = :viewers, logo = :logo WHERE game = :game");
+                query.bindValue(":game",game);
+                query.bindValue(":viewers",viewers);
+                query.bindValue(":logo",logo);
+                if(!query.exec())
                     qDebug() << query.lastError();
             }
         }
@@ -77,43 +79,58 @@ void database::storeStreamData(QStringList streamData, QString requestType)
     if(checkDBConnection())
     {
         QString username = streamData[0];
-        QString game = "'" + streamData[1].replace("'","\'") + "'";
+        QString game = streamData[1];
         QString viewers = streamData[2];
-        QString status = "'" + streamData[3].replace("'","") + "'";
-        QString logo = "'" + streamData[4].replace("'","") +  "'";
-        QString url = "'" + streamData[5].replace("'","") + "'";
-        QString followed = "'false'";
-        QString featured = "'false'";
-        QString top = "'false'";
+        QString status = streamData[3];
+        QString logo = streamData[4];
+        QString url = streamData[5];
+        QString followed = "false";
+        QString featured = "false";
+        QString top = "false";
         if(requestType == "followed")
-            followed = "'true'";
+            followed = "true";
         else if(requestType == "featured")
-            featured = "'true'";
+            featured = "true";
         else if(requestType == "top")
-            top = "'true'";
+            top = "true";
         if(!checkIfStreamExists(username))
         {
-            username = "'" + streamData[0] + "',";
-            QString queryString = "INSERT INTO stream_data (username, game, viewers, status, logo, url, followed, featured, top) ";
-            queryString = queryString + "VALUES (" + username + game + "," + viewers + "," + status + "," + logo + "," + url + ",";
-            queryString = queryString + followed + "," + featured + "," + top + ");";
             QSqlQuery query(this->db);
-            if(!query.exec(queryString))
+            QString insert = "INSERT INTO stream_data (username, game, viewers, status, logo, url, followed, featured, top) ";
+            QString values = "VALUES (:username, :game, :viewers, :status, :logo, :url, :followed, :featured, :top)";
+            QString queryString = insert + values;
+
+            query.prepare(queryString);
+            query.bindValue(":username", username);
+            query.bindValue(":game", game);
+            query.bindValue(":viewers", viewers);
+            query.bindValue(":status", status);
+            query.bindValue(":url", url);
+            query.bindValue(":logo", logo);
+            query.bindValue(":followed", followed);
+            query.bindValue(":featured", featured);
+            query.bindValue(":top", top);
+
+            if(!query.exec())
                 qDebug() << query.lastError();
         }
         else
         {
-            username = "'" + streamData[0] + "'";
-            QString queryString = "UPDATE stream_data SET game = " + game + ',';
-            queryString = queryString + "viewers = " + viewers + ',';
-            queryString = queryString + "status = " +  status + ',';
-            queryString = queryString + "followed = " + followed + ',';
-            queryString = queryString + "featured = " + featured + ',';
-            queryString = queryString + "top = " + top + ' ';
-            queryString = queryString + "WHERE username=" + username;
-
             QSqlQuery query(this->db);
-            if(!query.exec(queryString))
+            QString update = "UPDATE stream_data SET game = :game,";
+            QString values = "viewers = :viewers, status = :status, followed = :followed, ";
+            QString valuesCont = "featured = :featured, top = :top WHERE USERNAME = :username";
+            QString queryString = update+values+valuesCont;
+            query.prepare(queryString);
+            query.bindValue(":game", game);
+            query.bindValue(":viewers", viewers);
+            query.bindValue(":status", status);
+            query.bindValue(":followed", followed);
+            query.bindValue(":featured", featured);
+            query.bindValue(":top", top);
+            query.bindValue(":username", username);
+
+            if(!query.exec())
                 qDebug() << query.lastError();
         }
     }
@@ -121,9 +138,10 @@ void database::storeStreamData(QStringList streamData, QString requestType)
 
 bool database::checkIfStreamExists(QString username)
 {
-    QString queryString = "SELECT count(username) FROM stream_data WHERE username='" + username + "';";
     QSqlQuery query(this->db);
-    if(!query.exec(queryString))
+    query.prepare("SELECT count(username) FROM stream_data WHERE username=:username");
+    query.bindValue(":username",username);
+    if(!query.exec())
     {
         qDebug() << query.lastError();
         return false;
@@ -142,9 +160,10 @@ bool database::checkIfStreamExists(QString username)
 
 bool database::checkIfTopExists(QString game)
 {
-    QString queryString = "SELECT count(game) FROM top_data WHERE game=" + game + ";";
     QSqlQuery query(this->db);
-    if(!query.exec(queryString))
+    query.prepare("SELECT count(game) FROM top_data WHERE game=:game");
+    query.bindValue(":game",game);
+    if(!query.exec())
     {
         qDebug() << query.lastError();
         return false;
@@ -165,18 +184,17 @@ bool database::checkIfTopExists(QString game)
 QList<QStringList> database::retreiveStreamList(QString requestType)
 {
     QList<QStringList> streamDataList;
-    QString queryString;
     if(checkDBConnection())
     {
-        if(requestType == "follow")
-            queryString = "SELECT username,game,viewers,status,logo,url FROM stream_data WHERE followed='true';";
-        else if(requestType == "featured")
-            queryString = "SELECT username,game,viewers,status,logo,url FROM stream_data WHERE featured='true';";
-        else if(requestType == "top")
-            queryString = "SELECT username,game,viewers,status,logo,url FROM stream_data WHERE top='true';";
-
         QSqlQuery query(this->db);
-        if(query.exec(queryString))
+        if(requestType == "follow")
+            query.prepare("SELECT username,game,viewers,status,logo,url FROM stream_data WHERE followed='true'");
+        else if(requestType == "featured")
+            query.prepare("SELECT username,game,viewers,status,logo,url FROM stream_data WHERE featured='true'");
+        else if(requestType == "top")
+            query.prepare("SELECT username,game,viewers,status,logo,url FROM stream_data WHERE top='true'");
+
+        if(query.exec())
         {
             while(query.next())
             {
@@ -193,13 +211,11 @@ QList<QStringList> database::retreiveStreamList(QString requestType)
 QList<QStringList> database::retrieveTopList()
 {
     QList<QStringList> streamDataList;
-    QString queryString;
     if(checkDBConnection())
     {
-        queryString = "SELECT game,viewers,logo FROM top_data;";
-
         QSqlQuery query(this->db);
-        if(query.exec(queryString))
+        query.prepare("SELECT game,viewers,logo FROM top_data");
+        if(query.exec())
         {
             while(query.next())
             {
@@ -211,3 +227,75 @@ QList<QStringList> database::retrieveTopList()
     }
     return streamDataList;
 }
+
+
+
+QList<QStringList> database::retrieveTopListWithoutImage()
+{
+    QList<QStringList> streamDataList;
+    if(checkDBConnection())
+    {
+        QSqlQuery query(this->db);
+        query.prepare("SELECT game,logo FROM top_data WHERE image is null or image = ''");
+
+        if(query.exec())
+        {
+            while(query.next())
+            {
+                QStringList streamData;
+                streamData << query.value(0).toString() << query.value(1).toString();
+                streamDataList << streamData;
+            }
+        }
+    }
+    return streamDataList;
+}
+
+QList<QStringList> database::retrieveStreamListWithoutImage()
+{
+    QList<QStringList> streamDataList;
+    QString queryString;
+    if(checkDBConnection())
+    {
+        queryString = "SELECT username,logo FROM stream_data WHERE image is null or image = ''";
+
+        QSqlQuery query(this->db);
+        if(query.exec(queryString))
+        {
+            while(query.next())
+            {
+                QStringList streamData;
+                streamData << query.value(0).toString() << query.value(1).toString();
+                streamDataList << streamData;
+            }
+        }
+    }
+    return streamDataList;
+}
+
+void database::storeImageFromUsername(QString name, QByteArray data)
+{
+    if(checkDBConnection())
+    {
+        QSqlQuery query(this->db);
+        query.prepare("UPDATE stream_data SET image = :image WHERE username = :name");
+        query.bindValue(":image",data);
+        query.bindValue(":name",name);
+        if(!query.exec())
+            qDebug() << query.lastError();
+    }
+}
+
+void database::storeImageFromTop(QString game, QByteArray data)
+{
+    if(checkDBConnection())
+    {
+        QSqlQuery query(this->db);
+        query.prepare("UPDATE top_data SET image = :image WHERE username = :game");
+        query.bindValue(":image",data);
+        query.bindValue(":name",game);
+        if(!query.exec())
+            qDebug() << query.lastError();
+    }
+}
+
