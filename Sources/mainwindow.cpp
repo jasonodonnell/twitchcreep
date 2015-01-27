@@ -47,9 +47,11 @@ void MainWindow::requestReady(QByteArray data, QString requestType)
     else if (jsonType == "featured")
     {
         QList<QStringList> streamerList;
+        QStringList streamData;
         streamerList << jsonParser.getFeaturedStreamData(data);
-        foreach(QStringList streamData, streamerList)
+        foreach(streamData, streamerList)
             db.storeStreamData(streamData, "featured");
+            networking.makeStreamImageRequest(streamData);
     }
     else if (jsonType == "stream")
     {
@@ -62,10 +64,18 @@ void MainWindow::requestReady(QByteArray data, QString requestType)
         topGames << jsonParser.getTopGames(data);
         db.storeTopData(topGames);
     }
-    else if (jsonType.contains("image:"))
+    else if (jsonType.contains("streamImage:"))
     {
-        QStringList imageFilename = jsonType.split(":");
+        QStringList imageUsername = jsonType.split(":");
+        QString name = imageUsername[1];
+        db.storeImageFromUsername(name,data);
 
+    }
+    else if (jsonType.contains("topImage:"))
+    {
+        QStringList imageUsername = jsonType.split(":");
+        QString name = imageUsername[1];
+        db.storeImageFromTop(name,data);
     }
     else
     {

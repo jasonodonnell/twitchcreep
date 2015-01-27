@@ -20,8 +20,10 @@ public:
     void makeFollowRequest(QString);
     bool checkNetworkConnection();
     void makeRequest(QString);
-    void makeImageRequest(QString,QString);
+    void makeStreamImageRequest(QStringList);
+    void makeTopImageRequest();
     void makeStreamRequestFromList(QStringList usernames);
+    void makeTopImageRequest(QStringList topDataList);
 signals:
     void dataReady(QByteArray,QString);
 public slots:

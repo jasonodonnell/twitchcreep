@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QSql>
 #include <QtSql>
+#include "networkoperations.h"
 
 class database : public QObject
 {
@@ -21,9 +22,15 @@ public:
     QList<QStringList> retreiveStreamList(QString requestType);
     void storeTopData(QList<QStringList> topData);
     QList<QStringList> retrieveTopList();
+    QList<QStringList> retrieveStreamListWithoutImage();
+    QList<QStringList> retrieveTopListWithoutImage();
+    void storeImageFromUsername(QString name, QByteArray data);
 signals:
 
 public slots:
+    void storeImageFromTop(QString game, QByteArray data);
+private:
+    networkOperations networking;
 };
 
 #endif // DATABASE_H
