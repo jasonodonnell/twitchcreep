@@ -85,9 +85,12 @@ void MainWindow::requestReady(QByteArray data, QString requestType)
         bool exists;
         exists = jsonParser.checkUsernameExists(data);
         if(exists == true)
-            qDebug() << name;
+            settings.setValue("username",name);
         else
+        {
+            settings.setValue("username","");
             emit(usernameDialog("error"));
+        }
     }
     else
     {
@@ -101,13 +104,13 @@ void MainWindow::usernameDialog(QString dialogType)
     if(dialogType == "new")
     {
         bool ok;
-        QString text = QInputDialog::getText(this,tr("QInputDialog::getText()"),tr("Username:"),QLineEdit::Normal,"", &ok);
+        QString text = QInputDialog::getText(this,tr("Add Username"),tr("Username:"),QLineEdit::Normal,"", &ok);
         if(ok && !text.isEmpty())
             networking.checkUsernameRequest(text);
     }
     else if (dialogType == "error")
     {
-        QString text = QInputDialog::getText(this,tr("QInputDialog::getText()"),tr("Username:"),QLineEdit::Normal,"Username doesn't exist", &ok);
+        QString text = QInputDialog::getText(this,tr("Incorrect Username"),tr("Username:"),QLineEdit::Normal,"Username doesn't exist", &ok);
         if(ok && !text.isEmpty())
             networking.checkUsernameRequest(text);
     }
@@ -119,13 +122,16 @@ void MainWindow::timedDataRequest()
 {
     int tabIndex = ui->tabWidget->currentIndex();
     QList<QStringList> streamDataList;
-    QString username = "L0veWizard";
+
     if(tabIndex == 0)
         networking.makeFeaturedRequest();
     else if(tabIndex == 1)
         networking.makeTopGamesRequest();
     else if(tabIndex == 2)
-        networking.makeFollowRequest(username);
+    {
+        if(!settings.value("username").isNull())
+            networking.makeFollowRequest(settings.value("username").toString());
+    }
     else if(tabIndex == 3)
         qDebug() << "Todo";
 }
@@ -135,7 +141,7 @@ void MainWindow::timedDatabaseRead()
     int tabIndex = ui->tabWidget->currentIndex();
     QList<QStringList> streamDataList;
     QList<QStringList> topDataList;
-    QString username = "L0veWizard";
+
     if(tabIndex == 0){
         streamDataList = db.retreiveStreamList("featured");
         if(!streamDataList.isEmpty())
@@ -157,11 +163,7 @@ void MainWindow::timedDatabaseRead()
 
 void MainWindow::on_actionAdd_User_triggered()
 {
-    qDebug() << "File";
-    bool ok;
-    QString text = QInputDialog::getText(this,tr("QInputDialog::getText()"),tr("Username:"),QLineEdit::Normal,"", &ok);
-    if(ok && !text.isEmpty())
-        networking.checkUsernameRequest(text);
+    emit(usernameDialog("new"));
 }
 
 void MainWindow::on_actionExit_triggered()

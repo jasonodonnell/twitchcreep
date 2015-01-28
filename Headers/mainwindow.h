@@ -6,6 +6,7 @@
 #include <QListView>
 #include <QTimer>
 #include <QInputDialog>
+#include <QSettings>
 #include "json.h"
 #include "imageoperations.h"
 #include "networkoperations.h"
@@ -45,6 +46,7 @@ private:
     database db;
     QTimer *requestTimer = new QTimer(this);
     QTimer *readTimer = new QTimer(this);
+    QSettings settings;
 
     void createSignalSlots();
 };
