@@ -30,7 +30,7 @@ void networkOperations::doneReading(QNetworkReply *reply)
 
 void networkOperations::timedFollowRequest()
 {
-    QString username = "L0veWizard";
+    QString username = settings.value("username").toString();
     if (!username.isNull())
     {
         QString url = "https://api.twitch.tv/kraken/users/" + username + "/follows/channels";

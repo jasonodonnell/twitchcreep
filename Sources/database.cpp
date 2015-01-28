@@ -25,7 +25,6 @@ void database::initTables()
             qDebug() << query.lastError();
         else
             qDebug() << "Truncated";
-        checkIfStreamExists("L0veWizard");
     }
 }
 

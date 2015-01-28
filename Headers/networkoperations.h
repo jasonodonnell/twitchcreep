@@ -6,6 +6,7 @@
 #include <QNetworkReply>
 #include <QTimer>
 #include <QObject>
+#include <QSettings>
 
 class networkOperations : public QObject
 {
@@ -33,6 +34,7 @@ public slots:
 private:
     QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
     QTimer *timer = new QTimer(this);
+    QSettings settings;
 };
 
 #endif // NETWORKOPERATIONS_H
