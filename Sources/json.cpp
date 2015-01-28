@@ -123,3 +123,14 @@ QList<QStringList> json::getTopGames(QByteArray data)
         }
     return topList;
 }
+
+bool json::checkUsernameExists(QByteArray data)
+{
+    QJsonDocument jsonData = QJsonDocument::fromJson(data);
+    QJsonObject json = jsonData.object();
+    if(json.contains("error"))
+    {
+        return false;
+    }
+    return true;
+}

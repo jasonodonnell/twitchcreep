@@ -17,6 +17,7 @@ public:
     QStringList getStreamData(QByteArray);
     QList<QStringList> getFeaturedStreamData(QByteArray);
     QList<QStringList> getTopGames(QByteArray);
+    bool checkUsernameExists(QByteArray data);
 signals:
 
 public slots:

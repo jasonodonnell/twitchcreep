@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QListView>
 #include <QTimer>
+#include <QInputDialog>
 #include "json.h"
 #include "imageoperations.h"
 #include "networkoperations.h"
@@ -29,6 +30,7 @@ public:
 
 private slots:
     void requestReady(QByteArray,QString);
+    void usernameDialog(QString);
     void on_actionAdd_User_triggered();
     void on_actionExit_triggered();
     void on_tabWidget_currentChanged();
