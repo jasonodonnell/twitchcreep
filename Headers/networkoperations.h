@@ -24,6 +24,7 @@ public:
     void makeTopImageRequest();
     void makeStreamRequestFromList(QStringList usernames);
     void makeTopImageRequest(QStringList topDataList);
+    void checkUsernameRequest(QString username);
 signals:
     void dataReady(QByteArray,QString);
 public slots:

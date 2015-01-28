@@ -94,6 +94,14 @@ void networkOperations::makeTopImageRequest(QStringList topDataList)
     this->makeRequest(url);
 }
 
+void networkOperations::checkUsernameRequest(QString username)
+{
+    QString url = "https://api.twitch.tv/kraken/users/" + username;
+    QString usernameCheck = "usernameCheck:" + username;
+    this->setObjectName(usernameCheck);
+    this->makeRequest(url);
+}
+
 bool networkOperations::checkNetworkConnection()
 {
     QNetworkConfigurationManager mgr;

@@ -78,10 +78,41 @@ void MainWindow::requestReady(QByteArray data, QString requestType)
         QString name = imageUsername[1];
         db.storeImageFromTop(name,data);
     }
+    else if (jsonType.contains("usernameCheck:"))
+    {
+        QStringList usernameCheck = jsonType.split(":");
+        QString name = usernameCheck[1];
+        bool exists;
+        exists = jsonParser.checkUsernameExists(data);
+        if(exists == true)
+            qDebug() << name;
+        else
+            emit(usernameDialog("error"));
+    }
     else
     {
         qDebug() << "Unknown data";
     }
+}
+
+void MainWindow::usernameDialog(QString dialogType)
+{
+    bool ok;
+    if(dialogType == "new")
+    {
+        bool ok;
+        QString text = QInputDialog::getText(this,tr("QInputDialog::getText()"),tr("Username:"),QLineEdit::Normal,"", &ok);
+        if(ok && !text.isEmpty())
+            networking.checkUsernameRequest(text);
+    }
+    else if (dialogType == "error")
+    {
+        QString text = QInputDialog::getText(this,tr("QInputDialog::getText()"),tr("Username:"),QLineEdit::Normal,"Username doesn't exist", &ok);
+        if(ok && !text.isEmpty())
+            networking.checkUsernameRequest(text);
+    }
+    else
+        qDebug() << "Unknown data";
 }
 
 void MainWindow::timedDataRequest()
@@ -127,6 +158,10 @@ void MainWindow::timedDatabaseRead()
 void MainWindow::on_actionAdd_User_triggered()
 {
     qDebug() << "File";
+    bool ok;
+    QString text = QInputDialog::getText(this,tr("QInputDialog::getText()"),tr("Username:"),QLineEdit::Normal,"", &ok);
+    if(ok && !text.isEmpty())
+        networking.checkUsernameRequest(text);
 }
 
 void MainWindow::on_actionExit_triggered()
