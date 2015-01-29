@@ -143,6 +143,7 @@ void MainWindow::timedDatabaseRead()
     QList<QStringList> topDataList;
 
     if(tabIndex == 0){
+
         streamDataList = db.retreiveStreamList("featured");
         if(!streamDataList.isEmpty())
             this->addItemToListView(0,streamDataList);
@@ -179,6 +180,7 @@ void MainWindow::on_tabWidget_currentChanged()
 //Adds items to the list view
 void MainWindow::addItemToListView(int index, QList<QStringList> streams)
 {
+    qDebug() << streams.isEmpty();
     if(index == 0)
     {
         ui->listWidget->clear();
@@ -213,7 +215,6 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
             QString displayName = streamData[0];
             QString game = streamData[1];
             QString viewers = streamData[2];
-            //QString status = streamData[3];
             QString stream = displayName + ": (" + viewers + ") " + game;
             ui->listWidget_3->addItem(stream);
         }

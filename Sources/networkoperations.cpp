@@ -4,10 +4,6 @@ networkOperations::networkOperations(QObject *parent) : QObject(parent)
 {
     //Signal-slot connection for network reply, when its finished, activates doneReading (passess the reply)
     connect(networkManager,SIGNAL(finished(QNetworkReply*)),this,SLOT(doneReading(QNetworkReply*)));
-    //Timer thread that makes a request every 60 seconds in the background.
-    //Will have 5 second threads for active tab windows.
-    connect(timer,SIGNAL(timeout()),this,SLOT(timedFollowRequest()));
-    timer->start(60000);
 }
 
 //Makes the network request to twitch api
