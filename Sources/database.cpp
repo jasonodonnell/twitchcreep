@@ -14,18 +14,8 @@ database::~database()
 
 void database::initTables()
 {
-    if(checkDBConnection())
-    {
-        QSqlQuery query(this->db);
-        if(!query.exec("DELETE FROM stream_data;"))
-            qDebug() << query.lastError();
-        else
-            qDebug() << "Truncated";
-        if(!query.exec("DELETE FROM top_data;"))
-            qDebug() << query.lastError();
-        else
-            qDebug() << "Truncated";
-    }
+    this->truncateStreamData();
+    this->truncateTopData();
 }
 
 bool database::checkDBConnection()
@@ -38,6 +28,27 @@ bool database::checkDBConnection()
         return false;
     }
 }
+
+void database::truncateStreamData()
+{
+    if(checkDBConnection())
+    {
+        QSqlQuery query(this->db);
+        if(!query.exec("DELETE FROM stream_data;"))
+            qDebug() << query.lastError();
+    }
+}
+
+void database::truncateTopData()
+{
+    if(checkDBConnection())
+    {
+        QSqlQuery query(this->db);
+        if(!query.exec("DELETE FROM top_data;"))
+            qDebug() << query.lastError();
+    }
+}
+
 
 void database::storeTopData(QList<QStringList> topData)
 {

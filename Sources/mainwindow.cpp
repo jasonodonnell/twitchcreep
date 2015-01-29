@@ -85,17 +85,23 @@ void MainWindow::requestReady(QByteArray data, QString requestType)
         bool exists;
         exists = jsonParser.checkUsernameExists(data);
         if(exists == true)
+        {
             settings.setValue("username",name);
+            db.truncateStreamData();
+            db.truncateTopData();
+            ui->listWidget_3->clear();
+        }
         else
         {
+            db.truncateStreamData();
+            db.truncateTopData();
             settings.setValue("username","");
+            ui->listWidget_3->clear();
             emit(usernameDialog("error"));
         }
     }
     else
-    {
         qDebug() << "Unknown data";
-    }
 }
 
 void MainWindow::usernameDialog(QString dialogType)
@@ -180,7 +186,6 @@ void MainWindow::on_tabWidget_currentChanged()
 //Adds items to the list view
 void MainWindow::addItemToListView(int index, QList<QStringList> streams)
 {
-    qDebug() << streams.isEmpty();
     if(index == 0)
     {
         ui->listWidget->clear();
