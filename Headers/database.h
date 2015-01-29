@@ -25,6 +25,8 @@ public:
     QList<QStringList> retrieveStreamListWithoutImage();
     QList<QStringList> retrieveTopListWithoutImage();
     void storeImageFromUsername(QString name, QByteArray data);
+    void truncateStreamData();
+    void truncateTopData();
 signals:
 
 public slots:
