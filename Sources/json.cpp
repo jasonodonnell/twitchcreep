@@ -55,8 +55,10 @@ QList<QStringList> json::getFeaturedStreamData(QByteArray data)
             QString logo = channelObj.value("logo").toString();
             QString url = channelObj.value("url").toString();
             streamer << displayName << game << viewers << status << logo << url;
+            qDebug() << streamer;
             streamerList << streamer;
     }
+    //qDebug() << streamerList;
     return streamerList;
 }
 
