@@ -98,6 +98,13 @@ void networkOperations::checkUsernameRequest(QString username)
     this->makeRequest(url);
 }
 
+void networkOperations::makeGameRequest(QString game)
+{
+    QString url = "https://api.twitch.tv/kraken/search/streams?q=" + game;
+    this->setObjectName("game");
+    this->makeRequest(url);
+}
+
 bool networkOperations::checkNetworkConnection()
 {
     QNetworkConfigurationManager mgr;

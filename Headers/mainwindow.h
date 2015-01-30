@@ -38,6 +38,8 @@ private slots:
     void timedDataRequest();
     void timedDatabaseRead();
 
+    void on_pushButton_pressed();
+
 private:
     Ui::MainWindow *ui;
     json jsonParser;

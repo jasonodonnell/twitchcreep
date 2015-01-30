@@ -135,3 +135,31 @@ bool json::checkUsernameExists(QByteArray data)
     }
     return true;
 }
+
+QList<QStringList> json::getGameStreamData(QByteArray data)
+{
+    QList<QStringList> streamerList;
+    QJsonDocument jsonData = QJsonDocument::fromJson(data);
+    QJsonObject json = jsonData.object();
+    QJsonArray array = json["streams"].toArray();
+    if (array.isEmpty() != true)
+        for(int i = 0; i != array.count(); ++i)
+        {
+            QStringList streamer;
+            QJsonObject gameObj = array[i].toObject();
+            QString viewers = QString::number(gameObj.value("viewers").toInt());
+
+            QJsonValue channelVal = gameObj.value("channel");
+            QJsonObject channelObj = channelVal.toObject();
+
+            QString game = channelObj.value("game").toString();
+            QString status = channelObj.value("status").toString();
+            QString displayName = channelObj.value("display_name").toString();
+            QString logo = channelObj.value("logo").toString();
+            QString url = channelObj.value("url").toString();
+            streamer << displayName << game << viewers << status << logo << url;
+            streamerList << streamer;
+    }
+    //qDebug() << streamerList;
+    return streamerList;
+}
