@@ -5,7 +5,7 @@ To do this I'm using the twitch api: https://github.com/justintv/twitch-api
 
 This is my first time building an application with QT, so a lot of the code is messy and experimental.  Comments and criticism appreciated!
 
-Some screen captures:
+##Screen captures:
 
 Featured Functionality: http://imgur.com/NAyRokh
 
