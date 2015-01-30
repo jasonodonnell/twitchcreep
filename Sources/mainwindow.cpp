@@ -100,6 +100,10 @@ void MainWindow::requestReady(QByteArray data, QString requestType)
             emit(usernameDialog("error"));
         }
     }
+    else if (jsonType.contains("game"))
+    {
+        qDebug() << jsonParser.getGameStreamData(data);
+    }
     else
         qDebug() << "Unknown data";
 }
@@ -138,8 +142,6 @@ void MainWindow::timedDataRequest()
         if(!settings.value("username").isNull())
             networking.makeFollowRequest(settings.value("username").toString());
     }
-    else if(tabIndex == 3)
-        qDebug() << "Todo";
 }
 
 void MainWindow::timedDatabaseRead()
@@ -149,7 +151,6 @@ void MainWindow::timedDatabaseRead()
     QList<QStringList> topDataList;
 
     if(tabIndex == 0){
-
         streamDataList = db.retreiveStreamList("featured");
         if(!streamDataList.isEmpty())
             this->addItemToListView(0,streamDataList);
@@ -233,4 +234,18 @@ void MainWindow::changeStatusBar()
         statusBar()->showMessage(tr("Status: Online"));
     else
         statusBar()->showMessage(tr("Status: Offline"));
+}
+
+void MainWindow::on_pushButton_pressed()
+{
+    QString search = ui->lineEdit->text();
+    bool game = ui->radioButton->isChecked();
+    bool user = ui->radioButton_2->isChecked();
+    if(!search.isEmpty())
+    {
+        if(game == true)
+            networking.makeGameRequest(search);
+        else
+            networking.makeGameRequest(search);
+    }
 }
