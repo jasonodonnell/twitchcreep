@@ -12,3 +12,5 @@ Featured Functionality: http://imgur.com/NAyRokh
 Followed Functionality: http://imgur.com/WLVlo7V
 
 Top Functionality: http://imgur.com/UgQyoeX
+
+Search: Coming soon
