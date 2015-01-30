@@ -97,17 +97,21 @@ void database::storeStreamData(QStringList streamData, QString requestType)
         QString followed = "false";
         QString featured = "false";
         QString top = "false";
+        QString search = "false";
+
         if(requestType == "followed")
             followed = "true";
         else if(requestType == "featured")
             featured = "true";
         else if(requestType == "top")
             top = "true";
+        else if(requestType == "search")
+            search = "true";
         if(!checkIfStreamExists(username))
         {
             QSqlQuery query(this->db);
-            QString insert = "INSERT INTO stream_data (username, game, viewers, status, logo, url, followed, featured, top) ";
-            QString values = "VALUES (:username, :game, :viewers, :status, :logo, :url, :followed, :featured, :top)";
+            QString insert = "INSERT INTO stream_data (username, game, viewers, status, logo, url, followed, featured, top, search) ";
+            QString values = "VALUES (:username, :game, :viewers, :status, :logo, :url, :followed, :featured, :top, :search)";
             QString queryString = insert + values;
 
             query.prepare(queryString);
@@ -115,11 +119,12 @@ void database::storeStreamData(QStringList streamData, QString requestType)
             query.bindValue(":game", game);
             query.bindValue(":viewers", viewers);
             query.bindValue(":status", status);
-            query.bindValue(":url", url);
             query.bindValue(":logo", logo);
+            query.bindValue(":url", url);
             query.bindValue(":followed", followed);
             query.bindValue(":featured", featured);
             query.bindValue(":top", top);
+            query.bindValue(":search", search);
 
             if(!query.exec())
                 qDebug() << query.lastError();
@@ -129,7 +134,7 @@ void database::storeStreamData(QStringList streamData, QString requestType)
             QSqlQuery query(this->db);
             QString update = "UPDATE stream_data SET game = :game,";
             QString values = "viewers = :viewers, status = :status, followed = :followed, ";
-            QString valuesCont = "featured = :featured, top = :top WHERE USERNAME = :username";
+            QString valuesCont = "featured = :featured, top = :top, search = :search WHERE USERNAME = :username";
             QString queryString = update+values+valuesCont;
             query.prepare(queryString);
             query.bindValue(":game", game);
@@ -138,6 +143,7 @@ void database::storeStreamData(QStringList streamData, QString requestType)
             query.bindValue(":followed", followed);
             query.bindValue(":featured", featured);
             query.bindValue(":top", top);
+            query.bindValue(":search", search);
             query.bindValue(":username", username);
 
             if(!query.exec())
@@ -203,6 +209,8 @@ QList<QStringList> database::retreiveStreamList(QString requestType)
             query.prepare("SELECT username,game,viewers,status,logo,url FROM stream_data WHERE featured='true'");
         else if(requestType == "top")
             query.prepare("SELECT username,game,viewers,status,logo,url FROM stream_data WHERE top='true'");
+        else if(requestType == "top")
+            query.prepare("SELECT username,game,viewers,status,logo,url FROM stream_data WHERE search='true'");
 
         if(query.exec())
         {
