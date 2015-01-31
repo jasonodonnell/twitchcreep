@@ -7,11 +7,11 @@ This is my first time building an application with QT, so a lot of the code is m
 
 ##Screen captures:
 
-Featured Functionality: http://imgur.com/NAyRokh
+Featured: http://imgur.com/NAyRokh
 
-Followed Functionality: http://imgur.com/WLVlo7V
+Followed: http://imgur.com/WLVlo7V
 
-Top Functionality: http://imgur.com/UgQyoeX
+Top: http://imgur.com/UgQyoeX
 
 Search Game: http://i.imgur.com/UDYDqKc.png
 
