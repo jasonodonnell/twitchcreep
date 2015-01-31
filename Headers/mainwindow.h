@@ -40,6 +40,8 @@ private slots:
 
     void on_pushButton_pressed();
 
+    void on_lineEdit_returnPressed();
+
 private:
     Ui::MainWindow *ui;
     json jsonParser;
@@ -51,6 +53,7 @@ private:
     QSettings settings;
 
     void createSignalSlots();
+    void searchTabRequest();
 };
 
 #endif // MAINWINDOW_H

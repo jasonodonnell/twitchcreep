@@ -209,7 +209,7 @@ QList<QStringList> database::retreiveStreamList(QString requestType)
             query.prepare("SELECT username,game,viewers,status,logo,url FROM stream_data WHERE featured='true'");
         else if(requestType == "top")
             query.prepare("SELECT username,game,viewers,status,logo,url FROM stream_data WHERE top='true'");
-        else if(requestType == "top")
+        else if(requestType == "search")
             query.prepare("SELECT username,game,viewers,status,logo,url FROM stream_data WHERE search='true'");
 
         if(query.exec())

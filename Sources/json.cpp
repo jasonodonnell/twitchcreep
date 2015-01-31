@@ -142,7 +142,9 @@ QList<QStringList> json::getGameStreamData(QByteArray data)
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
     QJsonObject json = jsonData.object();
     QJsonArray array = json["streams"].toArray();
-    if (array.isEmpty() != true)
+
+    if (!array.isEmpty())
+    {
         for(int i = 0; i != array.count(); ++i)
         {
             QStringList streamer;
@@ -159,7 +161,13 @@ QList<QStringList> json::getGameStreamData(QByteArray data)
             QString url = channelObj.value("url").toString();
             streamer << displayName << game << viewers << status << logo << url;
             streamerList << streamer;
+        }
     }
-    //qDebug() << streamerList;
+    else
+    {
+        QStringList streamerNotFound;
+        streamerNotFound << "Not found" << "" << "" << "" << "" << "";
+        streamerList << streamerNotFound;
+    }
     return streamerList;
 }
