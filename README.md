@@ -13,4 +13,6 @@ Followed Functionality: http://imgur.com/WLVlo7V
 
 Top Functionality: http://imgur.com/UgQyoeX
 
-Search: Coming soon
+Search Game: http://i.imgur.com/UDYDqKc.png
+
+Search User: http://i.imgur.com/hxdP49h.png
