@@ -8,7 +8,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
-    ui->radioButton->setChecked(true);
     this->createSignalSlots();
     this->timedDataRequest();
     this->changeStatusBar();
@@ -102,7 +101,11 @@ void MainWindow::requestReady(QByteArray data, QString requestType)
     }
     else if (jsonType.contains("game"))
     {
-        qDebug() << jsonParser.getGameStreamData(data);
+        db.truncateStreamData();
+        QList<QStringList> search = jsonParser.getGameStreamData(data);
+        QStringList searchData;
+        foreach(searchData, search)
+            db.storeStreamData(searchData, "search");
     }
     else
         qDebug() << "Unknown data";
@@ -167,6 +170,12 @@ void MainWindow::timedDatabaseRead()
         if(!streamDataList.isEmpty())
             this->addItemToListView(2,streamDataList);
     }
+    else if(tabIndex == 3)
+    {
+        streamDataList = db.retreiveStreamList("search");
+        if(!streamDataList.isEmpty())
+            this->addItemToListView(3,streamDataList);
+    }
 }
 
 void MainWindow::on_actionAdd_User_triggered()
@@ -226,6 +235,18 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
         }
         ui->listWidget_3->sortItems();
     }
+    else if(index == 3)
+    {
+        ui->listWidget_4->clear();
+        foreach (QStringList streamData, streams)
+        {
+            QString displayName = streamData[0];
+            QString game = streamData[1];
+            QString viewers = streamData[2];
+            QString stream = displayName + ": (" + viewers + ") " + game;
+            ui->listWidget_4->addItem(stream);
+        }
+    }
 }
 
 void MainWindow::changeStatusBar()
@@ -236,16 +257,19 @@ void MainWindow::changeStatusBar()
         statusBar()->showMessage(tr("Status: Offline"));
 }
 
-void MainWindow::on_pushButton_pressed()
+void MainWindow::searchTabRequest()
 {
     QString search = ui->lineEdit->text();
-    bool game = ui->radioButton->isChecked();
-    bool user = ui->radioButton_2->isChecked();
     if(!search.isEmpty())
-    {
-        if(game == true)
-            networking.makeGameRequest(search);
-        else
-            networking.makeGameRequest(search);
-    }
+        networking.makeGameRequest(search);
+}
+
+void MainWindow::on_pushButton_pressed()
+{
+    this->searchTabRequest();
+}
+
+void MainWindow::on_lineEdit_returnPressed()
+{
+    this->searchTabRequest();
 }
