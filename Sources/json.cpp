@@ -37,7 +37,7 @@ QList<QStringList> json::getFeaturedStreamData(QByteArray data)
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
     QJsonObject json = jsonData.object();
     QJsonArray array = json["featured"].toArray();
-    if (array.isEmpty() != true)
+    if (!array.isEmpty())
         for(int i = 0; i != array.count(); ++i)
         {
             QStringList streamer;
@@ -102,7 +102,7 @@ QList<QStringList> json::getTopGames(QByteArray data)
     QJsonObject json = jsonData.object();
     QJsonArray array = json["top"].toArray();
 
-    if (array.isEmpty() != true)
+    if (!array.isEmpty())
         for(int i = 0; i != array.count(); ++i)
         {
             QStringList topGames;

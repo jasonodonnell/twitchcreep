@@ -83,7 +83,7 @@ void MainWindow::requestReady(QByteArray data, QString requestType)
         QString name = usernameCheck[1];
         bool exists;
         exists = jsonParser.checkUsernameExists(data);
-        if(exists == true)
+        if(exists)
         {
             settings.setValue("username",name);
             db.truncateStreamData();
@@ -106,6 +106,7 @@ void MainWindow::requestReady(QByteArray data, QString requestType)
         QStringList searchData;
         foreach(searchData, search)
             db.storeStreamData(searchData, "search");
+            networking.makeStreamImageRequest(searchData);
     }
     else
         qDebug() << "Unknown data";
