@@ -45,7 +45,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     json jsonParser;
-    imageOperations image;
     networkOperations networking;
     database db;
     QTimer *requestTimer = new QTimer(this);
