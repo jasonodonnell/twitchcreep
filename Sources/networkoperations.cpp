@@ -22,6 +22,7 @@ void networkOperations::doneReading(QNetworkReply *reply)
     emit(dataReady(replyData,requestType));
 }
 
+//Make the follow request based on username in QSettings
 void networkOperations::makeFollowRequest(QString username)
 {
     QString url = "https://api.twitch.tv/kraken/users/" + username + "/follows/channels";
@@ -29,6 +30,7 @@ void networkOperations::makeFollowRequest(QString username)
     this->makeRequest(url);
 }
 
+//Make the stream request based on the username passed in
 void networkOperations::makeStreamRequest(QString username)
 {
     QString url = "https://api.twitch.tv/kraken/streams/" + username;
@@ -36,6 +38,7 @@ void networkOperations::makeStreamRequest(QString username)
     this->makeRequest(url);
 }
 
+//Makes the stream requests from a list of streamer usernames.
 void networkOperations::makeStreamRequestFromList(QStringList usernames)
 {
     foreach(QString username,usernames)
@@ -46,7 +49,7 @@ void networkOperations::makeStreamRequestFromList(QStringList usernames)
     }
 }
 
-
+//Makes a featured stream request.
 void networkOperations::makeFeaturedRequest()
 {
     QString url = "https://api.twitch.tv/kraken/streams/featured";
@@ -54,6 +57,7 @@ void networkOperations::makeFeaturedRequest()
     this->makeRequest(url);
 }
 
+//Makes a top games request.
 void networkOperations::makeTopGamesRequest()
 {
     QString url = "https://api.twitch.tv/kraken/games/top";
@@ -61,6 +65,7 @@ void networkOperations::makeTopGamesRequest()
     this->makeRequest(url);
 }
 
+//Gets the profile image for a stream
 void networkOperations::makeStreamImageRequest(QStringList streamDataList)
 {
     QString objectName = "streamImage:" + streamDataList[0];
@@ -69,6 +74,7 @@ void networkOperations::makeStreamImageRequest(QStringList streamDataList)
     this->makeRequest(url);
 }
 
+//Gets the profile image for a game
 void networkOperations::makeTopImageRequest(QStringList topDataList)
 {
     QString objectName = "topImage:" + topDataList[0];
@@ -77,6 +83,7 @@ void networkOperations::makeTopImageRequest(QStringList topDataList)
     this->makeRequest(url);
 }
 
+//Check if username exists.
 void networkOperations::checkUsernameRequest(QString username)
 {
     QString url = "https://api.twitch.tv/kraken/users/" + username;
@@ -85,6 +92,7 @@ void networkOperations::checkUsernameRequest(QString username)
     this->makeRequest(url);
 }
 
+//Gets list of streams for a game
 void networkOperations::makeGameRequest(QString game)
 {
     QString url = "https://api.twitch.tv/kraken/search/streams?q=" + game;
@@ -92,6 +100,7 @@ void networkOperations::makeGameRequest(QString game)
     this->makeRequest(url);
 }
 
+//Check current internet connection
 bool networkOperations::checkNetworkConnection()
 {
     QNetworkConfigurationManager mgr;

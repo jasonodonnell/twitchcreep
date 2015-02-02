@@ -10,6 +10,9 @@ requestHandler::~requestHandler()
 
 }
 
+//Slot where data requests are processed.  When a request is made, the object
+//name is set by the member function and passed into this along with the request
+//data.  From here it is directed to the appropriate member function.
 void requestHandler::requestProcess(QByteArray data, QString jsonType)
 {
     if (jsonType == "follows")
@@ -39,6 +42,7 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
         this->getGame(data);
 }
 
+//Takes the follows request and makes the appropriate network call.
 void requestHandler::getFollows(QByteArray data)
 {
     QStringList follows;
@@ -46,6 +50,7 @@ void requestHandler::getFollows(QByteArray data)
     networking.makeStreamRequestFromList(follows);
 }
 
+//Takes the follow list and makes the appropriate network calls.
 void requestHandler::getFollowsList(QByteArray data)
 {
     QStringList streamData = jsonParser.getStreamData(data);
@@ -53,6 +58,7 @@ void requestHandler::getFollowsList(QByteArray data)
         db.storeStreamData(streamData, "followed");
 }
 
+//Takes the featured request and makes the appropriate network call.
 void requestHandler::getFeatured(QByteArray data)
 {
     QList<QStringList> streamerList;
@@ -63,6 +69,7 @@ void requestHandler::getFeatured(QByteArray data)
         networking.makeStreamImageRequest(streamData);
 }
 
+//Takes the top request and makes the appropriate network call.
 void requestHandler::getTop(QByteArray data)
 {
     QList<QStringList> topGames;
@@ -70,16 +77,19 @@ void requestHandler::getTop(QByteArray data)
     db.storeTopData(topGames);
 }
 
+//Takes the stream image request and makes the appropriate network call.
 void requestHandler::getStreamImage(QByteArray data, QString name)
 {
     db.storeImageFromUsername(name,data);
 }
 
+//Takes the top image request and makes the appropriate network call.
 void requestHandler::getTopImage(QByteArray data, QString name)
 {
     db.storeImageFromTop(name,data);
 }
 
+//Takes the usrername request and makes the appropriate network call.
 void requestHandler::getUsername(QByteArray data, QString name)
 {
     bool exists;
