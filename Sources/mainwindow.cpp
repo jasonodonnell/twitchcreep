@@ -16,6 +16,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+//Creates signals and slots for the mainwindow.
 void MainWindow::createSignalSlots()
 {
     connect((&request),SIGNAL(usernameDialogSignal(QString)),this,SLOT(usernameDialog(QString)));
@@ -26,7 +27,7 @@ void MainWindow::createSignalSlots()
     readTimer->start(500);
 }
 
-
+//Slot for the username dialog, will repop the dialog box if the username isn't found.
 void MainWindow::usernameDialog(QString dialogType)
 {
     bool ok;
@@ -44,11 +45,14 @@ void MainWindow::usernameDialog(QString dialogType)
     }
 }
 
+//Slot to clear the follow list (this is used when username is changed)
 void MainWindow::followListClear()
 {
     ui->listWidget_3->clear();
 }
 
+
+//Requests the data for the current open tab on a timer.
 void MainWindow::timedDataRequest()
 {
     int tabIndex = ui->tabWidget->currentIndex();
@@ -65,6 +69,7 @@ void MainWindow::timedDataRequest()
     }
 }
 
+//Reads the database for the current tab on a timer.
 void MainWindow::timedDatabaseRead()
 {
     int tabIndex = ui->tabWidget->currentIndex();
@@ -74,16 +79,19 @@ void MainWindow::timedDatabaseRead()
         this->addItemToListView(tabIndex,streamDataList);
 }
 
+//Adds a new username to QSettings
 void MainWindow::on_actionAdd_User_triggered()
 {
     this->usernameDialog("new");
 }
 
+//Exit
 void MainWindow::on_actionExit_triggered()
 {
     this->~MainWindow();
 }
 
+//Tab switched signal
 void MainWindow::on_tabWidget_currentChanged()
 {
     this->timedDataRequest();
@@ -146,6 +154,7 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
     }
 }
 
+//Changes status bar at the bottom for internet connection.
 void MainWindow::changeStatusBar()
 {
     if(request.checkConnection())
@@ -154,6 +163,7 @@ void MainWindow::changeStatusBar()
         statusBar()->showMessage(tr("Status: Offline"));
 }
 
+//Requests search string when submitted (through enter or clicking the button)
 void MainWindow::searchTabRequest()
 {
     QString search = ui->lineEdit->text();
@@ -161,11 +171,13 @@ void MainWindow::searchTabRequest()
         request.makeSearchRequest(search);
 }
 
+//Submit button
 void MainWindow::on_pushButton_pressed()
 {
     this->searchTabRequest();
 }
 
+//Enter pressed on the search window
 void MainWindow::on_lineEdit_returnPressed()
 {
     this->searchTabRequest();
