@@ -24,17 +24,6 @@ void networkOperations::doneReading(QNetworkReply *reply)
     emit(dataReady(replyData,requestType));
 }
 
-void networkOperations::timedFollowRequest()
-{
-    QString username = settings.value("username").toString();
-    if (!username.isNull())
-    {
-        QString url = "https://api.twitch.tv/kraken/users/" + username + "/follows/channels";
-        this->setObjectName("follow");
-        this->makeRequest(url);
-    }
-}
-
 void networkOperations::makeFollowRequest(QString username)
 {
     QString url = "https://api.twitch.tv/kraken/users/" + username + "/follows/channels";
