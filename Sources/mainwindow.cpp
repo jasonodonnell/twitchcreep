@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-QList<QStringList> followsList;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -33,7 +32,6 @@ void MainWindow::usernameDialog(QString dialogType)
     bool ok;
     if(dialogType == "new")
     {
-        bool ok;
         QString text = QInputDialog::getText(this,tr("Add Username"),tr("Username:"),QLineEdit::Normal,"", &ok);
         if(ok && !text.isEmpty())
             request.checkUsername(text);
@@ -44,8 +42,6 @@ void MainWindow::usernameDialog(QString dialogType)
         if(ok && !text.isEmpty())
             request.checkUsername(text);
     }
-    else
-        qDebug() << "Unknown data";
 }
 
 void MainWindow::followListClear()
@@ -85,7 +81,7 @@ void MainWindow::on_actionAdd_User_triggered()
 
 void MainWindow::on_actionExit_triggered()
 {
-    delete ui;
+    this->~MainWindow();
 }
 
 void MainWindow::on_tabWidget_currentChanged()

@@ -11,8 +11,6 @@ void networkOperations::makeRequest(QString url)
 {
     if(this->checkNetworkConnection())
         networkManager->get(QNetworkRequest(QUrl(url)));
-    else
-        qDebug() << "Not connected to internet";
 }
 
 //Slot that is activated after finished signal is fired.  Reads
@@ -97,10 +95,7 @@ void networkOperations::makeGameRequest(QString game)
 bool networkOperations::checkNetworkConnection()
 {
     QNetworkConfigurationManager mgr;
-    if(mgr.isOnline())
-        return true;
-    else
-        return false;
+    return mgr.isOnline();
 }
 
 networkOperations::~networkOperations()

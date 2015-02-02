@@ -1,14 +1,15 @@
 #include "json.h"
 
-
 json::json(QObject *parent) : QObject(parent)
 {
+
 }
 
 json::~json()
 {
 
 }
+
 //Returns a QStringList of all the streamers followed by a user.
 //The json object is very nested so some unpacking is required.
 QStringList json::getStreamerFollowedList(QByteArray data)
@@ -118,7 +119,6 @@ QList<QStringList> json::getTopGames(QByteArray data)
             QJsonObject logoObj = logoVal.toObject();
 
             QString smallLogo = logoObj.value("small").toString();
-
             topGames << game << viewers << smallLogo;
             topList << topGames;
         }
@@ -130,10 +130,9 @@ bool json::checkUsernameExists(QByteArray data)
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
     QJsonObject json = jsonData.object();
     if(json.contains("error"))
-    {
         return false;
-    }
-    return true;
+    else
+        return true;
 }
 
 QList<QStringList> json::getGameStreamData(QByteArray data)
