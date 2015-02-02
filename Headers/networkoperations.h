@@ -31,7 +31,6 @@ signals:
     void dataReady(QByteArray,QString);
 public slots:
     void doneReading(QNetworkReply *reply);
-    void timedFollowRequest();
 private:
     QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
     QTimer *timer = new QTimer(this);
