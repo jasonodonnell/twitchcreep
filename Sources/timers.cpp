@@ -4,6 +4,7 @@ timers::timers(QObject *parent) : QObject(parent)
 {
     this->createTimerSignals();
     this->startTimers();
+    this->connectionTimer;
 }
 
 timers::~timers()
@@ -15,6 +16,7 @@ void timers::createTimerSignals()
 {
     connect(requestTimer,SIGNAL(timeout()),this,SLOT(dataRequest()));
     connect(readTimer,SIGNAL(timeout()),this,SLOT(databaseRead()));
+    connect(connectionTimer,SIGNAL(timeout()),this,SLOT(networkConnection()));
 }
 
 void timers::startTimers()
@@ -31,4 +33,9 @@ void timers::dataRequest()
 void timers::databaseRead()
 {
     emit(readDatabase());
+}
+
+void timers::networkConnection()
+{
+    emit(checkConnection());
 }

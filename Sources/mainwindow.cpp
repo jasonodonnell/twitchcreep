@@ -23,6 +23,7 @@ void MainWindow::createSignalSlots()
     connect((&request),SIGNAL(clearFollowList()),this,SLOT(followListClear()));
     connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
     connect((&timerManager),SIGNAL(readDatabase()),this,SLOT(timedDatabaseRead()));
+    connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
 }
 
 //Slot for the username dialog, will repop the dialog box if the username isn't found.

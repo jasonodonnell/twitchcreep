@@ -14,14 +14,17 @@ public:
 signals:
     void requestData();
     void readDatabase();
+    void checkConnection();
 public slots:
 
 private slots:
     void dataRequest();
     void databaseRead();
+    void networkConnection();
 private:
     QTimer *requestTimer = new QTimer(this);
     QTimer *readTimer = new QTimer(this);
+    QTimer *connectionTimer = new QTimer(this);
     void createTimerSignals();
     void startTimers();
 };
