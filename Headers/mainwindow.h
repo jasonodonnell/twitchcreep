@@ -25,7 +25,6 @@ public:
     QList<QStringList> followsList;
     ~MainWindow();
 
-    void changeStatusBar();
     void addItemToListView(int,QList<QStringList>);
     //void tabRequest(int);
 public slots:
@@ -40,7 +39,7 @@ private slots:
     void timedDatabaseRead();
     void on_pushButton_pressed();
     void on_lineEdit_returnPressed();
-
+    void changeStatusBar();
 private:
     Ui::MainWindow *ui;
     requestHandler request;
