@@ -4,12 +4,12 @@
 #include <QMainWindow>
 #include <QDebug>
 #include <QListView>
-#include <QTimer>
 #include <QInputDialog>
 #include <QSettings>
 #include "json.h"
 #include "networkoperations.h"
 #include "database.h"
+#include "timers.h"
 #include "requesthandler.h"
 
 namespace Ui {
@@ -43,10 +43,9 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QTimer *requestTimer = new QTimer(this);
-    QTimer *readTimer = new QTimer(this);
     requestHandler request;
     QSettings settings;
+    timers timerManager;
     void createSignalSlots();
     void searchTabRequest();
 };

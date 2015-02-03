@@ -33,8 +33,6 @@ public slots:
     void doneReading(QNetworkReply *reply);
 private:
     QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
-    QTimer *timer = new QTimer(this);
-    QSettings settings;
 };
 
 #endif // NETWORKOPERATIONS_H
