@@ -43,8 +43,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     requestHandler request;
-    QSettings settings;
     timers timerManager;
+    QSettings settings;
     void createSignalSlots();
     void searchTabRequest();
 };
