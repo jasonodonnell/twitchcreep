@@ -3,8 +3,9 @@
 timers::timers(QObject *parent) : QObject(parent)
 {
     this->createTimerSignals();
+    this->dataRequest();
+    this->databaseRead();
     this->startTimers();
-    this->connectionTimer;
 }
 
 timers::~timers()
@@ -23,6 +24,7 @@ void timers::startTimers()
 {
     requestTimer->start(5000);
     readTimer->start(500);
+    connectionTimer->start(5000);
 }
 
 void timers::dataRequest()
