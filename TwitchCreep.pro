@@ -17,12 +17,14 @@ SOURCES += main.cpp\
            json.cpp \
     networkoperations.cpp \
     database.cpp \
-    requesthandler.cpp
+    requesthandler.cpp \
+    timers.cpp
 
 HEADERS  += mainwindow.h \
             json.h \
     networkoperations.h \
     database.h \
-    requesthandler.h
+    requesthandler.h \
+    timers.h
 
 FORMS    += mainwindow.ui
