@@ -25,8 +25,8 @@ void database::createTables()
 {
     if(checkDBConnection())
     {
-        QString top_data = "CREATE TABLE top_data (oid INTEGER PRIMARY KEY, game STRING, viewers INT, logo STRING, image BLOB);";
-        QString stream_data = "CREATE TABLE stream_data (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
+        QString top_data = "CREATE TABLE IF NOT EXISTS top_data (oid INTEGER PRIMARY KEY, game STRING, viewers INT, logo STRING, image BLOB);";
+        QString stream_data = "CREATE TABLE IF NOT EXISTS stream_data (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
         stream_data.append("status STRING, logo STRING, url STRING, image BLOB, followed BOOL, featured BOOL, top BOOL, search BOOL);");
 
         QSqlQuery query(this->db);
