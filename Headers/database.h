@@ -33,6 +33,7 @@ public slots:
     void storeImageFromTop(QString game, QByteArray data);
 private:
     networkOperations networking;
+    void createTables();
 };
 
 #endif // DATABASE_H

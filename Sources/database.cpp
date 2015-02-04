@@ -3,7 +3,9 @@
 database::database(QObject *parent) : QObject(parent)
 {
     this->db = QSqlDatabase::addDatabase("QSQLITE");
-    this->db.setDatabaseName("/Users/Wizard/Git/TwitchCreep/twitch.db");
+    QString appDir = QCoreApplication::applicationDirPath();
+    appDir = appDir.append("/twitch.db");
+    this->db.setDatabaseName(appDir);
     this->initTables();
 }
 
@@ -14,8 +16,25 @@ database::~database()
 
 void database::initTables()
 {
+    this->createTables();
     this->truncateStreamData();
     this->truncateTopData();
+}
+
+void database::createTables()
+{
+    if(checkDBConnection())
+    {
+        QString top_data = "CREATE TABLE top_data (oid INTEGER PRIMARY KEY, game STRING, viewers INT, logo STRING, image BLOB);";
+        QString stream_data = "CREATE TABLE stream_data (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
+        stream_data.append("status STRING, logo STRING, url STRING, image BLOB, followed BOOL, featured BOOL, top BOOL, search BOOL);");
+
+        QSqlQuery query(this->db);
+        if(!query.exec(top_data))
+            qDebug() << query.lastError();
+        if(!query.exec(stream_data))
+            qDebug() << query.lastError();
+    }
 }
 
 bool database::checkDBConnection()
