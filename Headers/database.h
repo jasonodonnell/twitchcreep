@@ -27,6 +27,8 @@ public:
     void storeImageFromUsername(QString name, QByteArray data);
     void truncateStreamData();
     void truncateTopData();
+    QByteArray retrieveStreamImage(QString name);
+    QByteArray retrieveTopImage(QString game);
 signals:
 
 public slots:

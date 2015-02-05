@@ -108,6 +108,7 @@ void database::storeStreamData(QStringList streamData, QString requestType)
     if(checkDBConnection())
     {
         QString username = streamData[0];
+
         QString game = streamData[1];
         QString viewers = streamData[2];
         QString status = streamData[3];
@@ -315,7 +316,7 @@ void database::storeImageFromUsername(QString name, QByteArray data)
     if(checkDBConnection())
     {
         QSqlQuery query(this->db);
-        query.prepare("UPDATE stream_data SET image = :image WHERE username = :name");
+        query.prepare("UPDATE stream_data SET image = IfNull(:image,'') WHERE username = :name");
         query.bindValue(":image",data);
         query.bindValue(":name",name);
         if(!query.exec())
@@ -335,4 +336,35 @@ void database::storeImageFromTop(QString game, QByteArray data)
             qDebug() << query.lastError();
     }
 }
+
+QByteArray database::retrieveStreamImage(QString name)
+{
+    if(checkDBConnection())
+    {
+        QSqlQuery query(this->db);
+        query.prepare("SELECT image FROM stream_data WHERE username=:username");
+        query.bindValue(":username",name);
+        if(query.exec())
+        {
+            while(query.next())
+                return query.value(0).toByteArray();
+        }
+    }
+}
+
+QByteArray database::retrieveTopImage(QString game)
+{
+    if(checkDBConnection())
+    {
+        QSqlQuery query(this->db);
+        query.prepare("SELECT image FROM top_data WHERE game=:game");
+        query.bindValue(":game",game);
+        if(query.exec())
+        {
+            while(query.next())
+                return query.value(0).toByteArray();
+        }
+    }
+}
+
 

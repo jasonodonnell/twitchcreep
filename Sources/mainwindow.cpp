@@ -23,6 +23,7 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
     connect((&timerManager),SIGNAL(readDatabase()),this,SLOT(timedDatabaseRead()));
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
+    connect((&timerManager),SIGNAL(imageRequest()),this,SLOT(timedImageRequest()));
 }
 
 //Slot for the username dialog, will repop the dialog box if the username isn't found.
@@ -54,7 +55,6 @@ void MainWindow::followListClear()
 void MainWindow::timedDataRequest()
 {
     int tabIndex = ui->tabWidget->currentIndex();
-    QList<QStringList> streamDataList;
 
     if(tabIndex == 0)
         request.makeFeaturedRequest();
@@ -77,6 +77,14 @@ void MainWindow::timedDatabaseRead()
         this->addItemToListView(tabIndex,streamDataList);
 }
 
+//Reads the database for the current tab on a timer.
+void MainWindow::timedImageRequest()
+{
+    QList<QStringList> streams = request.getStreamListNoImage();
+    if(!streams.isEmpty())
+        request.makeImageRequest(streams[0]);
+}
+
 //Adds a new username to QSettings
 void MainWindow::on_actionAdd_User_triggered()
 {
@@ -92,7 +100,9 @@ void MainWindow::on_actionExit_triggered()
 //Tab switched signal
 void MainWindow::on_tabWidget_currentChanged()
 {
+    request.clearObjectName();
     this->timedDataRequest();
+    this->timedDatabaseRead();
 }
 
 //Adds items to the list view
@@ -108,7 +118,14 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
             QString viewers = streamData[2];
             QString status = streamData[3];
             QString stream = displayName + ": (" + viewers + ") " + game;
-            ui->listWidget->addItem(stream);
+            QByteArray imageArray = request.readStreamImage(displayName);
+            QPixmap image;
+            if(image.loadFromData(imageArray,"PNG"))
+                QListWidgetItem *item = new QListWidgetItem(QPixmap(image), stream,ui->listWidget);
+            else if(image.loadFromData(imageArray,"JPEG"))
+                QListWidgetItem *item = new QListWidgetItem(QPixmap(image), stream,ui->listWidget);
+            else
+                ui->listWidget->addItem(stream);
         }
         ui->listWidget->sortItems();
     }

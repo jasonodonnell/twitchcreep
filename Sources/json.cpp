@@ -58,7 +58,6 @@ QList<QStringList> json::getFeaturedStreamData(QByteArray data)
             streamer << displayName << game << viewers << status << logo << url;
             streamerList << streamer;
     }
-    //qDebug() << streamerList;
     return streamerList;
 }
 

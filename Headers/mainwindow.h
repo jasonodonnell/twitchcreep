@@ -31,6 +31,7 @@ public slots:
     void usernameDialog(QString);
     void followListClear();
 
+    void timedImageRequest();
 private slots:
     void on_actionAdd_User_triggered();
     void on_actionExit_triggered();
