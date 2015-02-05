@@ -28,6 +28,12 @@ public:
     QList<QStringList> timedDatabaseRead(int index);
     void makeSearchRequest(QString search);
     bool checkConnection();
+    QByteArray readStreamImage(QString name);
+    QByteArray readTopImage(QString name);
+    void makeStreamImageRequest(QStringList stream);
+    QList<QStringList> getStreamListNoImage();
+    void makeImageRequest(QStringList);
+    void clearObjectName();
 signals:
     void usernameDialogSignal(QString );
     void clearFollowList();

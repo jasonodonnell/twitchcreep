@@ -17,7 +17,7 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
 {
     if (jsonType == "follows")
         this->getFollows(data);
-    else if (jsonType == "followList")
+    else if (jsonType == "followsList")
         this->getFollowsList(data);
     else if (jsonType == "featured")
         this->getFeatured(data);
@@ -40,6 +40,9 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
     }
     else if (jsonType.contains("game"))
         this->getGame(data);
+
+    if(networking.objectName() != "followsList")
+        networking.setObjectName("");
 }
 
 //Takes the follows request and makes the appropriate network call.
@@ -66,7 +69,6 @@ void requestHandler::getFeatured(QByteArray data)
     streamerList << jsonParser.getFeaturedStreamData(data);
     foreach(streamData, streamerList)
         db.storeStreamData(streamData, "featured");
-        networking.makeStreamImageRequest(streamData);
 }
 
 //Takes the top request and makes the appropriate network call.
@@ -81,6 +83,16 @@ void requestHandler::getTop(QByteArray data)
 void requestHandler::getStreamImage(QByteArray data, QString name)
 {
     db.storeImageFromUsername(name,data);
+}
+
+QByteArray requestHandler::readStreamImage(QString name)
+{
+    return db.retrieveStreamImage(name);
+}
+
+QByteArray requestHandler::readTopImage(QString name)
+{
+    return db.retrieveTopImage(name);
 }
 
 //Takes the top image request and makes the appropriate network call.
@@ -117,7 +129,6 @@ void requestHandler::getGame(QByteArray data)
     QStringList searchData;
     foreach(searchData, search)
         db.storeStreamData(searchData, "search");
-        networking.makeStreamImageRequest(searchData);
 }
 
 void requestHandler::checkUsername(QString text)
@@ -159,7 +170,22 @@ void requestHandler::makeSearchRequest(QString search)
     networking.makeGameRequest(search);
 }
 
+void requestHandler::makeImageRequest(QStringList stream)
+{
+    networking.makeStreamImageRequest(stream);
+}
+
+QList<QStringList> requestHandler::getStreamListNoImage()
+{
+    return db.retrieveStreamListWithoutImage();
+}
+
 bool requestHandler::checkConnection()
 {
     return networking.checkNetworkConnection();
+}
+
+void requestHandler::clearObjectName()
+{
+    networking.setObjectName("");
 }
