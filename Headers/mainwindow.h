@@ -24,14 +24,13 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     QList<QStringList> followsList;
     ~MainWindow();
-
     void addItemToListView(int,QList<QStringList>);
-    //void tabRequest(int);
+
 public slots:
     void usernameDialog(QString);
     void followListClear();
-
     void timedImageRequest();
+
 private slots:
     void on_actionAdd_User_triggered();
     void on_actionExit_triggered();

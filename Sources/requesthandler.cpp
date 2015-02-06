@@ -85,11 +85,13 @@ void requestHandler::getStreamImage(QByteArray data, QString name)
     db.storeImageFromUsername(name,data);
 }
 
+//Read stream image from the database
 QByteArray requestHandler::readStreamImage(QString name)
 {
     return db.retrieveStreamImage(name);
 }
 
+//Read top image from the database
 QByteArray requestHandler::readTopImage(QString name)
 {
     return db.retrieveTopImage(name);
@@ -122,6 +124,7 @@ void requestHandler::getUsername(QByteArray data, QString name)
     emit(clearFollowList());
 }
 
+//Get games from the search query
 void requestHandler::getGame(QByteArray data)
 {
     db.truncateStreamData();
@@ -131,26 +134,31 @@ void requestHandler::getGame(QByteArray data)
         db.storeStreamData(searchData, "search");
 }
 
+//Check if username exists, used in the UI
 void requestHandler::checkUsername(QString text)
 {
     networking.checkUsernameRequest(text);
 }
 
+//Request featured streams
 void requestHandler::makeFeaturedRequest()
 {
     networking.makeFeaturedRequest();
 }
 
+//Make top request
 void requestHandler::makeTopRequest()
 {
     networking.makeTopGamesRequest();
 }
 
+//Make follow request
 void requestHandler::makeFollowRequest(QString username)
 {
     networking.makeFollowRequest(username);
 }
 
+//Read the database on a timed interval.  Triggered by the timers class.
 QList<QStringList> requestHandler::timedDatabaseRead(int index)
 {
     QList<QStringList> streamDataList;
@@ -165,26 +173,31 @@ QList<QStringList> requestHandler::timedDatabaseRead(int index)
     return streamDataList;
 }
 
+//Make network request from a search value
 void requestHandler::makeSearchRequest(QString search)
 {
     networking.makeGameRequest(search);
 }
 
+//Get image for a given stream
 void requestHandler::makeImageRequest(QStringList stream)
 {
     networking.makeStreamImageRequest(stream);
 }
 
+//Get list of all streams without an image in the database
 QList<QStringList> requestHandler::getStreamListNoImage()
 {
     return db.retrieveStreamListWithoutImage();
 }
 
+//Check internet connection
 bool requestHandler::checkConnection()
 {
     return networking.checkNetworkConnection();
 }
 
+//Clear the networking objectname
 void requestHandler::clearObjectName()
 {
     networking.setObjectName("");
