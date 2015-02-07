@@ -49,6 +49,7 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
 void requestHandler::getFollows(QByteArray data)
 {
     QStringList follows;
+    db.manageOnlineStreamers("followed");
     follows = jsonParser.getStreamerFollowedList(data);
     networking.makeStreamRequestFromList(follows);
 }
@@ -66,6 +67,7 @@ void requestHandler::getFeatured(QByteArray data)
 {
     QList<QStringList> streamerList;
     QStringList streamData;
+    db.manageOnlineStreamers("featured");
     streamerList << jsonParser.getFeaturedStreamData(data);
     foreach(streamData, streamerList)
         db.storeStreamData(streamData, "featured");
@@ -75,6 +77,7 @@ void requestHandler::getFeatured(QByteArray data)
 void requestHandler::getTop(QByteArray data)
 {
     QList<QStringList> topGames;
+    db.manageOnlineStreamers("top");
     topGames << jsonParser.getTopGames(data);
     db.storeTopData(topGames);
 }
