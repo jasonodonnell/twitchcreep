@@ -2,11 +2,12 @@
 #define REQUESTHANDLER_H
 
 #include <QObject>
+#include <QThread>
 #include "json.h"
 #include "database.h"
 #include "networkoperations.h"
 
-class requestHandler : public QObject
+class requestHandler : public QThread
 {
     Q_OBJECT
     void getFollows(QByteArray data);

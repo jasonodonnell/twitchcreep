@@ -1,6 +1,6 @@
 #include "requesthandler.h"
 
-requestHandler::requestHandler(QObject *parent) : QObject(parent)
+requestHandler::requestHandler(QObject *parent) : QThread(parent)
 {
     connect((&networking),SIGNAL(dataReady(QByteArray,QString)),this,SLOT(requestProcess(QByteArray,QString)));
 }
