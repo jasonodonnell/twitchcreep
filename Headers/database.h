@@ -29,6 +29,7 @@ public:
     void truncateTopData();
     QByteArray retrieveStreamImage(QString name);
     QByteArray retrieveTopImage(QString game);
+    void manageOnlineStreamers(QString requestType);
 signals:
 
 public slots:
