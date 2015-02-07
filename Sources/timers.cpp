@@ -4,7 +4,6 @@ timers::timers(QObject *parent) : QObject(parent)
 {
     this->createTimerSignals();
     this->dataRequest();
-    this->databaseRead();
     this->makeImageRequest();
     this->startTimers();
 }
@@ -25,14 +24,9 @@ void timers::createTimerSignals()
 void timers::startTimers()
 {
     requestTimer->start(5000);
-    readTimer->start(500);
+    readTimer->start(100);
     connectionTimer->start(5000);
     imageRequestTimer->start(10);
-}
-
-void timers::dataRequest()
-{
-    emit(requestData());
 }
 
 void timers::databaseRead()
@@ -40,12 +34,17 @@ void timers::databaseRead()
     emit(readDatabase());
 }
 
-void timers::networkConnection()
+void timers::dataRequest()
 {
-    emit(checkConnection());
+    emit(requestData());
 }
 
 void timers::makeImageRequest()
 {
     emit(imageRequest());
+}
+
+void timers::networkConnection()
+{
+    emit(checkConnection());
 }
