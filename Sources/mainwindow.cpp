@@ -99,7 +99,7 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(readDatabase()),this,SLOT(timedDatabaseRead()));
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(imageRequest()),this,SLOT(timedImageRequest()));
-    connect((ui->listWidget),SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(onListItemClicked(QListWidgetItem*)));
+    connect((ui->listWidget),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemClicked(QListWidgetItem*)));
 }
 
 //Slot to clear the follow list (this is used when username is changed)
@@ -110,7 +110,9 @@ void MainWindow::followListClear()
 
 void MainWindow::onListItemClicked(QListWidgetItem *item)
 {
-    qDebug() << item->text();
+    QStringList username = item->text().split(":");
+    QString url = "http://www.twitch.tv/" + username[0];
+    QDesktopServices::openUrl(url);
 }
 
 //Adds a new username to QSettings

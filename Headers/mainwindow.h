@@ -7,6 +7,8 @@
 #include <QInputDialog>
 #include <QSettings>
 #include <QListWidgetItem>
+#include <QDesktopServices>
+#include <QStringList>
 #include "json.h"
 #include "networkoperations.h"
 #include "database.h"
