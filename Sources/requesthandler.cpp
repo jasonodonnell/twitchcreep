@@ -59,9 +59,9 @@ void requestHandler::getFollowsList(QByteArray data)
 //Get games from the search query
 void requestHandler::getGame(QByteArray data)
 {
-    db.truncateStreamData();
     QList<QStringList> search = jsonParser.getGameStreamData(data);
     QStringList searchData;
+    db.manageOnlineStreamers("search");
     foreach(searchData, search)
         db.storeStreamData(searchData, "search");
 }
