@@ -9,27 +9,30 @@
 class database : public QObject
 {
     Q_OBJECT
-    bool checkIfTopExists(QString game);
 public:
     explicit database(QObject *parent = 0);
     QSqlDatabase db;
     ~database();
 
-    void initTables();
-    void storeStreamData(QStringList streamData, QString requestType);
     bool checkDBConnection();
-    bool checkIfStreamExists(QString username);
+    bool checkIfStreamExists(QString username, QString requestType);
+    bool checkIfTopExists(QString game);
+    void initTables();
+    void getOfflineDisplayedStreams(QString requestType);
+    void manageOnlineStreamers(QString requestType);
+    QByteArray retrieveStreamImage(QString name);
     QList<QStringList> retreiveStreamList(QString requestType);
-    void storeTopData(QList<QStringList> topData);
+    QByteArray retrieveTopImage(QString game);
     QList<QStringList> retrieveTopList();
-    QList<QStringList> retrieveStreamListWithoutImage();
     QList<QStringList> retrieveTopListWithoutImage();
+    QList<QStringList> retrieveStreamListWithoutImage();
+    void storeStreamData(QStringList streamData, QString requestType);
     void storeImageFromUsername(QString name, QByteArray data);
+    void storeTopData(QList<QStringList> topData);
     void truncateStreamData();
     void truncateTopData();
-    QByteArray retrieveStreamImage(QString name);
-    QByteArray retrieveTopImage(QString game);
-    void manageOnlineStreamers(QString requestType);
+    void getDisplayedOfflineStreams(QString requestType);
+    void getNonDisplayedOnlineStreams(QString requestType);
 signals:
 
 public slots:
