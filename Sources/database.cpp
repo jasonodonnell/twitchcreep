@@ -102,32 +102,14 @@ void database::getDisplayedOfflineStreams(QString requestType)
 {
     QSqlQuery query(this->db);
     if(requestType == "followed")
-        query.prepare("SELECT username FROM stream_data WHERE followed='true', online='false', displayed='true'");
+        query.prepare("SELECT username FROM stream_data WHERE followed='true' AND online='false' AND displayed='true'");
     else if(requestType == "featured")
-        query.prepare("SELECT username FROM stream_data WHERE featured='true', online='false', displayed='true'");
+        query.prepare("SELECT username FROM stream_data WHERE featured='true' AND online='false' AND displayed='true'");
     else if(requestType == "top")
-        query.prepare("SELECT username FROM stream_data WHERE top='true', online='false', displayed='true'");
+        query.prepare("SELECT username FROM stream_data WHERE top='true' AND online='false' AND displayed='true'");
     else if(requestType == "search")
-        query.prepare("SELECT username FROM stream_data WHERE search='true', online='false', displayed='true'");
+        query.prepare("SELECT username FROM stream_data WHERE search='true' AND online='false' AND displayed='true'");
 
-    if(checkDBConnection())
-    {
-        if(!query.exec())
-            qDebug() << query.lastError();
-    }
-}
-
-void database::getNonDisplayedOnlineStreams(QString requestType)
-{
-    QSqlQuery query(this->db);
-    if(requestType == "followed")
-        query.prepare("SELECT username FROM stream_data WHERE followed='true', online='true', displayed='false'");
-    else if(requestType == "featured")
-        query.prepare("SELECT username FROM stream_data WHERE featured='true', online='true', displayed='false'");
-    else if(requestType == "top")
-        query.prepare("SELECT username FROM stream_data WHERE top='true', online='true', displayed='false'");
-    else if(requestType == "search")
-        query.prepare("SELECT username FROM stream_data WHERE search='true', online='true', displayed='false'");
 
     if(checkDBConnection())
     {
@@ -141,6 +123,26 @@ void database::initTables()
     this->createTables();
     this->truncateStreamData();
     this->truncateTopData();
+}
+
+void database::manageDisplayVariable(QString requestType, QString username)
+{
+    if(checkDBConnection())
+    {
+        QSqlQuery query(this->db);
+        if(requestType == "followed")
+            query.prepare("UPDATE stream_data SET displayed='true' WHERE username=:username AND followed='true'");
+        else if(requestType == "featured")
+            query.prepare("UPDATE stream_data SET displayed='true' WHERE username=:username AND featured='true'");
+        else if(requestType == "top")
+            query.prepare("UPDATE stream_data SET displayed='true' WHERE username=:username AND top='true'");
+        else if(requestType == "search")
+            query.prepare("UPDATE stream_data SET displayed='true' WHERE username=:username AND search='true'");
+
+        query.bindValue(":username",username);
+        if(!query.exec())
+            qDebug() << query.lastError();
+    }
 }
 
 void database::manageOnlineStreamers(QString requestType)

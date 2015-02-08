@@ -10,6 +10,12 @@ requestHandler::~requestHandler()
 
 }
 
+//Takes the featured request and makes the appropriate network call.
+void requestHandler::changeDisplayVariable(QString requestType, QString username)
+{
+    db.manageDisplayVariable(requestType, username);
+}
+
 //Check internet connection
 bool requestHandler::checkConnection()
 {

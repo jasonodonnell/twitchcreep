@@ -35,6 +35,7 @@ public:
     QList<QStringList> getStreamListNoImage();
     void makeImageRequest(QStringList);
     void clearObjectName();
+    void changeDisplayVariable(QString requestType, QString username);
 signals:
     void usernameDialogSignal(QString );
     void clearFollowList();
