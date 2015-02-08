@@ -6,6 +6,7 @@
 #include <QListView>
 #include <QInputDialog>
 #include <QSettings>
+#include <QListWidgetItem>
 #include "json.h"
 #include "networkoperations.h"
 #include "database.h"
@@ -40,6 +41,7 @@ private slots:
     void on_pushButton_pressed();
     void on_lineEdit_returnPressed();
     void changeStatusBar();
+    void onListItemClicked(QListWidgetItem* item);
 private:
     Ui::MainWindow *ui;
     requestHandler request;

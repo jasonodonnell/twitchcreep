@@ -99,12 +99,18 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(readDatabase()),this,SLOT(timedDatabaseRead()));
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(imageRequest()),this,SLOT(timedImageRequest()));
+    connect((ui->listWidget),SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(onListItemClicked(QListWidgetItem*)));
 }
 
 //Slot to clear the follow list (this is used when username is changed)
 void MainWindow::followListClear()
 {
     ui->listWidget_3->clear();
+}
+
+void MainWindow::onListItemClicked(QListWidgetItem *item)
+{
+    qDebug() << item->text();
 }
 
 //Adds a new username to QSettings
