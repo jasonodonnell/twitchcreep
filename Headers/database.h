@@ -32,7 +32,7 @@ public:
     void truncateStreamData();
     void truncateTopData();
     void getDisplayedOfflineStreams(QString requestType);
-    void getNonDisplayedOnlineStreams(QString requestType);
+    void manageDisplayVariable(QString requestType, QString username);
 signals:
 
 public slots:

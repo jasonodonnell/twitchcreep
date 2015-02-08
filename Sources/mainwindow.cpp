@@ -20,7 +20,6 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
 {
     if(index == 0)
     {
-        ui->listWidget->clear();
         foreach (QStringList streamData, streams)
         {
             QString displayName = streamData[0].replace(" ","");
@@ -32,9 +31,13 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
             if(image.loadFromData(imageArray,"PNG"))
             {
                 QListWidgetItem *item = new QListWidgetItem(QPixmap(image), stream,ui->listWidget);
+                request.changeDisplayVariable("featured", displayName);
             }
             else if(image.loadFromData(imageArray,"JPEG"))
+            {
                 QListWidgetItem *item = new QListWidgetItem(QPixmap(image), stream,ui->listWidget);
+                request.changeDisplayVariable("featured", displayName);
+            }
         }
         ui->listWidget->sortItems();
     }
@@ -52,13 +55,13 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
     }
     else if(index == 2)
     {
-        ui->listWidget_3->clear();
         foreach (QStringList streamData, streams)
         {
             QString displayName = streamData[0].replace(" ","");
             QString game = streamData[1];
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
+            request.changeDisplayVariable("followed", displayName);
             if(!displayName.isEmpty())
                 ui->listWidget_3->addItem(stream);
         }
@@ -66,13 +69,13 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
     }
     else if(index == 3)
     {
-        ui->listWidget_4->clear();
         foreach (QStringList streamData, streams)
         {
             QString displayName = streamData[0].replace(" ","");
             QString game = streamData[1];
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
+            request.changeDisplayVariable("search", displayName);
             ui->listWidget_4->addItem(stream);
         }
     }
