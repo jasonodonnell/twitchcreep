@@ -28,12 +28,7 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
             QString stream = displayName + ": (" + viewers + ") " + game;
             QByteArray imageArray = request.readStreamImage(displayName);
             QPixmap image;
-            if(image.loadFromData(imageArray,"PNG"))
-            {
-                QListWidgetItem *item = new QListWidgetItem(QPixmap(image), stream,ui->listWidget);
-                request.changeDisplayVariable("featured", displayName);
-            }
-            else if(image.loadFromData(imageArray,"JPEG"))
+            if(image.loadFromData(imageArray,0))
             {
                 QListWidgetItem *item = new QListWidgetItem(QPixmap(image), stream,ui->listWidget);
                 request.changeDisplayVariable("featured", displayName);
@@ -99,6 +94,7 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(readDatabase()),this,SLOT(timedDatabaseRead()));
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(imageRequest()),this,SLOT(timedImageRequest()));
+    connect((&timerManager),SIGNAL(removeOfflineStreams()),this,SLOT(timedOfflineRemoval()));
     connect((ui->listWidget),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemClicked(QListWidgetItem*)));
 }
 
@@ -187,6 +183,17 @@ void MainWindow::timedImageRequest()
     QList<QStringList> streams = request.getStreamListNoImage();
     if(!streams.isEmpty())
         request.makeImageRequest(streams[0]);
+}
+
+//Reads the database for the current tab on a timer.
+void MainWindow::timedOfflineRemoval()
+{
+    int tabIndex = ui->tabWidget->currentIndex();
+    QStringList streams = request.timedOfflineRemoval(tabIndex);
+    if(!streams.isEmpty())
+        if(tabIndex == 0)
+            for(int i = 0; i < ui->listWidget->count(); ++i)
+                qDebug() << ui->listWidget->item(i);
 }
 
 //Slot for the username dialog, will repop the dialog box if the username isn't found.

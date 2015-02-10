@@ -44,6 +44,7 @@ private slots:
     void on_lineEdit_returnPressed();
     void changeStatusBar();
     void onListItemClicked(QListWidgetItem* item);
+    void timedOfflineRemoval();
 private:
     Ui::MainWindow *ui;
     requestHandler request;

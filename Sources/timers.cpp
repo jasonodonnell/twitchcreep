@@ -18,6 +18,7 @@ void timers::createTimerSignals()
     connect(requestTimer,SIGNAL(timeout()),this,SLOT(dataRequest()));
     connect(readTimer,SIGNAL(timeout()),this,SLOT(databaseRead()));
     connect(connectionTimer,SIGNAL(timeout()),this,SLOT(networkConnection()));
+    connect(displayedOfflineTimer,SIGNAL(timeout()),this,SLOT(displayedOffline()));
     connect(imageRequestTimer,SIGNAL(timeout()),this,SLOT(makeImageRequest()));
 }
 
@@ -26,6 +27,7 @@ void timers::startTimers()
     requestTimer->start(5000);
     readTimer->start(100);
     connectionTimer->start(5000);
+    displayedOfflineTimer->start(10000);
     imageRequestTimer->start(10);
 }
 
@@ -47,4 +49,9 @@ void timers::makeImageRequest()
 void timers::networkConnection()
 {
     emit(checkConnection());
+}
+
+void timers::displayedOffline()
+{
+    emit(removeOfflineStreams());
 }

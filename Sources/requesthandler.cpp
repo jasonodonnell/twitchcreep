@@ -212,3 +212,17 @@ QList<QStringList> requestHandler::timedDatabaseRead(int index)
         streamDataList = db.retreiveStreamList("search");
     return streamDataList;
 }
+
+QStringList requestHandler::timedOfflineRemoval(int index)
+{
+    QStringList streamDataList;
+    if(index == 0)
+        streamDataList = db.getDisplayedOfflineStreams("featured");
+    else if(index == 1)
+        streamDataList = db.getDisplayedOfflineStreams("top");
+    else if(index == 2)
+        streamDataList = db.getDisplayedOfflineStreams("followed");
+    else if(index == 3)
+        streamDataList = db.getDisplayedOfflineStreams("search");
+    return streamDataList;
+}

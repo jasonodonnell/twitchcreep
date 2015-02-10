@@ -17,6 +17,7 @@ signals:
     void readDatabase();
     void checkConnection();
     void imageRequest();
+    void removeOfflineStreams();
 public slots:
 
 private slots:
@@ -24,11 +25,14 @@ private slots:
     void databaseRead();
     void networkConnection();
     void makeImageRequest();
+    void displayedOffline();
+
 private:
     QTimer *requestTimer = new QTimer(this);
     QTimer *readTimer = new QTimer(this);
     QTimer *connectionTimer = new QTimer(this);
     QTimer *imageRequestTimer = new QTimer(this);
+    QTimer *displayedOfflineTimer = new QTimer(this);
     void createTimerSignals();
     void startTimers();
 };

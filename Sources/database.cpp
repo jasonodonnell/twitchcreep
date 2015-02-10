@@ -98,9 +98,10 @@ void database::createTables()
     }
 }
 
-void database::getDisplayedOfflineStreams(QString requestType)
+QStringList database::getDisplayedOfflineStreams(QString requestType)
 {
     QSqlQuery query(this->db);
+    QStringList streamData;
     if(requestType == "followed")
         query.prepare("SELECT username FROM stream_data WHERE followed='true' AND online='false' AND displayed='true'");
     else if(requestType == "featured")
@@ -112,10 +113,10 @@ void database::getDisplayedOfflineStreams(QString requestType)
 
 
     if(checkDBConnection())
-    {
-        if(!query.exec())
-            qDebug() << query.lastError();
-    }
+        if(query.exec())
+            while(query.next())
+                streamData << query.value(0).toString();
+    return streamData;
 }
 
 void database::initTables()
