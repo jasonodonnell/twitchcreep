@@ -43,7 +43,7 @@ private slots:
     void on_pushButton_pressed();
     void on_lineEdit_returnPressed();
     void changeStatusBar();
-    void onListItemClicked(QListWidgetItem* item);
+    void onListItemDoubleClicked(QListWidgetItem* item);
     void timedOfflineRemoval();
 private:
     Ui::MainWindow *ui;

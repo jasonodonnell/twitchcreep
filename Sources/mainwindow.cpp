@@ -9,6 +9,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
     this->createSignalSlots();
     this->changeStatusBar();
+    //All style related stuff should be broken out into member functions
+    //this->setStyleSheet("background-color: rgb(51,53,58);");
+    QPalette p = ui->listWidget->palette();
+    p.setColor(QPalette::Highlight, QColor(153,126,175));
+    ui->listWidget->setPalette(p);
 }
 MainWindow::~MainWindow()
 {
@@ -31,6 +36,7 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
             if(image.loadFromData(imageArray,0))
             {
                 QListWidgetItem *item = new QListWidgetItem(QPixmap(image), stream,ui->listWidget);
+                item->setSizeHint(QSize(item->sizeHint().width(),20));
                 request.changeDisplayVariable("featured", displayName);
             }
         }
@@ -95,7 +101,7 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(imageRequest()),this,SLOT(timedImageRequest()));
     connect((&timerManager),SIGNAL(removeOfflineStreams()),this,SLOT(timedOfflineRemoval()));
-    connect((ui->listWidget),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemClicked(QListWidgetItem*)));
+    connect((ui->listWidget),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
 }
 
 //Slot to clear the follow list (this is used when username is changed)
@@ -104,7 +110,7 @@ void MainWindow::followListClear()
     ui->listWidget_3->clear();
 }
 
-void MainWindow::onListItemClicked(QListWidgetItem *item)
+void MainWindow::onListItemDoubleClicked(QListWidgetItem *item)
 {
     QStringList username = item->text().split(":");
     QString url = "http://www.twitch.tv/" + username[0];
@@ -193,7 +199,7 @@ void MainWindow::timedOfflineRemoval()
     if(!streams.isEmpty())
         if(tabIndex == 0)
             for(int i = 0; i < ui->listWidget->count(); ++i)
-                qDebug() << ui->listWidget->item(i);
+                qDebug() << ui->listWidget->item(i)->text();
 }
 
 //Slot for the username dialog, will repop the dialog box if the username isn't found.
