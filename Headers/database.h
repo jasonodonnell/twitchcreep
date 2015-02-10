@@ -31,7 +31,7 @@ public:
     void storeTopData(QList<QStringList> topData);
     void truncateStreamData();
     void truncateTopData();
-    void getDisplayedOfflineStreams(QString requestType);
+    QStringList getDisplayedOfflineStreams(QString requestType);
     void manageDisplayVariable(QString requestType, QString username);
 signals:
 

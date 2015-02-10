@@ -36,6 +36,7 @@ public:
     void makeImageRequest(QStringList);
     void clearObjectName();
     void changeDisplayVariable(QString requestType, QString username);
+    QStringList timedOfflineRemoval(int index);
 signals:
     void usernameDialogSignal(QString );
     void clearFollowList();
