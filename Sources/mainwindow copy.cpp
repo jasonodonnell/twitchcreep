@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->tabWidget->setCurrentIndex(0);
+    ui->tabWidget->setCurrentIndex(1);
     this->createSignalSlots();
     this->changeStatusBar();
     this->styleItems();
@@ -46,22 +46,34 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
             QString game = streamData[1];
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
-            request.changeDisplayVariable("followed", displayName);
-            if(!displayName.isEmpty())
-                ui->listWidget_2->addItem(stream);
+            QByteArray imageArray = request.readStreamImage(displayName);
+            QPixmap image;
+            if(image.loadFromData(imageArray,0))
+            {
+                QListWidgetItem *item = new QListWidgetItem(QPixmap(image), stream,ui->listWidget_2);
+                item->setSizeHint(QSize(item->sizeHint().width(),20));
+                request.changeDisplayVariable("followed", displayName);
+            }
         }
         ui->listWidget_2->sortItems();
     }
     else if(index == 2)
     {
+        qDebug() << streams;
         foreach (QStringList streamData, streams)
         {
             QString displayName = streamData[0].replace(" ","");
             QString game = streamData[1];
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
-            request.changeDisplayVariable("search", displayName);
-            ui->listWidget_3->addItem(stream);
+            QByteArray imageArray = request.readStreamImage(displayName);
+            QPixmap image;
+            if(image.loadFromData(imageArray,0))
+            {
+                QListWidgetItem *item = new QListWidgetItem(QPixmap(image), stream,ui->listWidget_3);
+                item->setSizeHint(QSize(item->sizeHint().width(),20));
+                request.changeDisplayVariable("search", displayName);
+            }
         }
     }
 }
@@ -128,7 +140,6 @@ void MainWindow::on_pushButton_pressed()
 //Tab switched signal
 void MainWindow::on_tabWidget_currentChanged()
 {
-    request.clearObjectName();
     this->timedDataRequest();
     this->timedDatabaseRead();
 }
@@ -136,8 +147,9 @@ void MainWindow::on_tabWidget_currentChanged()
 //Requests search string when submitted (through enter or clicking the button)
 void MainWindow::searchTabRequest()
 {
-    ui->listWidget_3->clear();
+    request.deleteSearchStreams();
     QString search = ui->lineEdit->text();
+    ui->listWidget_3->clear();
     if(!search.isEmpty())
         request.makeSearchRequest(search);
 }
@@ -194,6 +206,12 @@ void MainWindow::timedOfflineRemoval()
         if(tabIndex == 0)
             for(int i = 0; i < ui->listWidget->count(); ++i)
                 qDebug() << ui->listWidget->item(i)->text();
+        else if(tabIndex == 1)
+            for(int i = 0; i < ui->listWidget_2->count(); ++i)
+                qDebug() << ui->listWidget_2->item(i)->text();
+        else if(tabIndex == 2)
+            for(int i = 0; i < ui->listWidget_3->count(); ++i)
+                qDebug() << ui->listWidget_3->item(i)->text();
 }
 
 //Slot for the username dialog, will repop the dialog box if the username isn't found.

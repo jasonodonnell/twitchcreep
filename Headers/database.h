@@ -28,15 +28,11 @@ public:
     QList<QStringList> retrieveStreamListWithoutImage();
     void storeStreamData(QStringList streamData, QString requestType);
     void storeImageFromUsername(QString name, QByteArray data);
-    void storeTopData(QList<QStringList> topData);
     void truncateStreamData();
-    void truncateTopData();
     QStringList getDisplayedOfflineStreams(QString requestType);
     void manageDisplayVariable(QString requestType, QString username);
 signals:
 
-public slots:
-    void storeImageFromTop(QString game, QByteArray data);
 private:
     networkOperations networking;
     void createTables();

@@ -137,35 +137,3 @@ QStringList json::getStreamerFollowedList(QByteArray data)
     return streamers;
 }
 
-//Returns a QStringList of all the top games being played.
-//The json object is very nested so some unpacking is required.
-QList<QStringList> json::getTopGames(QByteArray data)
-{
-    QList<QStringList> topList;
-
-    QJsonDocument jsonData = QJsonDocument::fromJson(data);
-    QJsonObject json = jsonData.object();
-    QJsonArray array = json["top"].toArray();
-
-    if (!array.isEmpty())
-        for(int i = 0; i != array.count(); ++i)
-        {
-            QStringList topGames;
-            QJsonObject topObj = array[i].toObject();
-            QString viewers = QString::number(topObj.value("viewers").toInt());
-
-            QJsonValue gameVal = topObj.value("game");
-            QJsonObject gameObj = gameVal.toObject();
-
-            QString game = gameObj.value("name").toString();
-
-            QJsonValue logoVal = gameObj.value("logo");
-            QJsonObject logoObj = logoVal.toObject();
-
-            QString smallLogo = logoObj.value("small").toString();
-            topGames << game << viewers << smallLogo;
-            topList << topGames;
-        }
-    return topList;
-}
-

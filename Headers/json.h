@@ -16,7 +16,6 @@ public:
     ~json();
     QStringList getStreamData(QByteArray);
     QList<QStringList> getFeaturedStreamData(QByteArray);
-    QList<QStringList> getTopGames(QByteArray);
     bool checkUsernameExists(QByteArray data);
     QList<QStringList> getGameStreamData(QByteArray data);
 signals:

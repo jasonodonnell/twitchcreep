@@ -40,25 +40,15 @@
         </widget>
         <widget class="QWidget" name="tab_2">
          <attribute name="title">
-          <string>Top Games</string>
+          <string>Followed</string>
          </attribute>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
            <widget class="QListWidget" name="listWidget_2"/>
           </item>
          </layout>
         </widget>
         <widget class="QWidget" name="tab_3">
-         <attribute name="title">
-          <string>Followed</string>
-         </attribute>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <widget class="QListWidget" name="listWidget_3"/>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="tab_4">
          <attribute name="title">
           <string>Search</string>
          </attribute>
@@ -100,7 +90,7 @@
            </layout>
           </item>
           <item>
-           <widget class="QListWidget" name="listWidget_4"/>
+           <widget class="QListWidget" name="listWidget_3"/>
           </item>
          </layout>
         </widget>

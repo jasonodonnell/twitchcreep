@@ -52,6 +52,7 @@ private:
     QSettings settings;
     void createSignalSlots();
     void searchTabRequest();
+    void styleItems();
 };
 
 #endif // MAINWINDOW_H
