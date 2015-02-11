@@ -15,16 +15,13 @@ public:
     explicit networkOperations(QObject *parent = 0);
     ~networkOperations();
 
-    void makeTopGamesRequest();
     void makeFeaturedRequest();
     void makeStreamRequest(QString);
     void makeFollowRequest(QString);
     bool checkNetworkConnection();
     void makeRequest(QString);
     void makeStreamImageRequest(QStringList);
-    void makeTopImageRequest();
     void makeStreamRequestFromList(QStringList usernames);
-    void makeTopImageRequest(QStringList topDataList);
     void checkUsernameRequest(QString username);
     void makeGameRequest(QString game);
 signals:

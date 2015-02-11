@@ -13,9 +13,7 @@ class requestHandler : public QThread
     void getFollows(QByteArray data);
     void getFollowsList(QByteArray data);
     void getFeatured(QByteArray data);
-    void getTop(QByteArray data);
     void getStreamImage(QByteArray data, QString name);
-    void getTopImage(QByteArray data, QString name);
     void getUsername(QByteArray data, QString name);
     void getGame(QByteArray data);
 public:
@@ -24,13 +22,11 @@ public:
 
     void checkUsername(QString text);
     void makeFollowRequest(QString username);
-    void makeTopRequest();
     void makeFeaturedRequest();
     QList<QStringList> timedDatabaseRead(int index);
     void makeSearchRequest(QString search);
     bool checkConnection();
     QByteArray readStreamImage(QString name);
-    QByteArray readTopImage(QString name);
     void makeStreamImageRequest(QStringList stream);
     QList<QStringList> getStreamListNoImage();
     void makeImageRequest(QStringList);

@@ -112,26 +112,3 @@ void networkOperations::makeStreamImageRequest(QStringList streamDataList)
         this->makeRequest(url);
     }
 }
-
-//Makes a top games request.
-void networkOperations::makeTopGamesRequest()
-{
-    QString url = "https://api.twitch.tv/kraken/games/top";
-    if(this->objectName().isEmpty())
-    {
-        this->setObjectName("top");
-        this->makeRequest(url);
-    }
-}
-
-//Gets the profile image for a game
-void networkOperations::makeTopImageRequest(QStringList topDataList)
-{
-    QString objectName = "topImage:" + topDataList[0];
-    QString url = topDataList[1];
-    if(this->objectName().isEmpty())
-    {
-        this->setObjectName(objectName);
-        this->makeRequest(url);
-    }
-}

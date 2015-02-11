@@ -84,22 +84,6 @@ QList<QStringList> requestHandler::getStreamListNoImage()
     return db.retrieveStreamListWithoutImage();
 }
 
-
-//Takes the top request and makes the appropriate network call.
-void requestHandler::getTop(QByteArray data)
-{
-    QList<QStringList> topGames;
-    db.manageOnlineStreamers("top");
-    topGames << jsonParser.getTopGames(data);
-    db.storeTopData(topGames);
-}
-
-//Takes the top image request and makes the appropriate network call.
-void requestHandler::getTopImage(QByteArray data, QString name)
-{
-    db.storeImageFromTop(name,data);
-}
-
 //Takes the usrername request and makes the appropriate network call.
 void requestHandler::getUsername(QByteArray data, QString name)
 {
@@ -109,12 +93,10 @@ void requestHandler::getUsername(QByteArray data, QString name)
     {
         settings.setValue("username",name);
         db.truncateStreamData();
-        db.truncateTopData();
     }
     else
     {
         db.truncateStreamData();
-        db.truncateTopData();
         settings.setValue("username","");
         emit(usernameDialogSignal("error"));
     }
@@ -145,22 +127,10 @@ void requestHandler::makeSearchRequest(QString search)
     networking.makeGameRequest(search);
 }
 
-//Make top request
-void requestHandler::makeTopRequest()
-{
-    networking.makeTopGamesRequest();
-}
-
 //Read stream image from the database
 QByteArray requestHandler::readStreamImage(QString name)
 {
     return db.retrieveStreamImage(name);
-}
-
-//Read top image from the database
-QByteArray requestHandler::readTopImage(QString name)
-{
-    return db.retrieveTopImage(name);
 }
 
 //Slot where data requests are processed.  When a request is made, the object
@@ -174,17 +144,10 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
         this->getFollowsList(data);
     else if (jsonType == "featured")
         this->getFeatured(data);
-    else if (jsonType == "top")
-        this->getTop(data);
     else if (jsonType.contains("streamImage:"))
     {
         QStringList name = jsonType.split(":");
         this->getStreamImage(data,name[1]);
-    }
-    else if (jsonType.contains("topImage:"))
-    {
-        QStringList name = jsonType.split(":");
-        this->getTopImage(data,name[1]);
     }
     else if (jsonType.contains("usernameCheck:"))
     {
@@ -205,10 +168,8 @@ QList<QStringList> requestHandler::timedDatabaseRead(int index)
     if(index == 0)
         streamDataList = db.retreiveStreamList("featured");
     else if(index == 1)
-        streamDataList = db.retrieveTopList();
-    else if(index == 2)
         streamDataList = db.retreiveStreamList("follow");
-    else if(index == 3)
+    else if(index == 2)
         streamDataList = db.retreiveStreamList("search");
     return streamDataList;
 }
@@ -219,10 +180,8 @@ QStringList requestHandler::timedOfflineRemoval(int index)
     if(index == 0)
         streamDataList = db.getDisplayedOfflineStreams("featured");
     else if(index == 1)
-        streamDataList = db.getDisplayedOfflineStreams("top");
-    else if(index == 2)
         streamDataList = db.getDisplayedOfflineStreams("followed");
-    else if(index == 3)
+    else if(index == 2)
         streamDataList = db.getDisplayedOfflineStreams("search");
     return streamDataList;
 }
