@@ -86,6 +86,8 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(imageRequest()),this,SLOT(timedImageRequest()));
     connect((&timerManager),SIGNAL(removeOfflineStreams()),this,SLOT(timedOfflineRemoval()));
     connect((ui->listWidget),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
+    connect((ui->listWidget_2),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
+    connect((ui->listWidget_3),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
 }
 
 //Slot to clear the follow list (this is used when username is changed)
