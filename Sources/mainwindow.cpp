@@ -195,7 +195,12 @@ void MainWindow::timedOfflineRemoval()
     if(!streams.isEmpty())
         if(tabIndex == 0)
             for(int i = 0; i < ui->listWidget->count(); ++i)
-                qDebug() << ui->listWidget->item(i)->text();
+                if(streams.contains(ui->listWidget->item(i)->text()))
+                    ui->listWidget->removeItemWidget(ui->listWidget->item(i));
+        else if(tabIndex == 1)
+            for(int i = 0; i < ui->listWidget->count(); ++i)
+                if(streams.contains(ui->listWidget->item(i)->text()))
+                    ui->listWidget->removeItemWidget(ui->listWidget->item(i));
 }
 
 //Slot for the username dialog, will repop the dialog box if the username isn't found.
