@@ -32,7 +32,6 @@ public:
 public slots:
     void usernameDialog(QString);
     void followListClear();
-    void timedImageRequest();
 
 private slots:
     void on_actionAdd_User_triggered();
@@ -45,6 +44,8 @@ private slots:
     void changeStatusBar();
     void onListItemDoubleClicked(QListWidgetItem* item);
     void timedOfflineRemoval();
+    void timedNetworkRequest();
+
 private:
     Ui::MainWindow *ui;
     requestHandler request;

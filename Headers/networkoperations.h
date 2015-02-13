@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QObject>
 #include <QSettings>
+#include <QStringList>
 
 class networkOperations : public QObject
 {
@@ -19,17 +20,21 @@ public:
     void makeStreamRequest(QString);
     void makeFollowRequest(QString);
     bool checkNetworkConnection();
-    void makeRequest(QString);
+    void makeRequest();
     void makeStreamImageRequest(QStringList);
     void makeStreamRequestFromList(QStringList usernames);
     void checkUsernameRequest(QString username);
     void makeGameRequest(QString game);
+
 signals:
     void dataReady(QByteArray,QString);
 public slots:
     void doneReading(QNetworkReply *reply);
+    void popRequestFromList();
 private:
+    void addRequestToList(QString requestType, QString url);
     QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
+    QList<QStringList> requests;
 };
 
 #endif // NETWORKOPERATIONS_H

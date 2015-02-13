@@ -28,19 +28,15 @@ void requestHandler::checkUsername(QString text)
     networking.checkUsernameRequest(text);
 }
 
-//Clear the networking objectname
-void requestHandler::clearObjectName()
-{
-    networking.setObjectName("");
-}
-
 //Takes the featured request and makes the appropriate network call.
 void requestHandler::getFeatured(QByteArray data)
 {
     QList<QStringList> streamerList;
+    QList<QStringList> imageRequestList;
     QStringList streamData;
     db.manageOnlineStreamers("featured");
     streamerList << jsonParser.getFeaturedStreamData(data);
+
     foreach(streamData, streamerList)
         db.storeStreamData(streamData, "featured");
 }
@@ -49,6 +45,8 @@ void requestHandler::getFeatured(QByteArray data)
 void requestHandler::getFollows(QByteArray data)
 {
     QStringList follows;
+    QList<QStringList> imageRequestList;
+
     db.manageOnlineStreamers("followed");
     follows = jsonParser.getStreamerFollowedList(data);
     networking.makeStreamRequestFromList(follows);
@@ -121,6 +119,11 @@ void requestHandler::makeImageRequest(QStringList stream)
     networking.makeStreamImageRequest(stream);
 }
 
+void requestHandler::makeRequest()
+{
+    networking.makeRequest();
+}
+
 //Make network request from a search value
 void requestHandler::makeSearchRequest(QString search)
 {
@@ -157,8 +160,7 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
     else if (jsonType.contains("game"))
         this->getGame(data);
 
-    if(networking.objectName() != "followsList")
-        networking.setObjectName("");
+    networking.popRequestFromList();
 }
 
 //Read the database on a timed interval.  Triggered by the timers class.
