@@ -30,9 +30,9 @@ public:
     void makeStreamImageRequest(QStringList stream);
     QList<QStringList> getStreamListNoImage();
     void makeImageRequest(QStringList);
-    void clearObjectName();
     void changeDisplayVariable(QString requestType, QString username);
     QStringList timedOfflineRemoval(int index);
+    void makeRequest();
 signals:
     void usernameDialogSignal(QString );
     void clearFollowList();

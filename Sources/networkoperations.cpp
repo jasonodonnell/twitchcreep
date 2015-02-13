@@ -11,6 +11,13 @@ networkOperations::~networkOperations()
 
 }
 
+void networkOperations::addRequestToList(QString requestType, QString url)
+{
+    QStringList requestList;
+    requestList << requestType << url;
+    requests << requestList;
+}
+
 //Check current internet connection
 bool networkOperations::checkNetworkConnection()
 {
@@ -23,11 +30,7 @@ void networkOperations::checkUsernameRequest(QString username)
 {
     QString url = "https://api.twitch.tv/kraken/users/" + username;
     QString objectName = "usernameCheck:" + username;
-    if(this->objectName().isEmpty())
-    {
-        this->setObjectName(objectName);
-        this->makeRequest(url);
-    }
+    this->addRequestToList(objectName,url);
 }
 
 //Slot that is activated after finished signal is fired.  Reads
@@ -43,37 +46,35 @@ void networkOperations::doneReading(QNetworkReply *reply)
 void networkOperations::makeFeaturedRequest()
 {
     QString url = "https://api.twitch.tv/kraken/streams/featured";
-    if(this->objectName().isEmpty())
-    {
-        this->setObjectName("featured");
-        this->makeRequest(url);
-    }
+    this->addRequestToList("featured",url);
 }
 
 //Make the follow request based on username in QSettings
 void networkOperations::makeFollowRequest(QString username)
 {
     QString url = "https://api.twitch.tv/kraken/users/" + username + "/follows/channels";
-    this->setObjectName("follows");
-    this->makeRequest(url);
+    this->addRequestToList("follows",url);
 }
 
 //Gets list of streams for a game
 void networkOperations::makeGameRequest(QString game)
 {
     QString url = "https://api.twitch.tv/kraken/search/streams?q=" + game;
-    if(this->objectName().isEmpty())
-    {
-        this->setObjectName("game");
-        this->makeRequest(url);
-    }
+    this->addRequestToList("game",url);
 }
 
 //Makes the network request to twitch api
-void networkOperations::makeRequest(QString url)
+void networkOperations::makeRequest()
 {
-    if(this->checkNetworkConnection())
-        networkManager->get(QNetworkRequest(QUrl(url)));
+    if(requests.count() > 0)
+    {
+        if(this->checkNetworkConnection())
+        {
+            QStringList requestInfo = requests.first();
+            this->setObjectName(requestInfo[0]);
+            networkManager->get(QNetworkRequest(QUrl(requestInfo[1])));
+        }
+    }
 }
 
 
@@ -81,11 +82,7 @@ void networkOperations::makeRequest(QString url)
 void networkOperations::makeStreamRequest(QString username)
 {
     QString url = "https://api.twitch.tv/kraken/streams/" + username;
-    if(this->objectName().isEmpty())
-    {
-        this->setObjectName("stream");
-        this->makeRequest(url);
-    }
+    this->addRequestToList("stream",url);
 }
 
 //Makes the stream requests from a list of streamer usernames.
@@ -94,21 +91,26 @@ void networkOperations::makeStreamRequestFromList(QStringList usernames)
     foreach(QString username,usernames)
     {
         QString url = "https://api.twitch.tv/kraken/streams/" + username;
-        this->setObjectName("followsList");
-        this->makeRequest(url);
+        this->addRequestToList("followsList",url);
     }
 }
 
 //Gets the profile image for a stream
 void networkOperations::makeStreamImageRequest(QStringList streamDataList)
 {
+    QStringList checkList;
     QString objectName = "streamImage:" + streamDataList[0];
     QString url = streamDataList[1];
     if(url.isEmpty())
         url = "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png";
-    if(this->objectName().isEmpty())
-    {
-        this->setObjectName(objectName);
-        this->makeRequest(url);
-    }
+
+    checkList << objectName << url;
+    if(!requests.contains(checkList))
+        this->addRequestToList(objectName,url);
+}
+
+void networkOperations::popRequestFromList()
+{
+    if(requests.count() > 0)
+        requests.pop_front();
 }

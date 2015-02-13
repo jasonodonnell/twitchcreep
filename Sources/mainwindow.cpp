@@ -27,14 +27,9 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
             QString game = streamData[1];
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
-            QByteArray imageArray = request.readStreamImage(displayName);
-            QPixmap image;
-            if(image.loadFromData(imageArray,0))
-            {
-                QListWidgetItem *item = new QListWidgetItem(QPixmap(image), stream,ui->listWidget);
-                item->setSizeHint(QSize(item->sizeHint().width(),20));
-                request.changeDisplayVariable("featured", displayName);
-            }
+            if(!displayName.isEmpty())
+                ui->listWidget->addItem(stream);
+            request.changeDisplayVariable("featured", displayName);
         }
         ui->listWidget->sortItems();
     }
@@ -85,6 +80,7 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(imageRequest()),this,SLOT(timedImageRequest()));
     connect((&timerManager),SIGNAL(removeOfflineStreams()),this,SLOT(timedOfflineRemoval()));
+    connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
     connect((ui->listWidget),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
     connect((ui->listWidget_2),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
     connect((ui->listWidget_3),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
@@ -130,9 +126,7 @@ void MainWindow::on_pushButton_pressed()
 //Tab switched signal
 void MainWindow::on_tabWidget_currentChanged()
 {
-    request.clearObjectName();
     this->timedDataRequest();
-    this->timedDatabaseRead();
 }
 
 //Requests search string when submitted (through enter or clicking the button)
@@ -179,15 +173,7 @@ void MainWindow::timedDataRequest()
     }
 }
 
-//Reads the database for the current tab on a timer.
-void MainWindow::timedImageRequest()
-{
-    QList<QStringList> streams = request.getStreamListNoImage();
-    if(!streams.isEmpty())
-        request.makeImageRequest(streams[0]);
-}
-
-//Reads the database for the current tab on a timer.
+//This needs refactoring cus bad
 void MainWindow::timedOfflineRemoval()
 {
     int tabIndex = ui->tabWidget->currentIndex();
@@ -201,6 +187,11 @@ void MainWindow::timedOfflineRemoval()
             for(int i = 0; i < ui->listWidget->count(); ++i)
                 if(streams.contains(ui->listWidget->item(i)->text()))
                     ui->listWidget->removeItemWidget(ui->listWidget->item(i));
+}
+
+void MainWindow::timedNetworkRequest()
+{
+    request.makeRequest();
 }
 
 //Slot for the username dialog, will repop the dialog box if the username isn't found.
