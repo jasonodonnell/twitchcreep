@@ -10,40 +10,39 @@
 class requestHandler : public QThread
 {
     Q_OBJECT
+    void getFeatured(QByteArray data);
     void getFollows(QByteArray data);
     void getFollowsList(QByteArray data);
-    void getFeatured(QByteArray data);
+    void getGame(QByteArray data);
     void getStreamImage(QByteArray data, QString name);
     void getUsername(QByteArray data, QString name);
-    void getGame(QByteArray data);
+
 public:
     explicit requestHandler(QObject *parent = 0);
     ~requestHandler();
 
+    void changeDisplayVariable(QString requestType, QString username);
+    bool checkConnection();
     void checkUsername(QString text);
     void makeFollowRequest(QString username);
     void makeFeaturedRequest();
-    QList<QStringList> timedDatabaseRead(int index);
-    void makeSearchRequest(QString search);
-    bool checkConnection();
-    QByteArray readStreamImage(QString name);
-    void makeStreamImageRequest(QStringList stream);
-    QList<QStringList> getStreamListNoImage();
-    void makeImageRequest(QStringList);
-    void changeDisplayVariable(QString requestType, QString username);
-    QStringList timedOfflineRemoval(int index);
     void makeRequest();
+    void makeSearchRequest(QString search);
+    QByteArray readStreamImage(QString name);
+    QList<QStringList> timedDatabaseRead(int index);
+    QStringList timedOfflineRemoval(int index);
+
 signals:
-    void usernameDialogSignal(QString );
     void clearFollowList();
+    void usernameDialogSignal(QString );
 
 public slots:
     void requestProcess(QByteArray data, QString jsonType);
 
 private:
+    database db;
     json jsonParser;
     networkOperations networking;
-    database db;
     QSettings settings;
 };
 

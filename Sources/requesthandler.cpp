@@ -32,7 +32,6 @@ void requestHandler::checkUsername(QString text)
 void requestHandler::getFeatured(QByteArray data)
 {
     QList<QStringList> streamerList;
-    QList<QStringList> imageRequestList;
     QStringList streamData;
     db.manageOnlineStreamers("featured");
     streamerList << jsonParser.getFeaturedStreamData(data);
@@ -45,8 +44,6 @@ void requestHandler::getFeatured(QByteArray data)
 void requestHandler::getFollows(QByteArray data)
 {
     QStringList follows;
-    QList<QStringList> imageRequestList;
-
     db.manageOnlineStreamers("followed");
     follows = jsonParser.getStreamerFollowedList(data);
     networking.makeStreamRequestFromList(follows);
@@ -68,18 +65,6 @@ void requestHandler::getGame(QByteArray data)
     db.manageOnlineStreamers("search");
     foreach(searchData, search)
         db.storeStreamData(searchData, "search");
-}
-
-//Takes the stream image request and makes the appropriate network call.
-void requestHandler::getStreamImage(QByteArray data, QString name)
-{
-    db.storeImageFromUsername(name,data);
-}
-
-//Get list of all streams without an image in the database
-QList<QStringList> requestHandler::getStreamListNoImage()
-{
-    return db.retrieveStreamListWithoutImage();
 }
 
 //Takes the usrername request and makes the appropriate network call.
@@ -110,13 +95,8 @@ void requestHandler::makeFeaturedRequest()
 //Make follow request
 void requestHandler::makeFollowRequest(QString username)
 {
-    networking.makeFollowRequest(username);
-}
-
-//Get image for a given stream
-void requestHandler::makeImageRequest(QStringList stream)
-{
-    networking.makeStreamImageRequest(stream);
+    if(!username.isEmpty())
+        networking.makeFollowRequest(username);
 }
 
 void requestHandler::makeRequest()
@@ -130,12 +110,6 @@ void requestHandler::makeSearchRequest(QString search)
     networking.makeGameRequest(search);
 }
 
-//Read stream image from the database
-QByteArray requestHandler::readStreamImage(QString name)
-{
-    return db.retrieveStreamImage(name);
-}
-
 //Slot where data requests are processed.  When a request is made, the object
 //name is set by the member function and passed into this along with the request
 //data.  From here it is directed to the appropriate member function.
@@ -147,11 +121,6 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
         this->getFollowsList(data);
     else if (jsonType == "featured")
         this->getFeatured(data);
-    else if (jsonType.contains("streamImage:"))
-    {
-        QStringList name = jsonType.split(":");
-        this->getStreamImage(data,name[1]);
-    }
     else if (jsonType.contains("usernameCheck:"))
     {
         QStringList name = jsonType.split(":");

@@ -90,23 +90,12 @@ void networkOperations::makeStreamRequestFromList(QStringList usernames)
 {
     foreach(QString username,usernames)
     {
-        QString url = "https://api.twitch.tv/kraken/streams/" + username;
-        this->addRequestToList("followsList",url);
+        if(!username.isEmpty())
+        {
+            QString url = "https://api.twitch.tv/kraken/streams/" + username;
+            this->addRequestToList("followsList",url);
+        }
     }
-}
-
-//Gets the profile image for a stream
-void networkOperations::makeStreamImageRequest(QStringList streamDataList)
-{
-    QStringList checkList;
-    QString objectName = "streamImage:" + streamDataList[0];
-    QString url = streamDataList[1];
-    if(url.isEmpty())
-        url = "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png";
-
-    checkList << objectName << url;
-    if(!requests.contains(checkList))
-        this->addRequestToList(objectName,url);
 }
 
 void networkOperations::popRequestFromList()

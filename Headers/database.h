@@ -17,8 +17,9 @@ public:
     bool checkDBConnection();
     bool checkIfStreamExists(QString username, QString requestType);
     bool checkIfTopExists(QString game);
+    QStringList getDisplayedOfflineStreams(QString requestType);
     void initTables();
-    void getOfflineDisplayedStreams(QString requestType);
+    void manageDisplayVariable(QString requestType, QString username);
     void manageOnlineStreamers(QString requestType);
     QByteArray retrieveStreamImage(QString name);
     QList<QStringList> retreiveStreamList(QString requestType);
@@ -27,10 +28,7 @@ public:
     QList<QStringList> retrieveTopListWithoutImage();
     QList<QStringList> retrieveStreamListWithoutImage();
     void storeStreamData(QStringList streamData, QString requestType);
-    void storeImageFromUsername(QString name, QByteArray data);
     void truncateStreamData();
-    QStringList getDisplayedOfflineStreams(QString requestType);
-    void manageDisplayVariable(QString requestType, QString username);
 signals:
 
 private:

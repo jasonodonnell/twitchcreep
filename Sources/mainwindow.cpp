@@ -106,7 +106,7 @@ void MainWindow::on_actionAdd_User_triggered()
 }
 
 //Exit
-void MainWindow::on_actionExit_triggered()
+void MainWindow::on_actionQuit_triggered()
 {
     this->~MainWindow();
 }
