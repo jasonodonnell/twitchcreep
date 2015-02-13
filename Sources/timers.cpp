@@ -23,8 +23,8 @@ void timers::createTimerSignals()
 
 void timers::startTimers()
 {
-    requestTimer->start(5000);
-    readTimer->start(100);
+    requestTimer->start(3000);
+    readTimer->start(50);
     connectionTimer->start(5000);
     displayedOfflineTimer->start(10000);
     networkRequestTimer->start(100);

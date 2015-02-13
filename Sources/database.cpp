@@ -35,12 +35,7 @@ bool database::checkIfStreamExists(QString username, QString requestType)
     else if(requestType == "search")
         query.prepare("SELECT count(username) FROM stream_data WHERE username=:username AND search='true'");
     query.bindValue(":username",username);
-    if(!query.exec())
-    {
-        qDebug() << query.lastError();
-        return false;
-    }
-    else
+    if(query.exec())
     {
         while(query.next())
         {
@@ -163,59 +158,9 @@ QList<QStringList> database::retreiveStreamList(QString requestType)
     return streamDataList;
 }
 
-QByteArray database::retrieveStreamImage(QString name)
-{
-    if(checkDBConnection())
-    {
-        QSqlQuery query(this->db);
-        query.prepare("SELECT image FROM stream_data WHERE username=:username");
-        query.bindValue(":username",name);
-        if(query.exec())
-        {
-            while(query.next())
-                return query.value(0).toByteArray();
-        }
-    }
-}
-
-QList<QStringList> database::retrieveStreamListWithoutImage()
-{
-    QList<QStringList> streamDataList;
-    QString queryString;
-    if(checkDBConnection())
-    {
-        queryString = "SELECT username,logo FROM stream_data WHERE image is null or image = ''";
-
-        QSqlQuery query(this->db);
-        if(query.exec(queryString))
-        {
-            while(query.next())
-            {
-                QStringList streamData;
-                streamData << query.value(0).toString() << query.value(1).toString();
-                streamDataList << streamData;
-            }
-        }
-    }
-    return streamDataList;
-}
-
-void database::storeImageFromUsername(QString name, QByteArray data)
-{
-    if(checkDBConnection())
-    {
-        QSqlQuery query(this->db);
-        query.prepare("UPDATE stream_data SET image = IfNull(:image,'') WHERE username = :name");
-        query.bindValue(":image",data);
-        query.bindValue(":name",name);
-        if(!query.exec())
-            qDebug() << query.lastError();
-    }
-}
-
 void database::storeStreamData(QStringList streamData, QString requestType)
 {
-    if(checkDBConnection())
+    if(checkDBConnection() && streamData[0] != "")
     {
         QString username = streamData[0];
         QString game = streamData[1];
@@ -235,6 +180,7 @@ void database::storeStreamData(QStringList streamData, QString requestType)
             featured = "true";
         else if(requestType == "search")
             search = "true";
+
         if(!checkIfStreamExists(username,requestType))
         {
             QSqlQuery query(this->db);
