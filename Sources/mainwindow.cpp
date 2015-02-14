@@ -7,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
+    //if(!settings.value("username").isNull())
+    //    request.makeFollowRequest(settings.value("username").toString());
     this->createSignalSlots();
     this->changeStatusBar();
     this->styleItems();
@@ -78,7 +80,6 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
     connect((&timerManager),SIGNAL(readDatabase()),this,SLOT(timedDatabaseRead()));
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
-    connect((&timerManager),SIGNAL(imageRequest()),this,SLOT(timedImageRequest()));
     connect((&timerManager),SIGNAL(removeOfflineStreams()),this,SLOT(timedOfflineRemoval()));
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
     connect((ui->listWidget),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
@@ -106,7 +107,7 @@ void MainWindow::on_actionAdd_User_triggered()
 }
 
 //Exit
-void MainWindow::on_actionQuit_triggered()
+void MainWindow::on_actionExit_triggered()
 {
     this->~MainWindow();
 }
@@ -126,6 +127,7 @@ void MainWindow::on_pushButton_pressed()
 //Tab switched signal
 void MainWindow::on_tabWidget_currentChanged()
 {
+    this->timedDatabaseRead();
     this->timedDataRequest();
 }
 
