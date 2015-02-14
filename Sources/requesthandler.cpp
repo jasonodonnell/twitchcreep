@@ -33,8 +33,9 @@ void requestHandler::getFeatured(QByteArray data)
 {
     QList<QStringList> streamerList;
     QStringList streamData;
-    streamerList << jsonParser.getFeaturedStreamData(data);
     db.manageOnlineStreamers("featured");
+    streamerList << jsonParser.getFeaturedStreamData(data);
+
     foreach(streamData, streamerList)
         db.storeStreamData(streamData, "featured");
 }
@@ -66,7 +67,7 @@ void requestHandler::getGame(QByteArray data)
         db.storeStreamData(searchData, "search");
 }
 
-//Takes the username request and makes the appropriate network call.
+//Takes the usrername request and makes the appropriate network call.
 void requestHandler::getUsername(QByteArray data, QString name)
 {
     bool exists;
@@ -74,11 +75,11 @@ void requestHandler::getUsername(QByteArray data, QString name)
     if(exists)
     {
         settings.setValue("username",name);
-        db.truncateFollowData();
+        db.truncateStreamData();
     }
     else
     {
-        db.truncateFollowData();
+        db.truncateStreamData();
         settings.setValue("username","");
         emit(usernameDialogSignal("error"));
     }
@@ -138,7 +139,7 @@ QList<QStringList> requestHandler::timedDatabaseRead(int index)
     if(index == 0)
         streamDataList = db.retreiveStreamList("featured");
     else if(index == 1)
-        streamDataList = db.retreiveStreamList("followed");
+        streamDataList = db.retreiveStreamList("follow");
     else if(index == 2)
         streamDataList = db.retreiveStreamList("search");
     return streamDataList;

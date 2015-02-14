@@ -25,44 +25,43 @@ bool database::checkDBConnection()
     }
 }
 
+bool database::checkIfStreamExists(QString username, QString requestType)
+{
+    QSqlQuery query(this->db);
+    if(requestType == "followed")
+        query.prepare("SELECT count(username) FROM stream_data WHERE username=:username AND followed='true'");
+    else if(requestType == "featured")
+        query.prepare("SELECT count(username) FROM stream_data WHERE username=:username AND featured='true'");
+    else if(requestType == "search")
+        query.prepare("SELECT count(username) FROM stream_data WHERE username=:username AND search='true'");
+    query.bindValue(":username",username);
+    if(query.exec())
+    {
+        while(query.next())
+        {
+            if(query.value(0).toInt() > 0)
+                return true;
+            else
+                return false;
+        }
+    }
+}
+
 void database::createTables()
 {
     if(checkDBConnection())
     {
-        QString drop_featured = "DROP TABLE IF EXISTS featured;";
-        QString drop_followed = "DROP TABLE IF EXISTS followed;";
-        QString drop_search = "DROP TABLE IF EXISTS search;";
+        QString drop_stream = "DROP TABLE IF EXISTS stream_data;";
         QString drop_top = "DROP TABLE IF EXISTS top_data;";
-        QString featured = "CREATE TABLE IF NOT EXISTS featured (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
-        featured.append("status STRING, logo STRING, url STRING, online BOOL, displayed BOOL);");
-        QString followed = "CREATE TABLE IF NOT EXISTS followed (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
-        followed.append("status STRING, logo STRING, url STRING, online BOOL, displayed BOOL);");
-        QString search = "CREATE TABLE IF NOT EXISTS search (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
-        search.append("status STRING, logo STRING, url STRING, online BOOL, displayed BOOL);");
-        QString featured_unique = "CREATE UNIQUE INDEX featured_unique ON featured (username)";
-        QString followed_unique = "CREATE UNIQUE INDEX followed_unique ON followed (username)";
-        QString search_unique = "CREATE UNIQUE INDEX search_unique ON search (username)";
+        QString stream_data = "CREATE TABLE IF NOT EXISTS stream_data (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
+        stream_data.append("status STRING, logo STRING, url STRING, image BLOB, followed BOOL, featured BOOL, search BOOL, online BOOL, displayed BOOL);");
 
         QSqlQuery query(this->db);
-        if(!query.exec(drop_featured))
-            qDebug() << query.lastError();
-        if(!query.exec(drop_followed))
-            qDebug() << query.lastError();
-        if(!query.exec(drop_search))
+        if(!query.exec(drop_stream))
             qDebug() << query.lastError();
         if(!query.exec(drop_top))
             qDebug() << query.lastError();
-        if(!query.exec(featured))
-            qDebug() << query.lastError();
-        if(!query.exec(followed))
-            qDebug() << query.lastError();
-        if(!query.exec(search))
-            qDebug() << query.lastError();
-        if(!query.exec(followed_unique))
-            qDebug() << query.lastError();
-        if(!query.exec(featured_unique))
-            qDebug() << query.lastError();
-        if(!query.exec(search_unique))
+        if(!query.exec(stream_data))
             qDebug() << query.lastError();
     }
 }
@@ -71,8 +70,13 @@ QStringList database::getDisplayedOfflineStreams(QString requestType)
 {
     QSqlQuery query(this->db);
     QStringList streamData;
-    QString queryString = "SELECT username FROM " + requestType + " WHERE online='false' AND displayed='true'";
-    query.prepare(queryString);
+    if(requestType == "followed")
+        query.prepare("SELECT username FROM stream_data WHERE followed='true' AND online='false' AND displayed='true'");
+    else if(requestType == "featured")
+        query.prepare("SELECT username FROM stream_data WHERE featured='true' AND online='false' AND displayed='true'");
+    else if(requestType == "search")
+        query.prepare("SELECT username FROM stream_data WHERE search='true' AND online='false' AND displayed='true'");
+
 
     if(checkDBConnection())
         if(query.exec())
@@ -84,6 +88,7 @@ QStringList database::getDisplayedOfflineStreams(QString requestType)
 void database::initTables()
 {
     this->createTables();
+    this->truncateStreamData();
 }
 
 void database::manageDisplayVariable(QString requestType, QString username)
@@ -91,9 +96,13 @@ void database::manageDisplayVariable(QString requestType, QString username)
     if(checkDBConnection())
     {
         QSqlQuery query(this->db);
+        if(requestType == "followed")
+            query.prepare("UPDATE stream_data SET displayed='true' WHERE username=:username AND followed='true'");
+        else if(requestType == "featured")
+            query.prepare("UPDATE stream_data SET displayed='true' WHERE username=:username AND featured='true'");
+        else if(requestType == "search")
+            query.prepare("UPDATE stream_data SET displayed='true' WHERE username=:username AND search='true'");
 
-        QString queryString = "UPDATE " + requestType + " SET displayed='true' WHERE username=:username";
-        query.prepare(queryString);
         query.bindValue(":username",username);
         if(!query.exec())
             qDebug() << query.lastError();
@@ -102,22 +111,24 @@ void database::manageDisplayVariable(QString requestType, QString username)
 
 void database::manageOnlineStreamers(QString requestType)
 {
-    QSqlQuery query(this->db);
     QString queryString;
-    if(requestType == "featured")
-        queryString = "UPDATE featured SET online='false';";
-    else if(requestType == "followed")
-        queryString = "UPDATE followed SET online='false';";
+    if(requestType == "followed")
+        queryString = "UPDATE stream_data SET online='false' WHERE followed='true'";
+    else if(requestType == "featured")
+        queryString = "UPDATE stream_data SET online='false' WHERE featured='true'";
     else if(requestType == "search")
-        queryString = "UPDATE search SET online='false';";
-    qDebug() << queryString;
-    query.prepare(queryString);
-    if(checkDBConnection())
+        queryString = "UPDATE stream_data SET online='false' WHERE search='true'";
+
+    if(!queryString.isEmpty())
     {
-        if(!query.exec())
-            qDebug() << query.lastError();
+        if(checkDBConnection())
+        {
+            QSqlQuery query(this->db);
+            query.prepare(queryString);
+            if(!query.exec())
+                qDebug() << query.lastError();
+        }
     }
-    qDebug() << "End";
 }
 
 QList<QStringList> database::retreiveStreamList(QString requestType)
@@ -126,8 +137,12 @@ QList<QStringList> database::retreiveStreamList(QString requestType)
     if(checkDBConnection())
     {
         QSqlQuery query(this->db);
-        QString queryString = "SELECT username,game,viewers,status,logo,url FROM " + requestType + " WHERE displayed IS NULL";
-        query.prepare(queryString);
+        if(requestType == "follow")
+            query.prepare("SELECT username,game,viewers,status,logo,url FROM stream_data WHERE followed='true' AND online='true' AND displayed='false'");
+        else if(requestType == "featured")
+            query.prepare("SELECT username,game,viewers,status,logo,url FROM stream_data WHERE featured='true' AND online='true' AND displayed='false'");
+        else if(requestType == "search")
+            query.prepare("SELECT username,game,viewers,status,logo,url FROM stream_data WHERE search='true' AND online='true' AND displayed='false'");
 
         if(query.exec())
         {
@@ -153,52 +168,71 @@ void database::storeStreamData(QStringList streamData, QString requestType)
         QString status = streamData[3];
         QString logo = streamData[4];
         QString url = streamData[5];
+        QString followed = "false";
+        QString featured = "false";
+        QString search = "false";
         QString online = "true";
+        QString displayed = "false";
 
-        QSqlQuery query(this->db);
-        QString update = "INSERT OR REPLACE INTO " + requestType +  " (username,game,viewers,status,logo,url,online) ";
-        QString values = "VALUES (:username,:game,:viewers,:status,:logo,:url,:online);";
-        QString queryString = update+values;
-        query.prepare(queryString);
-        query.bindValue(":username", username);
-        query.bindValue(":game", game);
-        query.bindValue(":viewers", viewers);
-        query.bindValue(":status", status);
-        query.bindValue(":logo", logo);
-        query.bindValue(":url", url);
-        query.bindValue(":online", online);
+        if(requestType == "followed")
+            followed = "true";
+        else if(requestType == "featured")
+            featured = "true";
+        else if(requestType == "search")
+            search = "true";
 
-        if(!query.exec())
-            qDebug() << query.lastError();
+        if(!checkIfStreamExists(username,requestType))
+        {
+            QSqlQuery query(this->db);
+            QString insert = "INSERT INTO stream_data (username, game, viewers, status, logo, url, followed, featured, search, online, displayed) ";
+            QString values = "VALUES (:username, :game, :viewers, :status, :logo, :url, :followed, :featured, :search, :online, :displayed)";
+            QString queryString = insert + values;
+
+            query.prepare(queryString);
+            query.bindValue(":username", username);
+            query.bindValue(":game", game);
+            query.bindValue(":viewers", viewers);
+            query.bindValue(":status", status);
+            query.bindValue(":logo", logo);
+            query.bindValue(":url", url);
+            query.bindValue(":followed", followed);
+            query.bindValue(":featured", featured);
+            query.bindValue(":search", search);
+            query.bindValue(":online", online);
+            query.bindValue(":displayed", displayed);
+
+            if(!query.exec())
+                qDebug() << query.lastError();
+        }
+        else
+        {
+            QSqlQuery query(this->db);
+            QString update = "UPDATE stream_data SET game = :game,";
+            QString values = "viewers = :viewers, status = :status, followed = :followed, ";
+            QString valuesCont = "featured = :featured, search = :search, online = :online WHERE USERNAME = :username";
+            QString queryString = update+values+valuesCont;
+            query.prepare(queryString);
+            query.bindValue(":game", game);
+            query.bindValue(":viewers", viewers);
+            query.bindValue(":status", status);
+            query.bindValue(":followed", followed);
+            query.bindValue(":featured", featured);
+            query.bindValue(":search", search);
+            query.bindValue(":online", online);
+            query.bindValue(":username", username);
+
+            if(!query.exec())
+                qDebug() << query.lastError();
+        }
     }
 }
 
-void database::truncateFollowData()
+void database::truncateStreamData()
 {
     if(checkDBConnection())
     {
         QSqlQuery query(this->db);
-        if(!query.exec("DELETE FROM followed;"))
-            qDebug() << query.lastError();
-    }
-}
-
-void database::truncateFeaturedData()
-{
-    if(checkDBConnection())
-    {
-        QSqlQuery query(this->db);
-        if(!query.exec("DELETE FROM featured;"))
-            qDebug() << query.lastError();
-    }
-}
-
-void database::truncateSearchData()
-{
-    if(checkDBConnection())
-    {
-        QSqlQuery query(this->db);
-        if(!query.exec("DELETE FROM search;"))
+        if(!query.exec("DELETE FROM stream_data;"))
             qDebug() << query.lastError();
     }
 }
