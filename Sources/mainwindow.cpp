@@ -173,22 +173,6 @@ void MainWindow::timedDataRequest()
     }
 }
 
-//This needs refactoring cus bad
-void MainWindow::timedOfflineRemoval()
-{
-    int tabIndex = ui->tabWidget->currentIndex();
-    QStringList streams = request.timedOfflineRemoval(tabIndex);
-    if(!streams.isEmpty())
-        if(tabIndex == 0)
-            for(int i = 0; i < ui->listWidget->count(); ++i)
-                if(streams.contains(ui->listWidget->item(i)->text()))
-                    ui->listWidget->removeItemWidget(ui->listWidget->item(i));
-        else if(tabIndex == 1)
-            for(int i = 0; i < ui->listWidget->count(); ++i)
-                if(streams.contains(ui->listWidget->item(i)->text()))
-                    ui->listWidget->removeItemWidget(ui->listWidget->item(i));
-}
-
 void MainWindow::timedNetworkRequest()
 {
     request.makeRequest();

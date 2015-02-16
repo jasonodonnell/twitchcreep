@@ -43,7 +43,6 @@ private slots:
     void on_lineEdit_returnPressed();
     void changeStatusBar();
     void onListItemDoubleClicked(QListWidgetItem* item);
-    void timedOfflineRemoval();
     void timedNetworkRequest();
 
 private:
