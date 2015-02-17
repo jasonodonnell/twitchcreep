@@ -78,8 +78,6 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
     connect((&timerManager),SIGNAL(readDatabase()),this,SLOT(timedDatabaseRead()));
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
-    connect((&timerManager),SIGNAL(imageRequest()),this,SLOT(timedImageRequest()));
-    connect((&timerManager),SIGNAL(removeOfflineStreams()),this,SLOT(timedOfflineRemoval()));
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
     connect((ui->listWidget),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
     connect((ui->listWidget_2),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
@@ -105,12 +103,6 @@ void MainWindow::on_actionAdd_User_triggered()
     this->usernameDialog("new");
 }
 
-//Exit
-void MainWindow::on_actionQuit_triggered()
-{
-    this->~MainWindow();
-}
-
 //Enter pressed on the search window
 void MainWindow::on_lineEdit_returnPressed()
 {
@@ -127,6 +119,11 @@ void MainWindow::on_pushButton_pressed()
 void MainWindow::on_tabWidget_currentChanged()
 {
     this->timedDataRequest();
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    this->~MainWindow();
 }
 
 //Requests search string when submitted (through enter or clicking the button)

@@ -35,7 +35,7 @@ public slots:
 
 private slots:
     void on_actionAdd_User_triggered();
-    void on_actionQuit_triggered();
+    void on_actionExit_triggered();
     void on_tabWidget_currentChanged();
     void timedDataRequest();
     void timedDatabaseRead();
