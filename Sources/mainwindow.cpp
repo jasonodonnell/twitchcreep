@@ -7,6 +7,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
+    ui->listWidget->setMouseTracking(true);
+    ui->listWidget_2->setMouseTracking(true);
+    ui->listWidget_3->setMouseTracking(true);
     this->createSignalSlots();
     this->changeStatusBar();
     this->styleItems();
@@ -79,9 +82,17 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(readDatabase()),this,SLOT(timedDatabaseRead()));
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
+    connect((ui->listWidget),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
     connect((ui->listWidget_2),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
     connect((ui->listWidget_3),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
+}
+
+void MainWindow::displayToolTip(QListWidgetItem *item)
+{
+    QStringList username = item->text().split(":");
+    QString status = request.getStatus(username[0]);
+    QWidget::setToolTip(status);
 }
 
 //Slot to clear the follow list (this is used when username is changed)

@@ -67,6 +67,11 @@ void requestHandler::getGame(QByteArray data)
         db.storeStreamData(searchData, "search");
 }
 
+QString requestHandler::getStatus(QString username)
+{
+    return db.retrieveStatus(username);
+}
+
 //Takes the usrername request and makes the appropriate network call.
 void requestHandler::getUsername(QByteArray data, QString name)
 {

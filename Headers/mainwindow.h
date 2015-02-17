@@ -44,6 +44,7 @@ private slots:
     void changeStatusBar();
     void onListItemDoubleClicked(QListWidgetItem* item);
     void timedNetworkRequest();
+    void displayToolTip(QListWidgetItem* item);
 
 private:
     Ui::MainWindow *ui;

@@ -29,6 +29,7 @@ public:
     QList<QStringList> retrieveStreamListWithoutImage();
     void storeStreamData(QStringList streamData, QString requestType);
     void truncateStreamData();
+    QString retrieveStatus(QString username);
 signals:
 
 private:

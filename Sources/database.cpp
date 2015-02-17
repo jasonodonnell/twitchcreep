@@ -28,18 +28,13 @@ bool database::checkDBConnection()
 bool database::checkIfStreamExists(QString username, QString requestType)
 {
     QSqlQuery query(this->db);
-    if(requestType == "followed")
-        query.prepare("SELECT count(username) FROM stream_data WHERE username=:username AND followed='true'");
-    else if(requestType == "featured")
-        query.prepare("SELECT count(username) FROM stream_data WHERE username=:username AND featured='true'");
-    else if(requestType == "search")
-        query.prepare("SELECT count(username) FROM stream_data WHERE username=:username AND search='true'");
+    query.prepare("SELECT username FROM stream_data WHERE username=:username");
     query.bindValue(":username",username);
     if(query.exec())
     {
         while(query.next())
         {
-            if(query.value(0).toInt() > 0)
+            if(!query.value( 0 ).toString().isNull())
                 return true;
             else
                 return false;
@@ -131,6 +126,19 @@ void database::manageOnlineStreamers(QString requestType)
     }
 }
 
+QString database::retrieveStatus(QString username)
+{
+    if(checkDBConnection())
+    {
+        QSqlQuery query(this->db);
+        query.prepare("SELECT status FROM stream_data WHERE username=:username");
+        query.bindValue(":username",username);
+        if(query.exec())
+            while(query.next())
+                return query.value(0).toString();
+    }
+}
+
 QList<QStringList> database::retreiveStreamList(QString requestType)
 {
     QList<QStringList> streamDataList;
@@ -209,7 +217,7 @@ void database::storeStreamData(QStringList streamData, QString requestType)
             QSqlQuery query(this->db);
             QString update = "UPDATE stream_data SET game = :game,";
             QString values = "viewers = :viewers, status = :status, followed = :followed, ";
-            QString valuesCont = "featured = :featured, search = :search, online = :online WHERE USERNAME = :username";
+            QString valuesCont = "featured = :featured, search = :search, online = :online WHERE username = :username";
             QString queryString = update+values+valuesCont;
             query.prepare(queryString);
             query.bindValue(":game", game);
