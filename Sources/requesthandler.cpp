@@ -67,6 +67,7 @@ void requestHandler::getGame(QByteArray data)
         db.storeStreamData(searchData, "search");
 }
 
+//Returns status from stream for tooltip
 QString requestHandler::getStatus(QString username)
 {
     return db.retrieveStatus(username);
@@ -104,6 +105,7 @@ void requestHandler::makeFollowRequest(QString username)
         networking.makeFollowRequest(username);
 }
 
+//Makes a network request
 void requestHandler::makeRequest()
 {
     networking.makeRequest();
