@@ -7,12 +7,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
-    ui->listWidget->setMouseTracking(true);
-    ui->listWidget_2->setMouseTracking(true);
-    ui->listWidget_3->setMouseTracking(true);
     this->createSignalSlots();
     this->changeStatusBar();
     this->styleItems();
+    this->enableMouseTracking();
 }
 MainWindow::~MainWindow()
 {
@@ -93,6 +91,14 @@ void MainWindow::displayToolTip(QListWidgetItem *item)
     QStringList username = item->text().split(":");
     QString status = request.getStatus(username[0]);
     QWidget::setToolTip(status);
+}
+
+//Enables mouse tracking. this is required to show tooltips.
+void MainWindow::enableMouseTracking()
+{
+    ui->listWidget->setMouseTracking(true);
+    ui->listWidget_2->setMouseTracking(true);
+    ui->listWidget_3->setMouseTracking(true);
 }
 
 //Slot to clear the follow list (this is used when username is changed)
