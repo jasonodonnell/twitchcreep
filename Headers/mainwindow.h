@@ -54,6 +54,7 @@ private:
     void createSignalSlots();
     void searchTabRequest();
     void styleItems();
+    void enableMouseTracking();
 };
 
 #endif // MAINWINDOW_H
