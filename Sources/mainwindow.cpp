@@ -81,6 +81,8 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
     connect((ui->listWidget),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
+    connect((ui->listWidget_2),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
+    connect((ui->listWidget_3),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
     connect((ui->listWidget_2),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
     connect((ui->listWidget_3),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
@@ -88,9 +90,14 @@ void MainWindow::createSignalSlots()
 
 void MainWindow::displayToolTip(QListWidgetItem *item)
 {
-    QStringList username = item->text().split(":");
-    QString status = request.getStatus(username[0]);
-    QWidget::setToolTip(status);
+    if(item->isSelected())
+    {
+        QStringList username = item->text().split(":");
+        QString status = request.getStatus(username[0]);
+        QWidget::setToolTip(status);
+    }
+    else
+        QWidget::setToolTip("");
 }
 
 //Enables mouse tracking. this is required to show tooltips.
@@ -99,6 +106,7 @@ void MainWindow::enableMouseTracking()
     ui->listWidget->setMouseTracking(true);
     ui->listWidget_2->setMouseTracking(true);
     ui->listWidget_3->setMouseTracking(true);
+    QWidget::setToolTipDuration(3000);
 }
 
 //Slot to clear the follow list (this is used when username is changed)
