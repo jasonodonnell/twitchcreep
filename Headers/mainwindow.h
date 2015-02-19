@@ -9,6 +9,7 @@
 #include <QListWidgetItem>
 #include <QDesktopServices>
 #include <QStringList>
+#include <QToolTip>
 #include "json.h"
 #include "networkoperations.h"
 #include "database.h"
@@ -30,21 +31,21 @@ public:
     void addItemToListView(int,QList<QStringList>);
 
 public slots:
-    void usernameDialog(QString);
     void followListClear();
+    void usernameDialog(QString);
 
 private slots:
+    void changeStatusBar();
+    void displayToolTip(QListWidgetItem* item);
+    void onListItemDoubleClicked(QListWidgetItem* item);
     void on_actionAdd_User_triggered();
     void on_actionExit_triggered();
+    void on_lineEdit_returnPressed();
+    void on_pushButton_pressed();
     void on_tabWidget_currentChanged();
     void timedDataRequest();
     void timedDatabaseRead();
-    void on_pushButton_pressed();
-    void on_lineEdit_returnPressed();
-    void changeStatusBar();
-    void onListItemDoubleClicked(QListWidgetItem* item);
     void timedNetworkRequest();
-    void displayToolTip(QListWidgetItem* item);
 
 private:
     Ui::MainWindow *ui;
@@ -52,9 +53,9 @@ private:
     timers timerManager;
     QSettings settings;
     void createSignalSlots();
+    void enableMouseTracking();
     void searchTabRequest();
     void styleItems();
-    void enableMouseTracking();
 };
 
 #endif // MAINWINDOW_H
