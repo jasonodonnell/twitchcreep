@@ -13,25 +13,28 @@ public:
     ~timers();
 
 signals:
-    void requestData();
-    void readDatabase();
     void checkConnection();
     void networkRequest();
+    void readDatabase();
     void removeOfflineStreams();
+    void requestData();
+    void updateStreams();
 public slots:
 
 private slots:
     void dataRequest();
     void databaseRead();
-    void networkConnection();
-    void makeNetworkRequest();
     void displayedOffline();
+    void makeNetworkRequest();
+    void networkConnection();
+    void updateDisplayedStreams();
 private:
-    QTimer *requestTimer = new QTimer(this);
-    QTimer *readTimer = new QTimer(this);
     QTimer *connectionTimer = new QTimer(this);
     QTimer *displayedOfflineTimer = new QTimer(this);
     QTimer *networkRequestTimer = new QTimer(this);
+    QTimer *readTimer = new QTimer(this);
+    QTimer *requestTimer = new QTimer(this);
+    QTimer *updateStreamsTimer = new QTimer(this);
     void createTimerSignals();
     void startTimers();
 };

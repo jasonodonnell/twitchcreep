@@ -76,10 +76,11 @@ void MainWindow::createSignalSlots()
 {
     connect((&request),SIGNAL(usernameDialogSignal(QString)),this,SLOT(usernameDialog(QString)));
     connect((&request),SIGNAL(clearFollowList()),this,SLOT(followListClear()));
-    connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
-    connect((&timerManager),SIGNAL(readDatabase()),this,SLOT(timedDatabaseRead()));
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
+    connect((&timerManager),SIGNAL(readDatabase()),this,SLOT(timedDatabaseRead()));
+    connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
+    connect((&timerManager),SIGNAL(updateStreams()),this,SLOT(timedUpdateStreams()));
     connect((ui->listWidget),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_2),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_3),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
@@ -192,6 +193,24 @@ void MainWindow::timedDataRequest()
     {
         if(!settings.value("username").isNull())
             request.makeFollowRequest(settings.value("username").toString());
+    }
+}
+
+void MainWindow::timedUpdateStreams()
+{
+    int tabIndex = ui->tabWidget->currentIndex();
+    QList<QStringList> streamDataList;
+    streamDataList = request.timedDatabaseUpdateRead(tabIndex);
+    if(!streamDataList.isEmpty())
+    {
+        if(tabIndex == 0)
+            ui->listWidget->clear();
+        else if(tabIndex == 1)
+            ui->listWidget_2->clear();
+        else if(tabIndex == 2)
+            ui->listWidget_3->clear();
+
+        this->addItemToListView(tabIndex,streamDataList);
     }
 }
 

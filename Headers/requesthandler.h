@@ -33,6 +33,7 @@ public:
     QStringList timedOfflineRemoval(int index);
 
     QString getStatus(QString username);
+    QList<QStringList> timedDatabaseUpdateRead(int index);
 signals:
     void clearFollowList();
     void usernameDialogSignal(QString );

@@ -111,6 +111,23 @@ void database::manageDisplayVariable(QString requestType, QString username)
     }
 }
 
+void database::manageDisplayVariableClear(QString requestType)
+{
+    if(checkDBConnection())
+    {
+        QSqlQuery query(this->db);
+        if(requestType == "followed")
+            query.prepare("UPDATE stream_data SET displayed=0 WHERE followed=1");
+        else if(requestType == "featured")
+            query.prepare("UPDATE stream_data SET displayed=0 WHERE featured=1");
+        else if(requestType == "search")
+            query.prepare("UPDATE stream_data SET displayed=0 WHERE search=1");
+
+        if(!query.exec())
+            qDebug() << query.lastError();
+    }
+}
+
 void database::manageOnlineStreamers(QString requestType)
 {
     QString queryString;
