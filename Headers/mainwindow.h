@@ -46,6 +46,7 @@ private slots:
     void timedDataRequest();
     void timedDatabaseRead();
     void timedNetworkRequest();
+    void timedUpdateStreams();
 
 private:
     Ui::MainWindow *ui;

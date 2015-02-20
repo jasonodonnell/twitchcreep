@@ -30,6 +30,8 @@ public:
     void storeStreamData(QStringList streamData, QString requestType);
     void truncateStreamData();
     QString retrieveStatus(QString username);
+    QList<QStringList> retreiveUpdatedStreamList(QString requestType);
+    void manageDisplayVariableClear(QString requestType);
 signals:
 
 private:

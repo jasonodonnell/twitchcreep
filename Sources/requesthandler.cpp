@@ -152,6 +152,28 @@ QList<QStringList> requestHandler::timedDatabaseRead(int index)
     return streamDataList;
 }
 
+//Read the database on a timed interval.  Triggered by the timers class.
+QList<QStringList> requestHandler::timedDatabaseUpdateRead(int index)
+{
+    QList<QStringList> streamDataList;
+    if(index == 0)
+    {
+        db.manageDisplayVariableClear("featured");
+        streamDataList = this->timedDatabaseRead(index);
+    }
+    else if(index == 1)
+    {
+        db.manageDisplayVariableClear("follow");
+        streamDataList = this->timedDatabaseRead(index);
+    }
+    else if(index == 2)
+    {
+        db.manageDisplayVariableClear("search");
+        streamDataList = this->timedDatabaseRead(index);
+    }
+    return streamDataList;
+}
+
 QStringList requestHandler::timedOfflineRemoval(int index)
 {
     QStringList streamDataList;
