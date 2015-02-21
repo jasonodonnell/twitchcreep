@@ -14,6 +14,7 @@ database::~database()
 
 }
 
+//Check connection to the database before sql statements are prepared.
 bool database::checkDBConnection()
 {
     if(this->db.open())
@@ -25,6 +26,7 @@ bool database::checkDBConnection()
     }
 }
 
+//Check if a stream exists in the database for a given requestType
 bool database::checkIfStreamExists(QString username, QString requestType)
 {
     QSqlQuery query(this->db);
@@ -49,6 +51,7 @@ bool database::checkIfStreamExists(QString username, QString requestType)
     }
 }
 
+//Creates the table DDL for the app
 void database::createTables()
 {
     if(checkDBConnection())
@@ -68,6 +71,10 @@ void database::createTables()
     }
 }
 
+//Gets a list of usernames that aren't online but are being displayed.  Upon a network
+//request for streams, all streams currently online are changed to offline and will be
+//updated to online by the request.  Whatever isn't online is no longer broadcasting
+//and should be removed from views.
 QStringList database::getDisplayedOfflineStreams(QString requestType)
 {
     QSqlQuery query(this->db);
@@ -93,6 +100,7 @@ void database::initTables()
     this->truncateStreamData();
 }
 
+//Sets a stream to displayed after it is added to a listview.
 void database::manageDisplayVariable(QString requestType, QString username)
 {
     if(checkDBConnection())
@@ -111,6 +119,9 @@ void database::manageDisplayVariable(QString requestType, QString username)
     }
 }
 
+//Sets displayed to false.  This is currently used as a hackaround to update the listview.
+//Basically instead of updating individual items in a listview, all displayed streams are
+//set to 0, listview is cleared, and then they're all added to the listview again.
 void database::manageDisplayVariableClear(QString requestType)
 {
     if(checkDBConnection())
@@ -128,6 +139,8 @@ void database::manageDisplayVariableClear(QString requestType)
     }
 }
 
+//Clears online users when adding the updated data.  This is how we figure out who
+//is now offline.
 void database::manageOnlineStreamers(QString requestType)
 {
     QString queryString;
@@ -150,6 +163,7 @@ void database::manageOnlineStreamers(QString requestType)
     }
 }
 
+//Retrieves the stream status for the tooltip.
 QString database::retrieveStatus(QString username)
 {
     if(checkDBConnection())
@@ -163,6 +177,7 @@ QString database::retrieveStatus(QString username)
     }
 }
 
+//Retrieves stream data for a given requestType.
 QList<QStringList> database::retreiveStreamList(QString requestType)
 {
     QList<QStringList> streamDataList;
@@ -190,6 +205,7 @@ QList<QStringList> database::retreiveStreamList(QString requestType)
     return streamDataList;
 }
 
+//Stores stream data in the database.
 void database::storeStreamData(QStringList streamData, QString requestType)
 {
     if(checkDBConnection() && streamData[0] != "")
@@ -266,6 +282,8 @@ void database::storeStreamData(QStringList streamData, QString requestType)
     }
 }
 
+//Truncates the stream data, used to clear the database upon startup.  This might get changed in the future
+//to cache info.
 void database::truncateStreamData()
 {
     if(checkDBConnection())

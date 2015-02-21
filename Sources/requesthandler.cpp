@@ -174,6 +174,7 @@ QList<QStringList> requestHandler::timedDatabaseUpdateRead(int index)
     return streamDataList;
 }
 
+//Remove streams on a timer.
 QStringList requestHandler::timedOfflineRemoval(int index)
 {
     QStringList streamDataList;

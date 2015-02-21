@@ -11,6 +11,7 @@ networkOperations::~networkOperations()
 
 }
 
+//Adds request to a queue
 void networkOperations::addRequestToList(QString requestType, QString url)
 {
     QStringList requestList;
@@ -98,6 +99,7 @@ void networkOperations::makeStreamRequestFromList(QStringList usernames)
     }
 }
 
+//Used for managing the network request list.
 void networkOperations::popRequestFromList()
 {
     if(requests.count() > 0)

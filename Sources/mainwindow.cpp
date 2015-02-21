@@ -89,6 +89,7 @@ void MainWindow::createSignalSlots()
     connect((ui->listWidget_3),SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(onListItemDoubleClicked(QListWidgetItem*)));
 }
 
+//Slot to display a tooltip for the currently hovered item.
 void MainWindow::displayToolTip(QListWidgetItem *item)
 {
     if(item->isSelected())
@@ -116,6 +117,7 @@ void MainWindow::followListClear()
     ui->listWidget_3->clear();
 }
 
+//Launch browser with stream url on a double clicked item.
 void MainWindow::onListItemDoubleClicked(QListWidgetItem *item)
 {
     QStringList username = item->text().split(":");
@@ -147,6 +149,7 @@ void MainWindow::on_tabWidget_currentChanged()
     this->timedDataRequest();
 }
 
+//Exit app when close is clicked.
 void MainWindow::on_actionExit_triggered()
 {
     this->~MainWindow();
@@ -161,6 +164,7 @@ void MainWindow::searchTabRequest()
         request.makeSearchRequest(search);
 }
 
+//Apply styles to various views.
 void MainWindow::styleItems()
 {
     QPalette p = ui->listWidget->palette();
@@ -196,6 +200,7 @@ void MainWindow::timedDataRequest()
     }
 }
 
+//Update listviews on a timer.
 void MainWindow::timedUpdateStreams()
 {
     int tabIndex = ui->tabWidget->currentIndex();
@@ -214,6 +219,7 @@ void MainWindow::timedUpdateStreams()
     }
 }
 
+//Make a network request on a timer.  This is based on current tab index.
 void MainWindow::timedNetworkRequest()
 {
     request.makeRequest();
