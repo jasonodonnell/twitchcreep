@@ -7,6 +7,7 @@ database::database(QObject *parent) : QObject(parent)
     appDir = appDir.append("/twitch.db");
     this->db.setDatabaseName(appDir);
     this->initTables();
+    qDebug() << appDir;
 }
 
 database::~database()
@@ -29,6 +30,7 @@ bool database::checkDBConnection()
 //Check if a stream exists in the database for a given requestType
 bool database::checkIfStreamExists(QString username, QString requestType)
 {
+    bool returnCode;
     QSqlQuery query(this->db);
     if(requestType == "followed")
         query.prepare("SELECT username FROM stream_data WHERE username=:username AND followed=1");
@@ -44,11 +46,12 @@ bool database::checkIfStreamExists(QString username, QString requestType)
         while(query.next())
         {
             if(!query.value( 0 ).toString().isNull())
-                return true;
+                returnCode = true;
             else
-                return false;
+                returnCode = false;
         }
     }
+    return returnCode;
 }
 
 //Creates the table DDL for the app
@@ -169,11 +172,14 @@ QString database::retrieveStatus(QString username)
     if(checkDBConnection())
     {
         QSqlQuery query(this->db);
+        QString status;
         query.prepare("SELECT status FROM stream_data WHERE username=:username");
         query.bindValue(":username",username);
         if(query.exec())
             while(query.next())
-                return query.value(0).toString();
+                status = query.value(0).toString();
+        else
+            return status;
     }
 }
 
