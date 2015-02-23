@@ -7,7 +7,6 @@ database::database(QObject *parent) : QObject(parent)
     appDir = appDir.append("/twitch.db");
     this->db.setDatabaseName(appDir);
     this->initTables();
-    qDebug() << appDir;
 }
 
 database::~database()
