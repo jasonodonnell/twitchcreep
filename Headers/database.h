@@ -4,7 +4,6 @@
 #include <QDebug>
 #include <QSql>
 #include <QtSql>
-#include "networkoperations.h"
 
 class database : public QObject
 {
@@ -35,7 +34,6 @@ public:
 signals:
 
 private:
-    networkOperations networking;
     void createTables();
 };
 

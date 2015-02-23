@@ -10,9 +10,6 @@
 #include <QDesktopServices>
 #include <QStringList>
 #include <QToolTip>
-#include "json.h"
-#include "networkoperations.h"
-#include "database.h"
 #include "timers.h"
 #include "requesthandler.h"
 
