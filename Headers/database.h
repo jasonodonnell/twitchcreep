@@ -19,18 +19,14 @@ public:
     QStringList getDisplayedOfflineStreams(QString requestType);
     void initTables();
     void manageDisplayVariable(QString requestType, QString username);
+    void manageDisplayVariableClear(QString requestType);
     void manageOnlineStreamers(QString requestType);
-    QByteArray retrieveStreamImage(QString name);
+    QString retrieveStatus(QString username);
     QList<QStringList> retreiveStreamList(QString requestType);
-    QByteArray retrieveTopImage(QString game);
     QList<QStringList> retrieveTopList();
-    QList<QStringList> retrieveTopListWithoutImage();
-    QList<QStringList> retrieveStreamListWithoutImage();
+    QList<QStringList> retreiveUpdatedStreamList(QString requestType);
     void storeStreamData(QStringList streamData, QString requestType);
     void truncateStreamData();
-    QString retrieveStatus(QString username);
-    QList<QStringList> retreiveUpdatedStreamList(QString requestType);
-    void manageDisplayVariableClear(QString requestType);
 signals:
 
 private:
@@ -38,3 +34,4 @@ private:
 };
 
 #endif // DATABASE_H
+
