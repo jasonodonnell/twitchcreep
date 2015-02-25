@@ -49,7 +49,6 @@ private:
     Ui::MainWindow *ui;
     requestHandler request;
     timers timerManager;
-    QSettings settings;
     void createSignalSlots();
     void enableMouseTracking();
     void searchTabRequest();

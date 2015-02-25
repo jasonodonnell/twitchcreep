@@ -76,6 +76,8 @@ QString requestHandler::getStatus(QString username)
 //Takes the usrername request and makes the appropriate network call.
 void requestHandler::getUsername(QByteArray data, QString name)
 {
+    QString settingsDir = QCoreApplication::applicationDirPath() + "/twitchCreep.conf";
+    QSettings settings(settingsDir, QSettings::IniFormat);
     bool exists;
     exists = jsonParser.checkUsernameExists(data);
     if(exists)

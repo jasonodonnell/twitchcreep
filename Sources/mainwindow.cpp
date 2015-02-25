@@ -190,6 +190,8 @@ void MainWindow::timedDatabaseRead()
 void MainWindow::timedDataRequest()
 {
     int tabIndex = ui->tabWidget->currentIndex();
+    QString settingsDir = QCoreApplication::applicationDirPath() + "/twitchCreep.conf";
+    QSettings settings(settingsDir, QSettings::IniFormat);
 
     if(tabIndex == 0)
         request.makeFeaturedRequest();
