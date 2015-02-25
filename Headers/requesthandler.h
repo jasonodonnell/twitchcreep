@@ -45,7 +45,6 @@ private:
     database db;
     json jsonParser;
     networkOperations networking;
-    QSettings settings;
 };
 
 #endif // REQUESTHANDLER_H
