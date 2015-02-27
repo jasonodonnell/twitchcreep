@@ -189,7 +189,7 @@ QString database::retrieveStatus(QString username,QString requestType)
         query.bindValue(":username",username);
         if(query.exec())
             while(query.next())
-                status = query.value(0).toString();
+                return query.value(0).toString();
         else
             return status;
     }
