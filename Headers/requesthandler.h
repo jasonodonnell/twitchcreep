@@ -32,7 +32,7 @@ public:
     QList<QStringList> timedDatabaseRead(int index);
     QStringList timedOfflineRemoval(int index);
 
-    QString getStatus(QString username);
+    QString getStatus(QString username, QString requestType);
     QList<QStringList> timedDatabaseUpdateRead(int index);
 signals:
     void clearFollowList();

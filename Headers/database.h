@@ -21,7 +21,7 @@ public:
     void manageDisplayVariable(QString requestType, QString username);
     void manageDisplayVariableClear(QString requestType);
     void manageOnlineStreamers(QString requestType);
-    QString retrieveStatus(QString username);
+    QString retrieveStatus(QString username, QString requestType);
     QList<QStringList> retreiveStreamList(QString requestType);
     QList<QStringList> retrieveTopList();
     QList<QStringList> retreiveUpdatedStreamList(QString requestType);

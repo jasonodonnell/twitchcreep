@@ -95,7 +95,15 @@ void MainWindow::displayToolTip(QListWidgetItem *item)
     if(item->isSelected())
     {
         QStringList username = item->text().split(":");
-        QString status = request.getStatus(username[0]);
+        int tabIndex = ui->tabWidget->currentIndex();
+        QString requestType;
+        if(tabIndex == 0)
+            requestType = "featured";
+        else if(tabIndex == 1)
+            requestType = "followed";
+        else if(tabIndex == 2)
+            requestType = "search";
+        QString status = request.getStatus(username[0], requestType);
         QWidget::setToolTip(status);
     }
     else

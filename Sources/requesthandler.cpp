@@ -68,9 +68,9 @@ void requestHandler::getGame(QByteArray data)
 }
 
 //Returns status from stream for tooltip
-QString requestHandler::getStatus(QString username)
+QString requestHandler::getStatus(QString username,QString requestType)
 {
-    return db.retrieveStatus(username);
+    return db.retrieveStatus(username,requestType);
 }
 
 //Takes the usrername request and makes the appropriate network call.
