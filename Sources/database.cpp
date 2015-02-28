@@ -7,9 +7,6 @@ database::database(QObject *parent) : QObject(parent)
     appDir = appDir.append("/twitch.db");
     this->db.setDatabaseName(appDir);
     this->initTables();
-    connect((&request),SIGNAL(manageOnlineStreamers(QString)),this,SLOT(manageOnlineStreamers(QString)));
-    connect((&request),SIGNAL(storeStreamData(QStringList, QString)),this,SLOT(storeStreamData(QStringList,QString)));
-    connect((&request),SIGNAL(truncateStreamData()),this,SLOT(truncateStreamData()));
 }
 
 database::~database()
@@ -223,7 +220,6 @@ void database::storeStreamData(QStringList streamData, QString requestType)
 
             if(!query.exec())
                 qDebug() << query.lastError();
-
             emit(updateStreamInView(streamData));
         }
     }

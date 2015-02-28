@@ -25,6 +25,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     QList<QStringList> followsList;
+    requestHandler request;
     ~MainWindow();
 
 public slots:
@@ -47,7 +48,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    requestHandler request;
     database db;
     timers timerManager;
     void createSignalSlots();
