@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QSql>
 #include <QtSql>
+#include "requesthandler.h"
 
 class database : public QObject
 {
@@ -15,22 +16,23 @@ public:
 
     bool checkDBConnection();
     bool checkIfStreamExists(QString username, QString requestType);
-    bool checkIfTopExists(QString game);
     QStringList getDisplayedOfflineStreams(QString requestType);
     void initTables();
-    void manageDisplayVariable(QString requestType, QString username);
-    void manageDisplayVariableClear(QString requestType);
-    void manageOnlineStreamers(QString requestType);
     QString retrieveStatus(QString username, QString requestType);
-    QList<QStringList> retreiveStreamList(QString requestType);
-    QList<QStringList> retrieveTopList();
-    QList<QStringList> retreiveUpdatedStreamList(QString requestType);
+
+    void setRequestSignal(requestHandler request);
+private slots:
+    void manageOnlineStreamers(QString requestType);
     void storeStreamData(QStringList streamData, QString requestType);
     void truncateStreamData();
+
 signals:
+    void addStreamToView(QStringList stream);
+    void updateStreamInView(QStringList stream);
 
 private:
     void createTables();
+    requestHandler request;
 };
 
 #endif // DATABASE_H

@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QThread>
+#include <QCoreApplication>
 #include "json.h"
-#include "database.h"
 #include "networkoperations.h"
 
 class requestHandler : public QThread
@@ -21,7 +21,6 @@ public:
     explicit requestHandler(QObject *parent = 0);
     ~requestHandler();
 
-    void changeDisplayVariable(QString requestType, QString username);
     bool checkConnection();
     void checkUsername(QString text);
     void makeFollowRequest(QString username);
@@ -29,20 +28,17 @@ public:
     void makeRequest();
     void makeSearchRequest(QString search);
     QByteArray readStreamImage(QString name);
-    QList<QStringList> timedDatabaseRead(int index);
-    QStringList timedOfflineRemoval(int index);
-
-    QString getStatus(QString username, QString requestType);
-    QList<QStringList> timedDatabaseUpdateRead(int index);
 signals:
     void clearFollowList();
-    void usernameDialogSignal(QString );
+    void manageOnlineStreamers(QString);
+    void storeStreamData(QStringList data, QString requestType);
+    void truncateStreamData();
+    void usernameDialogSignal(QString);
 
 public slots:
     void requestProcess(QByteArray data, QString jsonType);
 
 private:
-    database db;
     json jsonParser;
     networkOperations networking;
 };

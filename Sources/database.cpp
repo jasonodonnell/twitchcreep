@@ -7,6 +7,9 @@ database::database(QObject *parent) : QObject(parent)
     appDir = appDir.append("/twitch.db");
     this->db.setDatabaseName(appDir);
     this->initTables();
+    connect((&request),SIGNAL(manageOnlineStreamers(QString)),this,SLOT(manageOnlineStreamers(QString)));
+    connect((&request),SIGNAL(storeStreamData(QStringList, QString)),this,SLOT(storeStreamData(QStringList,QString)));
+    connect((&request),SIGNAL(truncateStreamData()),this,SLOT(truncateStreamData()));
 }
 
 database::~database()
@@ -60,11 +63,11 @@ void database::createTables()
         QString drop_featured = "DROP TABLE IF EXISTS featured_data;";
         QString drop_search = "DROP TABLE IF EXISTS search_data;";
         QString followed_data = "CREATE TABLE IF NOT EXISTS followed_data (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
-        followed_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL, displayed BOOL);");
+        followed_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL);");
         QString featured_data = "CREATE TABLE IF NOT EXISTS featured_data (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
-        featured_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL, displayed BOOL);");
+        featured_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL);");
         QString search_data = "CREATE TABLE IF NOT EXISTS search_data (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
-        search_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL, displayed BOOL);");
+        search_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL);");
 
         QSqlQuery query(this->db);
         if(!query.exec(drop_followed))
@@ -91,11 +94,11 @@ QStringList database::getDisplayedOfflineStreams(QString requestType)
     QSqlQuery query(this->db);
     QStringList streamData;
     if(requestType == "followed")
-        query.prepare("SELECT username FROM followed_data WHERE online=0 AND displayed=1");
+        query.prepare("SELECT username FROM followed_data WHERE online=0");
     else if(requestType == "featured")
-        query.prepare("SELECT username FROM featured_data WHERE online=0 AND displayed=1");
+        query.prepare("SELECT username FROM featured_data WHERE online=0");
     else if(requestType == "search")
-        query.prepare("SELECT username FROM search_data WHERE online=0 AND displayed=1");
+        query.prepare("SELECT username FROM search_data WHERE online=0");
 
     if(checkDBConnection())
         if(query.exec())
@@ -108,45 +111,6 @@ void database::initTables()
 {
     this->createTables();
     this->truncateStreamData();
-}
-
-//Sets a stream to displayed after it is added to a listview.
-void database::manageDisplayVariable(QString requestType, QString username)
-{
-    if(checkDBConnection())
-    {
-        QSqlQuery query(this->db);
-        if(requestType == "followed")
-            query.prepare("UPDATE followed_data SET displayed=1 WHERE username=:username");
-        else if(requestType == "featured")
-            query.prepare("UPDATE featured_data SET displayed=1 WHERE username=:username");
-        else if(requestType == "search")
-            query.prepare("UPDATE search_data SET displayed=1 WHERE username=:username");
-
-        query.bindValue(":username",username);
-        if(!query.exec())
-            qDebug() << query.lastError();
-    }
-}
-
-//Sets displayed to false.  This is currently used as a hackaround to update the listview.
-//Basically instead of updating individual items in a listview, all displayed streams are
-//set to 0, listview is cleared, and then they're all added to the listview again.
-void database::manageDisplayVariableClear(QString requestType)
-{
-    if(checkDBConnection())
-    {
-        QSqlQuery query(this->db);
-        if(requestType == "followed")
-            query.prepare("UPDATE followed_data SET displayed=0");
-        else if(requestType == "featured")
-            query.prepare("UPDATE featured_data SET displayed=0");
-        else if(requestType == "search")
-            query.prepare("UPDATE search_data SET displayed=0");
-
-        if(!query.exec())
-            qDebug() << query.lastError();
-    }
 }
 
 //Clears online users when adding the updated data.  This is how we figure out who
@@ -195,34 +159,6 @@ QString database::retrieveStatus(QString username,QString requestType)
     }
 }
 
-//Retrieves stream data for a given requestType.
-QList<QStringList> database::retreiveStreamList(QString requestType)
-{
-    QList<QStringList> streamDataList;
-    if(checkDBConnection())
-    {
-        QSqlQuery query(this->db);
-        if(requestType == "follow")
-            query.prepare("SELECT username,game,viewers,status,logo,url FROM followed_data WHERE online=1 AND displayed=0");
-        else if(requestType == "featured")
-            query.prepare("SELECT username,game,viewers,status,logo,url FROM featured_data WHERE online=1 AND displayed=0");
-        else if(requestType == "search")
-            query.prepare("SELECT username,game,viewers,status,logo,url FROM search_data WHERE online=1 AND displayed=0");
-
-        if(query.exec())
-        {
-            while(query.next())
-            {
-                QStringList streamData;
-                streamData << query.value(0).toString() << query.value(1).toString() << query.value(2).toString();
-                streamData << query.value(3).toString() << query.value(4).toString() << query.value(5).toString();
-                streamDataList << streamData;
-            }
-        }
-    }
-    return streamDataList;
-}
-
 //Stores stream data in the database.
 void database::storeStreamData(QStringList streamData, QString requestType)
 {
@@ -235,19 +171,21 @@ void database::storeStreamData(QStringList streamData, QString requestType)
         QString logo = streamData[4];
         QString url = streamData[5];
         int online = 1;
-        int displayed = 0;
+
+        QStringList streamData;
+        streamData << username << game << viewers << requestType;
 
         if(!checkIfStreamExists(username,requestType))
         {
             QString insert;
             QSqlQuery query(this->db);
             if(requestType == "followed")
-                insert = "INSERT INTO followed_data (username, game, viewers, status, logo, url, online, displayed) ";
+                insert = "INSERT INTO followed_data (username, game, viewers, status, logo, url, online) ";
             else if(requestType == "featured")
-                insert = "INSERT INTO featured_data (username, game, viewers, status, logo, url, online, displayed) ";
+                insert = "INSERT INTO featured_data (username, game, viewers, status, logo, url, online) ";
             else if(requestType == "search")
-                insert = "INSERT INTO search_data (username, game, viewers, status, logo, url, online, displayed) ";
-            QString values = "VALUES (:username, :game, :viewers, :status, :logo, :url, :online, :displayed)";
+                insert = "INSERT INTO search_data (username, game, viewers, status, logo, url, online) ";
+            QString values = "VALUES (:username, :game, :viewers, :status, :logo, :url, :online)";
             QString queryString = insert + values;
 
             query.prepare(queryString);
@@ -258,10 +196,10 @@ void database::storeStreamData(QStringList streamData, QString requestType)
             query.bindValue(":logo", logo);
             query.bindValue(":url", url);
             query.bindValue(":online", online);
-            query.bindValue(":displayed", displayed);
 
             if(!query.exec())
                 qDebug() << query.lastError();
+            emit(addStreamToView(streamData));
         }
         else
         {
@@ -274,7 +212,6 @@ void database::storeStreamData(QStringList streamData, QString requestType)
             else if(requestType == "search")
                 update = "UPDATE search_data SET game = :game,";
             QString values = "viewers = :viewers, status = :status, online = :online WHERE username = :username";
-            QString where;
 
             QString queryString = update+values;
             query.prepare(queryString);
@@ -286,6 +223,8 @@ void database::storeStreamData(QStringList streamData, QString requestType)
 
             if(!query.exec())
                 qDebug() << query.lastError();
+
+            emit(updateStreamInView(streamData));
         }
     }
 }

@@ -18,11 +18,11 @@ MainWindow::~MainWindow()
 }
 
 //Adds items to the list view
-void MainWindow::addItemToListView(int index, QList<QStringList> streams)
+void MainWindow::addItemToListView(QStringList streamData)
 {
-    if(index == 0)
+    if(!streamData.isEmpty())
     {
-        foreach (QStringList streamData, streams)
+        if(streamData[3] == "featured")
         {
             QString displayName = streamData[0].replace(" ","");
             QString game = streamData[1];
@@ -30,34 +30,27 @@ void MainWindow::addItemToListView(int index, QList<QStringList> streams)
             QString stream = displayName + ": (" + viewers + ") " + game;
             if(!displayName.isEmpty())
                 ui->listWidget->addItem(stream);
-            request.changeDisplayVariable("featured", displayName);
+            ui->listWidget->sortItems();
         }
-        ui->listWidget->sortItems();
-    }
-    else if(index == 1)
-    {
-        foreach (QStringList streamData, streams)
+        else if(streamData[3] == "followed")
         {
             QString displayName = streamData[0].replace(" ","");
             QString game = streamData[1];
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
-            request.changeDisplayVariable("followed", displayName);
             if(!displayName.isEmpty())
-                ui->listWidget_2->addItem(stream);
+                ui->listWidget->addItem(stream);
+            ui->listWidget->sortItems();
         }
-        ui->listWidget_2->sortItems();
-    }
-    else if(index == 2)
-    {
-        foreach (QStringList streamData, streams)
+        else if(streamData[3] == "search")
         {
             QString displayName = streamData[0].replace(" ","");
             QString game = streamData[1];
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
-            request.changeDisplayVariable("search", displayName);
-            ui->listWidget_3->addItem(stream);
+            if(!displayName.isEmpty())
+                ui->listWidget->addItem(stream);
+            ui->listWidget->sortItems();
         }
     }
 }
@@ -74,13 +67,13 @@ void MainWindow::changeStatusBar()
 //Creates signals and slots for the mainwindow.
 void MainWindow::createSignalSlots()
 {
+    connect((&db),SIGNAL(addStreamToView(QStringList)),this,SLOT(addItemToListView(QStringList)));
+    connect((&db),SIGNAL(updateStreamInView(QStringList)),this,SLOT(updateItemInListView(QStringList)));
     connect((&request),SIGNAL(usernameDialogSignal(QString)),this,SLOT(usernameDialog(QString)));
     connect((&request),SIGNAL(clearFollowList()),this,SLOT(followListClear()));
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
-    connect((&timerManager),SIGNAL(readDatabase()),this,SLOT(timedDatabaseRead()));
     connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
-    connect((&timerManager),SIGNAL(updateStreams()),this,SLOT(timedUpdateStreams()));
     connect((ui->listWidget),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_2),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_3),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
@@ -103,7 +96,7 @@ void MainWindow::displayToolTip(QListWidgetItem *item)
             requestType = "followed";
         else if(tabIndex == 2)
             requestType = "search";
-        QString status = request.getStatus(username[0], requestType);
+        QString status = db.retrieveStatus(username[0], requestType);
         QWidget::setToolTip(status);
     }
     else
@@ -184,16 +177,6 @@ void MainWindow::styleItems()
     ui->listWidget_3->setPalette(p);
 }
 
-//Reads the database for the current tab on a timer.
-void MainWindow::timedDatabaseRead()
-{
-    int tabIndex = ui->tabWidget->currentIndex();
-    QList<QStringList> streamDataList;
-    streamDataList = request.timedDatabaseRead(tabIndex);
-    if(!streamDataList.isEmpty())
-        this->addItemToListView(tabIndex,streamDataList);
-}
-
 //Requests the data for the current open tab on a timer.
 void MainWindow::timedDataRequest()
 {
@@ -210,29 +193,56 @@ void MainWindow::timedDataRequest()
     }
 }
 
-//Update listviews on a timer.
-void MainWindow::timedUpdateStreams()
-{
-    int tabIndex = ui->tabWidget->currentIndex();
-    QList<QStringList> streamDataList;
-    streamDataList = request.timedDatabaseUpdateRead(tabIndex);
-    if(!streamDataList.isEmpty())
-    {
-        if(tabIndex == 0)
-            ui->listWidget->clear();
-        else if(tabIndex == 1)
-            ui->listWidget_2->clear();
-        else if(tabIndex == 2)
-            ui->listWidget_3->clear();
-
-        this->addItemToListView(tabIndex,streamDataList);
-    }
-}
-
 //Make a network request on a timer.  This is based on current tab index.
 void MainWindow::timedNetworkRequest()
 {
     request.makeRequest();
+}
+
+//Adds items to the list view
+void MainWindow::updateItemInListView(QStringList streamData)
+{
+    if(!streamData.isEmpty())
+    {
+        if(streamData[3] == "featured")
+        {
+            QString displayName = streamData[0].replace(" ","");
+            QString game = streamData[1];
+            QString viewers = streamData[2];
+            QString stream = displayName + ": (" + viewers + ") " + game;
+            for(int i = 0; i < ui->listWidget->count(); i++)
+            {
+                QListWidgetItem *currentItem = ui->listWidget->item(i);
+                QStringList username = currentItem->text().split(":");
+                if(displayName == username[0])
+                {
+                    ui->listWidget->removeItemWidget(currentItem);
+                    ui->listWidget->addItem(stream);
+                    ui->listWidget->sortItems();
+                    break;
+                }
+            }
+        }
+        else if(streamData[3] == "followed")
+        {
+            QString displayName = streamData[0].replace(" ","");
+            QString game = streamData[1];
+            QString viewers = streamData[2];
+            QString stream = displayName + ": (" + viewers + ") " + game;
+            for(int i = 0; i < ui->listWidget->count(); i++)
+            {
+                QListWidgetItem *currentItem = ui->listWidget->item(i);
+                QStringList username = currentItem->text().split(":");
+                if(displayName == username[0])
+                {
+                    ui->listWidget->removeItemWidget(currentItem);
+                    ui->listWidget->addItem(stream);
+                    ui->listWidget->sortItems();
+                    break;
+                }
+            }
+        }
+    }
 }
 
 //Slot for the username dialog, will repop the dialog box if the username isn't found.
