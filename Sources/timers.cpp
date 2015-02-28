@@ -22,9 +22,9 @@ void timers::createTimerSignals()
 //Start all the timers.
 void timers::startTimers()
 {
-    requestTimer->start(2000);
+    requestTimer->start(3000);
     connectionTimer->start(5000);
-    networkRequestTimer->start(100);
+    networkRequestTimer->start(10);
 }
 
 //Request data on a timer.

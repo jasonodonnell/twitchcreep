@@ -39,8 +39,8 @@ void MainWindow::addItemToListView(QStringList streamData)
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
             if(!displayName.isEmpty())
-                ui->listWidget->addItem(stream);
-            ui->listWidget->sortItems();
+                ui->listWidget_2->addItem(stream);
+            ui->listWidget_2->sortItems();
         }
         else if(streamData[3] == "search")
         {
@@ -49,8 +49,8 @@ void MainWindow::addItemToListView(QStringList streamData)
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
             if(!displayName.isEmpty())
-                ui->listWidget->addItem(stream);
-            ui->listWidget->sortItems();
+                ui->listWidget_3->addItem(stream);
+            ui->listWidget_3->sortItems();
         }
     }
 }
@@ -71,6 +71,9 @@ void MainWindow::createSignalSlots()
     connect((&db),SIGNAL(updateStreamInView(QStringList)),this,SLOT(updateItemInListView(QStringList)));
     connect((&request),SIGNAL(usernameDialogSignal(QString)),this,SLOT(usernameDialog(QString)));
     connect((&request),SIGNAL(clearFollowList()),this,SLOT(followListClear()));
+    connect((&request),SIGNAL(manageOnlineStreamers(QString)),&db,SLOT(manageOnlineStreamers(QString)));
+    connect((&request),SIGNAL(storeStreamData(QStringList, QString)),&db,SLOT(storeStreamData(QStringList,QString)));
+    connect((&request),SIGNAL(truncateStreamData()),&db,SLOT(truncateStreamData()));
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
     connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
@@ -216,9 +219,7 @@ void MainWindow::updateItemInListView(QStringList streamData)
                 QStringList username = currentItem->text().split(":");
                 if(displayName == username[0])
                 {
-                    ui->listWidget->removeItemWidget(currentItem);
-                    ui->listWidget->addItem(stream);
-                    ui->listWidget->sortItems();
+                    ui->listWidget->item(i)->setText(stream);
                     break;
                 }
             }
@@ -229,15 +230,13 @@ void MainWindow::updateItemInListView(QStringList streamData)
             QString game = streamData[1];
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
-            for(int i = 0; i < ui->listWidget->count(); i++)
+            for(int i = 0; i < ui->listWidget_2->count(); i++)
             {
-                QListWidgetItem *currentItem = ui->listWidget->item(i);
+                QListWidgetItem *currentItem = ui->listWidget_2->item(i);
                 QStringList username = currentItem->text().split(":");
                 if(displayName == username[0])
                 {
-                    ui->listWidget->removeItemWidget(currentItem);
-                    ui->listWidget->addItem(stream);
-                    ui->listWidget->sortItems();
+                    ui->listWidget_2->item(i)->setText(stream);
                     break;
                 }
             }

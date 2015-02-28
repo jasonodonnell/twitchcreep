@@ -4,7 +4,6 @@
 #include <QDebug>
 #include <QSql>
 #include <QtSql>
-#include "requesthandler.h"
 
 class database : public QObject
 {
@@ -20,8 +19,7 @@ public:
     void initTables();
     QString retrieveStatus(QString username, QString requestType);
 
-    void setRequestSignal(requestHandler request);
-private slots:
+public slots:
     void manageOnlineStreamers(QString requestType);
     void storeStreamData(QStringList streamData, QString requestType);
     void truncateStreamData();
@@ -32,7 +30,6 @@ signals:
 
 private:
     void createTables();
-    requestHandler request;
 };
 
 #endif // DATABASE_H
