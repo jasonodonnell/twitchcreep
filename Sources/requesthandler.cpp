@@ -10,12 +10,6 @@ requestHandler::~requestHandler()
 
 }
 
-//Takes the featured request and makes the appropriate network call.
-void requestHandler::changeDisplayVariable(QString requestType, QString username)
-{
-    db.manageDisplayVariable(requestType, username);
-}
-
 //Check internet connection
 bool requestHandler::checkConnection()
 {
@@ -33,18 +27,20 @@ void requestHandler::getFeatured(QByteArray data)
 {
     QList<QStringList> streamerList;
     QStringList streamData;
-    db.manageOnlineStreamers("featured");
+    emit(manageOnlineStreamers("featured"));
     streamerList << jsonParser.getFeaturedStreamData(data);
 
     foreach(streamData, streamerList)
-        db.storeStreamData(streamData, "featured");
+    {
+        emit(storeStreamData(streamData, "featured"));
+    }
 }
 
 //Takes the follows request and makes the appropriate network call.
 void requestHandler::getFollows(QByteArray data)
 {
     QStringList follows;
-    db.manageOnlineStreamers("followed");
+    emit(manageOnlineStreamers("followed"));
     follows = jsonParser.getStreamerFollowedList(data);
     networking.makeStreamRequestFromList(follows);
 }
@@ -54,7 +50,7 @@ void requestHandler::getFollowsList(QByteArray data)
 {
     QStringList streamData = jsonParser.getStreamData(data);
     if(!streamData.isEmpty())
-        db.storeStreamData(streamData, "followed");
+        emit(storeStreamData(streamData, "followed"));
 }
 
 //Get games from the search query
@@ -62,15 +58,9 @@ void requestHandler::getGame(QByteArray data)
 {
     QList<QStringList> search = jsonParser.getGameStreamData(data);
     QStringList searchData;
-    db.manageOnlineStreamers("search");
+    emit(manageOnlineStreamers("search"));
     foreach(searchData, search)
-        db.storeStreamData(searchData, "search");
-}
-
-//Returns status from stream for tooltip
-QString requestHandler::getStatus(QString username,QString requestType)
-{
-    return db.retrieveStatus(username,requestType);
+        emit(storeStreamData(searchData, "search"));
 }
 
 //Takes the usrername request and makes the appropriate network call.
@@ -83,11 +73,11 @@ void requestHandler::getUsername(QByteArray data, QString name)
     if(exists)
     {
         settings.setValue("username",name);
-        db.truncateStreamData();
+        emit(truncateStreamData());
     }
     else
     {
-        db.truncateStreamData();
+        emit(truncateStreamData());
         settings.setValue("username","");
         emit(usernameDialogSignal("error"));
     }
@@ -139,52 +129,4 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
         this->getGame(data);
 
     networking.popRequestFromList();
-}
-
-//Read the database on a timed interval.  Triggered by the timers class.
-QList<QStringList> requestHandler::timedDatabaseRead(int index)
-{
-    QList<QStringList> streamDataList;
-    if(index == 0)
-        streamDataList = db.retreiveStreamList("featured");
-    else if(index == 1)
-        streamDataList = db.retreiveStreamList("follow");
-    else if(index == 2)
-        streamDataList = db.retreiveStreamList("search");
-    return streamDataList;
-}
-
-//Read the database on a timed interval.  Triggered by the timers class.
-QList<QStringList> requestHandler::timedDatabaseUpdateRead(int index)
-{
-    QList<QStringList> streamDataList;
-    if(index == 0)
-    {
-        db.manageDisplayVariableClear("featured");
-        streamDataList = this->timedDatabaseRead(index);
-    }
-    else if(index == 1)
-    {
-        db.manageDisplayVariableClear("follow");
-        streamDataList = this->timedDatabaseRead(index);
-    }
-    else if(index == 2)
-    {
-        db.manageDisplayVariableClear("search");
-        streamDataList = this->timedDatabaseRead(index);
-    }
-    return streamDataList;
-}
-
-//Remove streams on a timer.
-QStringList requestHandler::timedOfflineRemoval(int index)
-{
-    QStringList streamDataList;
-    if(index == 0)
-        streamDataList = db.getDisplayedOfflineStreams("featured");
-    else if(index == 1)
-        streamDataList = db.getDisplayedOfflineStreams("followed");
-    else if(index == 2)
-        streamDataList = db.getDisplayedOfflineStreams("search");
-    return streamDataList;
 }

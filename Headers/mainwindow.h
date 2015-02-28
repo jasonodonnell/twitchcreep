@@ -12,6 +12,7 @@
 #include <QToolTip>
 #include "timers.h"
 #include "requesthandler.h"
+#include "database.h"
 
 namespace Ui {
 class MainWindow;
@@ -25,13 +26,13 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     QList<QStringList> followsList;
     ~MainWindow();
-    void addItemToListView(int,QList<QStringList>);
 
 public slots:
     void followListClear();
     void usernameDialog(QString);
 
 private slots:
+    void addItemToListView(QStringList);
     void changeStatusBar();
     void displayToolTip(QListWidgetItem* item);
     void onListItemDoubleClicked(QListWidgetItem* item);
@@ -41,13 +42,13 @@ private slots:
     void on_pushButton_pressed();
     void on_tabWidget_currentChanged();
     void timedDataRequest();
-    void timedDatabaseRead();
     void timedNetworkRequest();
-    void timedUpdateStreams();
+    void updateItemInListView(QStringList streamData);
 
 private:
     Ui::MainWindow *ui;
     requestHandler request;
+    database db;
     timers timerManager;
     void createSignalSlots();
     void enableMouseTracking();
