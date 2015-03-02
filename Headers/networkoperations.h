@@ -34,6 +34,7 @@ private:
     void addRequestToList(QString requestType, QString url);
     QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
     QList<QStringList> requests;
+    QString appId = "t4wqbkwgdox7xzbt6fd5ldwls37b6fh";
 };
 
 #endif // NETWORKOPERATIONS_H
