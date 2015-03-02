@@ -24,8 +24,8 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    QList<QStringList> followsList;
     requestHandler request;
+    QList<QStringList> followsList;
     ~MainWindow();
 
 public slots:
@@ -47,9 +47,9 @@ private slots:
     void updateItemInListView(QStringList streamData);
 
 private:
-    Ui::MainWindow *ui;
     database db;
     timers timerManager;
+    Ui::MainWindow *ui;
     void createSignalSlots();
     void enableMouseTracking();
     void searchTabRequest();

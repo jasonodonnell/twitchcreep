@@ -29,7 +29,7 @@ bool networkOperations::checkNetworkConnection()
 //Check if username exists.
 void networkOperations::checkUsernameRequest(QString username)
 {
-    QString url = "https://api.twitch.tv/kraken/users/" + username;
+    QString url = "https://api.twitch.tv/kraken/users/" + username + "?client_id=" + appId;
     QString objectName = "usernameCheck:" + username;
     this->addRequestToList(objectName,url);
 }
@@ -46,21 +46,22 @@ void networkOperations::doneReading(QNetworkReply *reply)
 //Makes a featured stream request.
 void networkOperations::makeFeaturedRequest()
 {
-    QString url = "https://api.twitch.tv/kraken/streams/featured";
+    QString url = "https://api.twitch.tv/kraken/streams/featured?client_id=" + appId;
     this->addRequestToList("featured",url);
 }
 
 //Make the follow request based on username in QSettings
 void networkOperations::makeFollowRequest(QString username)
 {
-    QString url = "https://api.twitch.tv/kraken/users/" + username + "/follows/channels";
+    QString url = "https://api.twitch.tv/kraken/users/" + username + "/follows/channels?client_id=" + appId;
     this->addRequestToList("follows",url);
 }
 
 //Gets list of streams for a game
 void networkOperations::makeGameRequest(QString game)
 {
-    QString url = "https://api.twitch.tv/kraken/search/streams?q=" + game;
+    QString url = "https://api.twitch.tv/kraken/search/streams?q=" + game + "&client_id=" + appId;
+    qDebug() << url;
     this->addRequestToList("game",url);
 }
 
@@ -73,7 +74,8 @@ void networkOperations::makeRequest()
         {
             QStringList requestInfo = requests.first();
             this->setObjectName(requestInfo[0]);
-            networkManager->get(QNetworkRequest(QUrl(requestInfo[1])));
+            QString url = requestInfo[1];
+            networkManager->get(QNetworkRequest(QUrl(url)));
         }
     }
 }
@@ -82,7 +84,7 @@ void networkOperations::makeRequest()
 //Make the stream request based on the username passed in
 void networkOperations::makeStreamRequest(QString username)
 {
-    QString url = "https://api.twitch.tv/kraken/streams/" + username;
+    QString url = "https://api.twitch.tv/kraken/streams/" + username + "?client_id=" + appId;;
     this->addRequestToList("stream",url);
 }
 
@@ -93,7 +95,7 @@ void networkOperations::makeStreamRequestFromList(QStringList usernames)
     {
         if(!username.isEmpty())
         {
-            QString url = "https://api.twitch.tv/kraken/streams/" + username;
+            QString url = "https://api.twitch.tv/kraken/streams/" + username + "?client_id=" + appId;;
             this->addRequestToList("followsList",url);
         }
     }

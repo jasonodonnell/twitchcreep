@@ -4,7 +4,10 @@ timers::timers(QObject *parent) : QObject(parent)
 {
     this->createTimerSignals();
     this->dataRequest();
+    this->makeNetworkRequest();
+    this->networkConnection();
     this->startTimers();
+
 }
 
 timers::~timers()
