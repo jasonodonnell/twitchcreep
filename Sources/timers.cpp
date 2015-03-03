@@ -14,7 +14,7 @@ timers::~timers()
 {
 
 }
-
+//Attach all the signals to slots.
 void timers::createTimerSignals()
 {
     connect(connectionTimer,SIGNAL(timeout()),this,SLOT(networkConnection()));

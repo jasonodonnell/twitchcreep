@@ -17,7 +17,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//Adds items to the list view
+//Adds items to the list view when database fires the additem signal.  This is fired
+//when a new item is inserted into the database.
 void MainWindow::addItemToListView(QStringList streamData)
 {
     if(!streamData.isEmpty())
@@ -202,7 +203,8 @@ void MainWindow::timedNetworkRequest()
     request.makeRequest();
 }
 
-//Adds items to the list view
+//Update items in the list view.  When the database updates an entry in the db, it'll fire
+//a signal to activate this update.
 void MainWindow::updateItemInListView(QStringList streamData)
 {
     if(!streamData.isEmpty())

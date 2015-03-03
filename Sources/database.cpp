@@ -104,6 +104,7 @@ QStringList database::getDisplayedOfflineStreams(QString requestType)
     return streamData;
 }
 
+//Intialize tables by creating the table and truncating any data.
 void database::initTables()
 {
     this->createTables();
@@ -156,7 +157,8 @@ QString database::retrieveStatus(QString username,QString requestType)
     }
 }
 
-//Stores stream data in the database.
+//Stores stream data in the database.  Could possibly fire two signals: the add new item
+//or update an existing item signals.
 void database::storeStreamData(QStringList streamData, QString requestType)
 {
     if(checkDBConnection() && streamData[0] != "")
