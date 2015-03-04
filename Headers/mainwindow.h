@@ -46,6 +46,9 @@ private slots:
     void timedNetworkRequest();
     void updateItemInListView(QStringList streamData);
 
+    void on_actionClear_User_triggered();
+
+    void clearListViews();
 private:
     database db;
     timers timerManager;

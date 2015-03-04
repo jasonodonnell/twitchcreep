@@ -114,6 +114,7 @@
      <string>File</string>
     </property>
     <addaction name="actionAdd_User"/>
+    <addaction name="actionClear_User"/>
     <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFile"/>
@@ -135,6 +136,11 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionClear_User">
+   <property name="text">
+    <string>Clear User</string>
    </property>
   </action>
  </widget>

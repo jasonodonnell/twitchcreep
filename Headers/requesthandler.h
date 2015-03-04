@@ -23,11 +23,13 @@ public:
 
     bool checkConnection();
     void checkUsername(QString text);
+    QString getSettingsValue(QString value);
     void makeFollowRequest(QString username);
     void makeFeaturedRequest();
     void makeRequest();
     void makeSearchRequest(QString search);
     QByteArray readStreamImage(QString name);
+    void setSettingsValue(QString setting, QString value);
 signals:
     void clearFollowList();
     void manageOnlineStreamers(QString);
@@ -41,6 +43,7 @@ public slots:
 private:
     json jsonParser;
     networkOperations networking;
+    QSettings settings;
 };
 
 #endif // REQUESTHANDLER_H

@@ -26,7 +26,9 @@ public slots:
 
 signals:
     void addStreamToView(QStringList stream);
+    void listViewClears();
     void updateStreamInView(QStringList stream);
+
 
 private:
     void createTables();
