@@ -240,5 +240,6 @@ void database::truncateStreamData()
             qDebug() << query.lastError();
         if(!query.exec("DELETE FROM search_data;"))
             qDebug() << query.lastError();
+        emit(listViewClears());
     }
 }

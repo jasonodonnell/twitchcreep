@@ -59,16 +59,34 @@ void MainWindow::addItemToListView(QStringList streamData)
 //Changes status bar at the bottom for internet connection.
 void MainWindow::changeStatusBar()
 {
+    QString networkStatus;
+    QString username = request.getSettingsValue("username");
+
     if(request.checkConnection())
-        statusBar()->showMessage(tr("Status: Online"));
+        networkStatus = "Online";
     else
-        statusBar()->showMessage(tr("Status: Offline"));
+        networkStatus = "Offline";
+
+    if(username.isNull())
+        username = "Not set";
+
+    QString status = "Username: " + username;
+    statusBar()->showMessage(status);
+
+}
+
+void MainWindow::clearListViews()
+{
+    ui->listWidget->clear();
+    ui->listWidget_2->clear();
+    ui->listWidget_3->clear();
 }
 
 //Creates signals and slots for the mainwindow.
 void MainWindow::createSignalSlots()
 {
     connect((&db),SIGNAL(addStreamToView(QStringList)),this,SLOT(addItemToListView(QStringList)));
+    connect((&db),SIGNAL(listViewClears()),this,SLOT(clearListViews()));
     connect((&db),SIGNAL(updateStreamInView(QStringList)),this,SLOT(updateItemInListView(QStringList)));
     connect((&request),SIGNAL(usernameDialogSignal(QString)),this,SLOT(usernameDialog(QString)));
     connect((&request),SIGNAL(clearFollowList()),this,SLOT(followListClear()));
@@ -136,6 +154,12 @@ void MainWindow::on_actionAdd_User_triggered()
     this->usernameDialog("new");
 }
 
+//Clears username out of qsettings
+void MainWindow::on_actionClear_User_triggered()
+{
+    request.setSettingsValue("username","");
+}
+
 //Enter pressed on the search window
 void MainWindow::on_lineEdit_returnPressed()
 {
@@ -185,15 +209,14 @@ void MainWindow::styleItems()
 void MainWindow::timedDataRequest()
 {
     int tabIndex = ui->tabWidget->currentIndex();
-    QString settingsDir = QCoreApplication::applicationDirPath() + "/twitchCreep.conf";
-    QSettings settings(settingsDir, QSettings::IniFormat);
+    QString username = request.getSettingsValue("username");
 
     if(tabIndex == 0)
         request.makeFeaturedRequest();
     else if(tabIndex == 1)
     {
-        if(!settings.value("username").isNull())
-            request.makeFollowRequest(settings.value("username").toString());
+        if(!username.isNull())
+            request.makeFollowRequest(username);
     }
 }
 

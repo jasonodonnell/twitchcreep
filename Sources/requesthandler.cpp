@@ -3,6 +3,8 @@
 requestHandler::requestHandler(QObject *parent) : QThread(parent)
 {
     connect((&networking),SIGNAL(dataReady(QByteArray,QString)),this,SLOT(requestProcess(QByteArray,QString)));
+    QString settingsDir = QCoreApplication::applicationDirPath() + "/twitchCreep.conf";
+    settings.setPath(QSettings::IniFormat,QSettings::SystemScope,settingsDir);
 }
 
 requestHandler::~requestHandler()
@@ -63,11 +65,15 @@ void requestHandler::getGame(QByteArray data)
         emit(storeStreamData(searchData, "search"));
 }
 
+QString requestHandler::getSettingsValue(QString value)
+{
+    if(!value.isEmpty())
+        return settings.value(value).toString();
+}
+
 //Takes the usrername request and makes the appropriate network call.
 void requestHandler::getUsername(QByteArray data, QString name)
 {
-    QString settingsDir = QCoreApplication::applicationDirPath() + "/twitchCreep.conf";
-    QSettings settings(settingsDir, QSettings::IniFormat);
     bool exists;
     exists = jsonParser.checkUsernameExists(data);
     if(exists)
@@ -129,4 +135,10 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
         this->getGame(data);
 
     networking.popRequestFromList();
+}
+
+
+void requestHandler::setSettingsValue(QString setting, QString value)
+{
+    settings.setValue(setting,value);
 }
