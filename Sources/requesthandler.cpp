@@ -142,3 +142,8 @@ void requestHandler::setSettingsValue(QString setting, QString value)
 {
     settings.setValue(setting,value);
 }
+
+void requestHandler::storeItemIndex(QString requestType, QString username, int index)
+{
+    emit(storeIndex(requestType,username,index));
+}

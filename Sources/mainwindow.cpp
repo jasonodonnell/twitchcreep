@@ -30,8 +30,12 @@ void MainWindow::addItemToListView(QStringList streamData)
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
             if(!displayName.isEmpty())
+            {
                 ui->listWidget->addItem(stream);
-            ui->listWidget->sortItems();
+                int count = ui->listWidget->count() - 1;
+                request.storeItemIndex(streamData[3],displayName,count);
+            }
+            //ui->listWidget->sortItems();
         }
         else if(streamData[3] == "followed")
         {
@@ -40,8 +44,12 @@ void MainWindow::addItemToListView(QStringList streamData)
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
             if(!displayName.isEmpty())
+            {
                 ui->listWidget_2->addItem(stream);
-            ui->listWidget_2->sortItems();
+                int count = ui->listWidget_2->count() - 1;
+                request.storeItemIndex(streamData[3],displayName,count);
+            }
+            //ui->listWidget_2->sortItems();
         }
         else if(streamData[3] == "search")
         {
@@ -87,10 +95,11 @@ void MainWindow::createSignalSlots()
 {
     connect((&db),SIGNAL(addStreamToView(QStringList)),this,SLOT(addItemToListView(QStringList)));
     connect((&db),SIGNAL(listViewClears()),this,SLOT(clearListViews()));
-    connect((&db),SIGNAL(updateStreamInView(QStringList)),this,SLOT(updateItemInListView(QStringList)));
+    connect((&db),SIGNAL(updateStreamInView(QStringList,int)),this,SLOT(updateItemInListView(QStringList,int)));
     connect((&request),SIGNAL(usernameDialogSignal(QString)),this,SLOT(usernameDialog(QString)));
     connect((&request),SIGNAL(clearFollowList()),this,SLOT(followListClear()));
     connect((&request),SIGNAL(manageOnlineStreamers(QString)),&db,SLOT(manageOnlineStreamers(QString)));
+    connect((&request),SIGNAL(storeIndex(QString,QString,int)),&db,SLOT(storeItemIndex(QString,QString,int)));
     connect((&request),SIGNAL(storeStreamData(QStringList, QString)),&db,SLOT(storeStreamData(QStringList,QString)));
     connect((&request),SIGNAL(truncateStreamData()),&db,SLOT(truncateStreamData()));
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
@@ -228,7 +237,7 @@ void MainWindow::timedNetworkRequest()
 
 //Update items in the list view.  When the database updates an entry in the db, it'll fire
 //a signal to activate this update.
-void MainWindow::updateItemInListView(QStringList streamData)
+void MainWindow::updateItemInListView(QStringList streamData,int index)
 {
     if(!streamData.isEmpty())
     {
@@ -238,16 +247,8 @@ void MainWindow::updateItemInListView(QStringList streamData)
             QString game = streamData[1];
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
-            for(int i = 0; i < ui->listWidget->count(); i++)
-            {
-                QListWidgetItem *currentItem = ui->listWidget->item(i);
-                QStringList username = currentItem->text().split(":");
-                if(displayName == username[0])
-                {
-                    ui->listWidget->item(i)->setText(stream);
-                    break;
-                }
-            }
+            ui->listWidget->item(index)->setText(stream);
+            //ui->listWidget->sortItems();
         }
         else if(streamData[3] == "followed")
         {
@@ -255,16 +256,8 @@ void MainWindow::updateItemInListView(QStringList streamData)
             QString game = streamData[1];
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
-            for(int i = 0; i < ui->listWidget_2->count(); i++)
-            {
-                QListWidgetItem *currentItem = ui->listWidget_2->item(i);
-                QStringList username = currentItem->text().split(":");
-                if(displayName == username[0])
-                {
-                    ui->listWidget_2->item(i)->setText(stream);
-                    break;
-                }
-            }
+            ui->listWidget_2->item(index)->setText(stream);
+            //ui->listWidget_2->sortItems();
         }
     }
 }

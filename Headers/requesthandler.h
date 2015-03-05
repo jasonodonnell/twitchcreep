@@ -30,9 +30,11 @@ public:
     void makeSearchRequest(QString search);
     QByteArray readStreamImage(QString name);
     void setSettingsValue(QString setting, QString value);
+    void storeItemIndex(QString requestType, QString username, int index);
 signals:
     void clearFollowList();
     void manageOnlineStreamers(QString);
+    void storeIndex(QString requestType, QString username, int index);
     void storeStreamData(QStringList data, QString requestType);
     void truncateStreamData();
     void usernameDialogSignal(QString);

@@ -44,7 +44,7 @@ private slots:
     void on_tabWidget_currentChanged();
     void timedDataRequest();
     void timedNetworkRequest();
-    void updateItemInListView(QStringList streamData);
+    void updateItemInListView(QStringList streamData, int index);
 
     void on_actionClear_User_triggered();
 
