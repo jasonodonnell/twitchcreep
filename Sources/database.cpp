@@ -60,11 +60,11 @@ void database::createTables()
         QString drop_featured = "DROP TABLE IF EXISTS featured_data;";
         QString drop_search = "DROP TABLE IF EXISTS search_data;";
         QString followed_data = "CREATE TABLE IF NOT EXISTS followed_data (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
-        followed_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL);");
+        followed_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL, itemIndex INT);");
         QString featured_data = "CREATE TABLE IF NOT EXISTS featured_data (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
-        featured_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL);");
+        featured_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL, itemIndex INT);");
         QString search_data = "CREATE TABLE IF NOT EXISTS search_data (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
-        search_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL);");
+        search_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL, itemIndex INT);");
 
         QSqlQuery query(this->db);
         if(!query.exec(drop_followed))
@@ -136,6 +136,26 @@ void database::manageOnlineStreamers(QString requestType)
 }
 
 //Retrieves the stream status for the tooltip.
+int database::retrieveIndex(QString requestType, QString username)
+{
+    if(checkDBConnection())
+    {
+        QSqlQuery query(this->db);
+        int indexValue;
+        if(requestType == "featured")
+            query.prepare("SELECT itemIndex FROM featured_data WHERE username=:username");
+        else if(requestType == "followed")
+            query.prepare("SELECT itemIndex FROM followed_data WHERE username=:username");
+        query.bindValue(":username",username);
+        if(query.exec())
+            while(query.next())
+                return query.value(0).toInt();
+        else
+            return indexValue;
+    }
+}
+
+//Retrieves the stream status for the tooltip.
 QString database::retrieveStatus(QString username,QString requestType)
 {
     if(checkDBConnection())
@@ -154,6 +174,28 @@ QString database::retrieveStatus(QString username,QString requestType)
                 return query.value(0).toString();
         else
             return status;
+    }
+}
+
+void database::storeItemIndex(QString requestType, QString username, int index)
+{
+    if(checkDBConnection())
+    {
+        QSqlQuery query(this->db);
+        QString update;
+        if(requestType == "followed")
+            update = "UPDATE followed_data SET itemIndex = :index ";
+        else if(requestType == "featured")
+            update = "UPDATE featured_data SET itemIndex = :index ";
+        QString values = "WHERE username = :username";
+
+        QString queryString = update+values;
+        query.prepare(queryString);
+        query.bindValue(":index", index);
+        query.bindValue(":username", username);
+
+        if(!query.exec())
+            qDebug() << query.lastError();
     }
 }
 
@@ -222,7 +264,8 @@ void database::storeStreamData(QStringList streamData, QString requestType)
 
             if(!query.exec())
                 qDebug() << query.lastError();
-            emit(updateStreamInView(streamData));
+            int index = this->retrieveIndex(requestType,username);
+            emit(updateStreamInView(streamData,index));
         }
     }
 }

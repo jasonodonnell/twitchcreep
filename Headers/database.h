@@ -24,14 +24,16 @@ public slots:
     void storeStreamData(QStringList streamData, QString requestType);
     void truncateStreamData();
 
+    void storeItemIndex(QString requestType, QString username, int index);
 signals:
     void addStreamToView(QStringList stream);
     void listViewClears();
-    void updateStreamInView(QStringList stream);
+    void updateStreamInView(QStringList stream,int index);
 
 
 private:
     void createTables();
+    int retrieveIndex(QString requestType, QString username);
 };
 
 #endif // DATABASE_H
