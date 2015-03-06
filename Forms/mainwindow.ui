@@ -26,7 +26,7 @@
          <bool>true</bool>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -34,7 +34,11 @@
          </attribute>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QListWidget" name="listWidget"/>
+           <widget class="QListWidget" name="listWidget">
+            <property name="sortingEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -44,7 +48,11 @@
          </attribute>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <widget class="QListWidget" name="listWidget_2"/>
+           <widget class="QListWidget" name="listWidget_2">
+            <property name="sortingEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -90,7 +98,11 @@
            </layout>
           </item>
           <item>
-           <widget class="QListWidget" name="listWidget_3"/>
+           <widget class="QListWidget" name="listWidget_3">
+            <property name="sortingEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
