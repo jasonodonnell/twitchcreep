@@ -177,6 +177,7 @@ QString database::retrieveStatus(QString username,QString requestType)
     }
 }
 
+//Stores an index for a given item
 void database::storeItemIndex(QString requestType, QString username, int index)
 {
     if(checkDBConnection())
