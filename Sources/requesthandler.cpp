@@ -65,6 +65,7 @@ void requestHandler::getGame(QByteArray data)
         emit(storeStreamData(searchData, "search"));
 }
 
+//Retrieve value of a given setting
 QString requestHandler::getSettingsValue(QString value)
 {
     if(!value.isEmpty())
@@ -137,12 +138,13 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
     networking.popRequestFromList();
 }
 
-
+//Set the value of a given setting
 void requestHandler::setSettingsValue(QString setting, QString value)
 {
     settings.setValue(setting,value);
 }
 
+//Store the index of an item from the view
 void requestHandler::storeItemIndex(QString requestType, QString username, int index)
 {
     emit(storeIndex(requestType,username,index));
