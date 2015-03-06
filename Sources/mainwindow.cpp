@@ -32,8 +32,12 @@ void MainWindow::addItemToListView(QStringList streamData)
             if(!displayName.isEmpty())
             {
                 ui->listWidget->addItem(stream);
-                int count = ui->listWidget->count() - 1;
-                request.storeItemIndex(streamData[3],displayName,count);
+                int count = ui->listWidget->count();
+                if(count > 0)
+                {
+                    count-= 1;
+                    request.storeItemIndex(streamData[3],displayName,count);
+                }
             }
             //ui->listWidget->sortItems();
         }
@@ -46,8 +50,12 @@ void MainWindow::addItemToListView(QStringList streamData)
             if(!displayName.isEmpty())
             {
                 ui->listWidget_2->addItem(stream);
-                int count = ui->listWidget_2->count() - 1;
-                request.storeItemIndex(streamData[3],displayName,count);
+                int count = ui->listWidget_2->count();
+                if(count > 0)
+                {
+                    count-= 1;
+                    request.storeItemIndex(streamData[3],displayName,count);
+                }
             }
             //ui->listWidget_2->sortItems();
         }
