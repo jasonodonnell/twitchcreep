@@ -12,19 +12,25 @@ TARGET = TwitchCreep
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-           mainwindow.cpp \
-           json.cpp \
-    networkoperations.cpp \
-    requesthandler.cpp \
-    timers.cpp \
-    database.cpp
+SOURCES += Sources/database.cpp \
+    Sources/json.cpp \
+    Sources/main.cpp \
+    Sources/mainwindow.cpp \
+    Sources/networkoperations.cpp \
+    Sources/requesthandler.cpp \
+    Sources/timers.cpp
 
-HEADERS  += mainwindow.h \
-            json.h \
-    networkoperations.h \
-    requesthandler.h \
-    timers.h \
-    database.h
+HEADERS  += Headers/database.h \
+    Headers/json.h \
+    Headers/mainwindow.h \
+    Headers/networkoperations.h \
+    Headers/requesthandler.h \
+    Headers/timers.h \
+    Headers/database.h \
+    Headers/json.h \
+    Headers/mainwindow.h \
+    Headers/networkoperations.h \
+    Headers/requesthandler.h \
+    Headers/timers.h
 
-FORMS    += mainwindow.ui
+FORMS    += Forms/mainwindow.ui
