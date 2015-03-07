@@ -1,4 +1,4 @@
-#include "Headers/database.h"
+#include "../Headers/database.h"
 
 database::database(QObject *parent) : QObject(parent)
 {
@@ -29,7 +29,7 @@ bool database::checkDBConnection()
 //Check if a stream exists in the database for a given requestType
 bool database::checkIfStreamExists(QString username, QString requestType)
 {
-    bool returnCode;
+    bool returnCode = false;
     QSqlQuery query(this->db);
     if(requestType == "followed")
         query.prepare("SELECT username FROM followed_data WHERE username=:username");
@@ -44,8 +44,6 @@ bool database::checkIfStreamExists(QString username, QString requestType)
         {
             if(!query.value( 0 ).toString().isNull())
                 returnCode = true;
-            else
-                returnCode = false;
         }
     }
     return returnCode;
@@ -138,10 +136,10 @@ void database::manageOnlineStreamers(QString requestType)
 //Retrieves the stream status for the tooltip.
 int database::retrieveIndex(QString requestType, QString username)
 {
+    int indexValue = -1;
     if(checkDBConnection())
     {
         QSqlQuery query(this->db);
-        int indexValue;
         if(requestType == "featured")
             query.prepare("SELECT itemIndex FROM featured_data WHERE username=:username");
         else if(requestType == "followed")
@@ -149,19 +147,18 @@ int database::retrieveIndex(QString requestType, QString username)
         query.bindValue(":username",username);
         if(query.exec())
             while(query.next())
-                return query.value(0).toInt();
-        else
-            return indexValue;
+                indexValue = query.value(0).toInt();
     }
+    return indexValue;
 }
 
 //Retrieves the stream status for the tooltip.
 QString database::retrieveStatus(QString username,QString requestType)
 {
+    QString status;
     if(checkDBConnection())
     {
         QSqlQuery query(this->db);
-        QString status;
         if(requestType == "featured")
             query.prepare("SELECT status FROM featured_data WHERE username=:username");
         else if(requestType == "followed")
@@ -172,9 +169,8 @@ QString database::retrieveStatus(QString username,QString requestType)
         if(query.exec())
             while(query.next())
                 return query.value(0).toString();
-        else
-            return status;
     }
+    return status;
 }
 
 //Stores an index for a given item

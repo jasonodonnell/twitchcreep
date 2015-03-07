@@ -1,4 +1,4 @@
-#include "Headers/json.h"
+#include "../Headers/json.h"
 
 json::json(QObject *parent) : QObject(parent)
 {

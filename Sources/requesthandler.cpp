@@ -1,4 +1,4 @@
-#include "Headers/requesthandler.h"
+#include "../Headers/requesthandler.h"
 
 requestHandler::requestHandler(QObject *parent) : QThread(parent)
 {
@@ -68,8 +68,7 @@ void requestHandler::getGame(QByteArray data)
 //Retrieve value of a given setting
 QString requestHandler::getSettingsValue(QString value)
 {
-    if(!value.isEmpty())
-        return settings.value(value).toString();
+    return settings.value(value).toString();
 }
 
 //Takes the usrername request and makes the appropriate network call.
