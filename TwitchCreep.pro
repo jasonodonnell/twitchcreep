@@ -26,11 +26,5 @@ HEADERS  += Headers/database.h \
     Headers/networkoperations.h \
     Headers/requesthandler.h \
     Headers/timers.h \
-    Headers/database.h \
-    Headers/json.h \
-    Headers/mainwindow.h \
-    Headers/networkoperations.h \
-    Headers/requesthandler.h \
-    Headers/timers.h
 
 FORMS    += Forms/mainwindow.ui
