@@ -16,4 +16,6 @@ Search Game: http://i.imgur.com/UDYDqKc.png
 Search User: http://i.imgur.com/hxdP49h.png
 
 ##Instructions to Compile
-Download the source to desktop, open the TwitchCreep.pro file with QTCreator, and run.
+QT requires all files to be one directory but I put them in folders to organize the code.  There may be a way to change this in QT but I haven't looked into it.  
+
+Remove the code from the folders, place all the files into one directory, and open the twitchcreep.pro file in QT Creator.

@@ -1,4 +1,4 @@
-#include "Headers/networkoperations.h"
+#include "../Headers/networkoperations.h"
 
 networkOperations::networkOperations(QObject *parent) : QObject(parent)
 {
