@@ -86,7 +86,7 @@ void MainWindow::changeStatusBar()
     if(username.isNull())
         username = "Not set";
 
-    QString status = "Username: " + username;
+    QString status = "Network: " + networkStatus;
     statusBar()->showMessage(status);
 
 }
