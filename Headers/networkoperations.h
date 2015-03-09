@@ -4,7 +4,6 @@
 #include <QNetworkConfiguration>
 #include <QNetworkConfigurationManager>
 #include <QNetworkReply>
-#include <QTimer>
 #include <QObject>
 #include <QSettings>
 #include <QStringList>

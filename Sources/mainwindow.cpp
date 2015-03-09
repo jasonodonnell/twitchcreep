@@ -30,16 +30,9 @@ void MainWindow::addItemToListView(QStringList streamData)
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
             if(!displayName.isEmpty())
-            {
                 ui->listWidget->addItem(stream);
-                int count = ui->listWidget->count();
-                if(count > 0)
-                {
-                    count-= 1;
-                    request.storeItemIndex(streamData[3],displayName,count);
-                }
-            }
-            //ui->listWidget->sortItems();
+            ui->listWidget->sortItems();
+            this->updateItemIndex(streamData[3]);
         }
         else if(streamData[3] == "followed")
         {
@@ -48,16 +41,9 @@ void MainWindow::addItemToListView(QStringList streamData)
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
             if(!displayName.isEmpty())
-            {
                 ui->listWidget_2->addItem(stream);
-                int count = ui->listWidget_2->count();
-                if(count > 0)
-                {
-                    count-= 1;
-                    request.storeItemIndex(streamData[3],displayName,count);
-                }
-            }
-            //ui->listWidget_2->sortItems();
+            ui->listWidget_2->sortItems();
+            this->updateItemIndex(streamData[3]);
         }
         else if(streamData[3] == "search")
         {
@@ -256,7 +242,7 @@ void MainWindow::updateItemInListView(QStringList streamData,int index)
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
             ui->listWidget->item(index)->setText(stream);
-            //ui->listWidget->sortItems();
+            ui->listWidget->sortItems();
         }
         else if(streamData[3] == "followed")
         {
@@ -266,6 +252,30 @@ void MainWindow::updateItemInListView(QStringList streamData,int index)
             QString stream = displayName + ": (" + viewers + ") " + game;
             ui->listWidget_2->item(index)->setText(stream);
             //ui->listWidget_2->sortItems();
+        }
+    }
+}
+
+void MainWindow::updateItemIndex(QString requestType)
+{
+    if(requestType == "featured")
+    {
+        int count = ui->listWidget->count();
+        for(int i = 0; i < count; i++)
+        {
+            QString item = ui->listWidget->item(i)->text();
+            QStringList stream = item.split(":");
+            request.storeItemIndex(requestType,stream[0],i);
+        }
+    }
+    else if(requestType == "followed")
+    {
+        int count = ui->listWidget_2->count();
+        for(int i = 0; i < count; i++)
+        {
+            QString item = ui->listWidget_2->item(i)->text();
+            QStringList stream = item.split(":");
+            request.storeItemIndex(requestType,stream[0],i);
         }
     }
 }

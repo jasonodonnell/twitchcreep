@@ -61,7 +61,6 @@ void networkOperations::makeFollowRequest(QString username)
 void networkOperations::makeGameRequest(QString game)
 {
     QString url = "https://api.twitch.tv/kraken/search/streams?q=" + game + "&client_id=" + appId;
-    qDebug() << url;
     this->addRequestToList("game",url);
 }
 
