@@ -57,6 +57,7 @@ private:
     void enableMouseTracking();
     void searchTabRequest();
     void styleItems();
+    void updateItemIndex(QString requestType);
 };
 
 #endif // MAINWINDOW_H

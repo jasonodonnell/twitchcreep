@@ -31,7 +31,6 @@ void requestHandler::getFeatured(QByteArray data)
     QStringList streamData;
     emit(manageOnlineStreamers("featured"));
     streamerList << jsonParser.getFeaturedStreamData(data);
-
     foreach(streamData, streamerList)
     {
         emit(storeStreamData(streamData, "featured"));
