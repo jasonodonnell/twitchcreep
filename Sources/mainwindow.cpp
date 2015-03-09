@@ -62,15 +62,11 @@ void MainWindow::addItemToListView(QStringList streamData)
 void MainWindow::changeStatusBar()
 {
     QString networkStatus;
-    QString username = request.getSettingsValue("username");
 
     if(request.checkConnection())
         networkStatus = "Online";
     else
         networkStatus = "Offline";
-
-    if(username.isNull())
-        username = "Not set";
 
     QString status = "Network: " + networkStatus;
     statusBar()->showMessage(status);
@@ -218,8 +214,13 @@ void MainWindow::timedDataRequest()
         request.makeFeaturedRequest();
     else if(tabIndex == 1)
     {
-        if(!username.isNull())
+        if(!username.isEmpty())
             request.makeFollowRequest(username);
+        else
+        {
+            ui->listWidget_2->clear();
+            ui->listWidget_2->addItem("No Username Set");
+        }
     }
 }
 
@@ -251,7 +252,7 @@ void MainWindow::updateItemInListView(QStringList streamData,int index)
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
             ui->listWidget_2->item(index)->setText(stream);
-            //ui->listWidget_2->sortItems();
+            ui->listWidget_2->sortItems();
         }
     }
 }
