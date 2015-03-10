@@ -11,10 +11,22 @@ MainWindow::MainWindow(QWidget *parent) :
     this->changeStatusBar();
     this->styleItems();
     this->enableMouseTracking();
+    QThread* thread = this->createRequestThread();
+
 }
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+QThread* MainWindow::createRequestThread()
+{
+    QThread *thread = new QThread();
+    request.moveToThread(thread);
+    connect((&request),SIGNAL(destroyed()),thread,SLOT(quit()));
+    connect((&request),SIGNAL(finished()),thread,SLOT(deleteLater()));
+    thread->start();
+    return thread;
 }
 
 //Adds items to the list view when database fires the additem signal.  This is fired
@@ -180,6 +192,7 @@ void MainWindow::on_tabWidget_currentChanged()
 //Exit app when close is clicked.
 void MainWindow::on_actionExit_triggered()
 {
+    this->thread()->terminate();
     this->~MainWindow();
 }
 
@@ -222,6 +235,7 @@ void MainWindow::timedDataRequest()
             ui->listWidget_2->addItem("No Username Set");
         }
     }
+    qDebug() << request.isRunning();
 }
 
 //Make a network request on a timer.  This is based on current tab index.

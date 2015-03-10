@@ -58,6 +58,7 @@ private:
     void searchTabRequest();
     void styleItems();
     void updateItemIndex(QString requestType);
+    QThread* createRequestThread();
 };
 
 #endif // MAINWINDOW_H
