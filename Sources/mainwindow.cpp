@@ -11,22 +11,16 @@ MainWindow::MainWindow(QWidget *parent) :
     this->changeStatusBar();
     this->styleItems();
     this->enableMouseTracking();
-    QThread* thread = this->createRequestThread();
 
 }
 MainWindow::~MainWindow()
 {
-    delete ui;
+    QApplication::quit();
 }
 
-QThread* MainWindow::createRequestThread()
+void MainWindow::aboutToQuit()
 {
-    QThread *thread = new QThread();
-    request.moveToThread(thread);
-    connect((&request),SIGNAL(destroyed()),thread,SLOT(quit()));
-    connect((&request),SIGNAL(finished()),thread,SLOT(deleteLater()));
-    thread->start();
-    return thread;
+    this->~MainWindow();
 }
 
 //Adds items to the list view when database fires the additem signal.  This is fired
@@ -44,7 +38,6 @@ void MainWindow::addItemToListView(QStringList streamData)
             if(!displayName.isEmpty())
                 ui->listWidget->addItem(stream);
             ui->listWidget->sortItems();
-            this->updateItemIndex(streamData[3]);
         }
         else if(streamData[3] == "followed")
         {
@@ -55,7 +48,6 @@ void MainWindow::addItemToListView(QStringList streamData)
             if(!displayName.isEmpty())
                 ui->listWidget_2->addItem(stream);
             ui->listWidget_2->sortItems();
-            this->updateItemIndex(streamData[3]);
         }
         else if(streamData[3] == "search")
         {
@@ -67,6 +59,7 @@ void MainWindow::addItemToListView(QStringList streamData)
                 ui->listWidget_3->addItem(stream);
             ui->listWidget_3->sortItems();
         }
+        this->updateItemIndex(streamData[3]);
     }
 }
 
@@ -107,6 +100,7 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
     connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
+    connect((this),SIGNAL(QCoreApplication::aboutToQuit()),this,SLOT(aboutToQuit()));
     connect((ui->listWidget),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_2),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_3),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
@@ -192,7 +186,6 @@ void MainWindow::on_tabWidget_currentChanged()
 //Exit app when close is clicked.
 void MainWindow::on_actionExit_triggered()
 {
-    this->thread()->terminate();
     this->~MainWindow();
 }
 
@@ -221,12 +214,12 @@ void MainWindow::styleItems()
 void MainWindow::timedDataRequest()
 {
     int tabIndex = ui->tabWidget->currentIndex();
-    QString username = request.getSettingsValue("username");
 
     if(tabIndex == 0)
         request.makeFeaturedRequest();
     else if(tabIndex == 1)
     {
+        QString username = request.getSettingsValue("username");
         if(!username.isEmpty())
             request.makeFollowRequest(username);
         else
@@ -235,7 +228,6 @@ void MainWindow::timedDataRequest()
             ui->listWidget_2->addItem("No Username Set");
         }
     }
-    qDebug() << request.isRunning();
 }
 
 //Make a network request on a timer.  This is based on current tab index.
@@ -257,7 +249,6 @@ void MainWindow::updateItemInListView(QStringList streamData,int index)
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
             ui->listWidget->item(index)->setText(stream);
-            ui->listWidget->sortItems();
         }
         else if(streamData[3] == "followed")
         {
@@ -266,7 +257,6 @@ void MainWindow::updateItemInListView(QStringList streamData,int index)
             QString viewers = streamData[2];
             QString stream = displayName + ": (" + viewers + ") " + game;
             ui->listWidget_2->item(index)->setText(stream);
-            ui->listWidget_2->sortItems();
         }
     }
 }

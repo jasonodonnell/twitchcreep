@@ -10,6 +10,9 @@
 #include <QDesktopServices>
 #include <QStringList>
 #include <QToolTip>
+#include <QtCore>
+#include <QtConcurrent>
+#include <QtConcurrentRun>
 #include "timers.h"
 #include "requesthandler.h"
 #include "database.h"
@@ -33,11 +36,14 @@ public slots:
     void usernameDialog(QString);
 
 private slots:
+    void aboutToQuit();
     void addItemToListView(QStringList);
     void changeStatusBar();
+    void clearListViews();
     void displayToolTip(QListWidgetItem* item);
     void onListItemDoubleClicked(QListWidgetItem* item);
     void on_actionAdd_User_triggered();
+    void on_actionClear_User_triggered();
     void on_actionExit_triggered();
     void on_lineEdit_returnPressed();
     void on_pushButton_pressed();
@@ -45,10 +51,6 @@ private slots:
     void timedDataRequest();
     void timedNetworkRequest();
     void updateItemInListView(QStringList streamData, int index);
-
-    void on_actionClear_User_triggered();
-
-    void clearListViews();
 private:
     database db;
     timers timerManager;
@@ -58,7 +60,6 @@ private:
     void searchTabRequest();
     void styleItems();
     void updateItemIndex(QString requestType);
-    QThread* createRequestThread();
 };
 
 #endif // MAINWINDOW_H
