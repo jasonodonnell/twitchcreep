@@ -10,9 +10,7 @@
 #include <QDesktopServices>
 #include <QStringList>
 #include <QToolTip>
-#include <QtCore>
-#include <QtConcurrent>
-#include <QtConcurrentRun>
+#include <QSystemTrayIcon>
 #include "timers.h"
 #include "requesthandler.h"
 #include "database.h"
