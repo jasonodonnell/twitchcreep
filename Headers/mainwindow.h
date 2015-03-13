@@ -34,7 +34,6 @@ public slots:
     void usernameDialog(QString);
 
 private slots:
-    void aboutToQuit();
     void addItemToListView(QStringList);
     void changeStatusBar();
     void clearListViews();

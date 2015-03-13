@@ -11,28 +11,10 @@ MainWindow::MainWindow(QWidget *parent) :
     this->changeStatusBar();
     this->styleItems();
     this->enableMouseTracking();
-    if(QSystemTrayIcon::isSystemTrayAvailable())
-    {
-        QPixmap pixmap(100,100);
-        pixmap.fill(QColor(153,126,175));
-        QIcon purpleIcon(pixmap);
-        QSystemTrayIcon sysTray;
-        sysTray.setIcon(purpleIcon);
-        QMenu* testMenu = new QMenu(NULL);
-        QAction* action = new QAction("Test", NULL);
-        testMenu->addAction(action);
-        sysTray.setContextMenu(testMenu);
-        sysTray.show();
-    }
 }
 MainWindow::~MainWindow()
 {
     QApplication::quit();
-}
-
-void MainWindow::aboutToQuit()
-{
-    this->~MainWindow();
 }
 
 //Adds items to the list view when database fires the additem signal.  This is fired
