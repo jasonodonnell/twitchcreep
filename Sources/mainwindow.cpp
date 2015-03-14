@@ -72,6 +72,7 @@ void MainWindow::changeStatusBar()
 
 }
 
+//Clears the list views (featured, followed and search)
 void MainWindow::clearListViews()
 {
     ui->listWidget->clear();
@@ -254,6 +255,8 @@ void MainWindow::updateItemInListView(QStringList streamData,int index)
     }
 }
 
+//Updates the item index in the database.  This is needed because sorting the listview rearranges the
+//indexes so they need to be updated manually after every sort.
 void MainWindow::updateItemIndex(QString requestType)
 {
     if(requestType == "featured")

@@ -51,6 +51,8 @@ QList<QStringList> json::getFeaturedStreamData(QByteArray data)
     return streamerList;
 }
 
+
+//Extract the data from game related json queries.
 QList<QStringList> json::getGameStreamData(QByteArray data)
 {
     QList<QStringList> streamerList;
