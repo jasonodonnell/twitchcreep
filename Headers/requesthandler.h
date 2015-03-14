@@ -31,6 +31,7 @@ public:
     QByteArray readStreamImage(QString name);
     void setSettingsValue(QString setting, QString value);
     void storeItemIndex(QString requestType, QString username, int index);
+
 signals:
     void clearFollowList();
     void manageOnlineStreamers(QString);

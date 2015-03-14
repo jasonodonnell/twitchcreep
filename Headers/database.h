@@ -21,15 +21,13 @@ public:
 
 public slots:
     void manageOnlineStreamers(QString requestType);
+    void storeItemIndex(QString requestType, QString username, int index);
     void storeStreamData(QStringList streamData, QString requestType);
     void truncateStreamData();
-
-    void storeItemIndex(QString requestType, QString username, int index);
 signals:
     void addStreamToView(QStringList stream);
     void listViewClears();
     void updateStreamInView(QStringList stream,int index);
-
 
 private:
     void createTables();
