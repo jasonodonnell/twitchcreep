@@ -26,14 +26,16 @@ public:
 
 signals:
     void dataReady(QByteArray,QString);
+
 public slots:
     void doneReading(QNetworkReply *reply);
     void popRequestFromList();
+
 private:
-    void addRequestToList(QString requestType, QString url);
+    QString appId = "t4wqbkwgdox7xzbt6fd5ldwls37b6fh";
     QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
     QList<QStringList> requests;
-    QString appId = "t4wqbkwgdox7xzbt6fd5ldwls37b6fh";
+    void addRequestToList(QString requestType, QString url);
 };
 
 #endif // NETWORKOPERATIONS_H

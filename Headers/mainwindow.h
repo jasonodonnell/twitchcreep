@@ -57,6 +57,7 @@ private:
     void searchTabRequest();
     void styleItems();
     void updateItemIndex(QString requestType);
+    void configureGUI();
 };
 
 #endif // MAINWINDOW_H
