@@ -7,11 +7,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
-    this->createSignalSlots();
-    this->changeStatusBar();
-    this->styleItems();
-    this->enableMouseTracking();
+    this->configureGUI();
 }
+
 MainWindow::~MainWindow()
 {
     QApplication::quit();
@@ -78,6 +76,14 @@ void MainWindow::clearListViews()
     ui->listWidget->clear();
     ui->listWidget_2->clear();
     ui->listWidget_3->clear();
+}
+
+void MainWindow::configureGUI()
+{
+    this->createSignalSlots();
+    this->changeStatusBar();
+    this->styleItems();
+    this->enableMouseTracking();
 }
 
 //Creates signals and slots for the mainwindow.

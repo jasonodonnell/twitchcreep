@@ -12,12 +12,13 @@ class json : public QObject
     Q_OBJECT
 public:
     explicit json(QObject *parent = 0);
-    QStringList getStreamerFollowedList(QByteArray);
     ~json();
-    QStringList getStreamData(QByteArray);
-    QList<QStringList> getFeaturedStreamData(QByteArray);
     bool checkUsernameExists(QByteArray data);
+    QList<QStringList> getFeaturedStreamData(QByteArray);
     QList<QStringList> getGameStreamData(QByteArray data);
+    QStringList getStreamData(QByteArray);
+    QStringList getStreamerFollowedList(QByteArray);
+
 signals:
 
 public slots:
