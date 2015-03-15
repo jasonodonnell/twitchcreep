@@ -288,6 +288,8 @@ void database::storeStreamImage(QByteArray data, QString username, QString reque
         query.prepare(update);
         query.bindValue(":image",data);
         query.bindValue(":username",username);
+        if(!query.exec())
+            qDebug() << query.lastError();
     }
 }
 
