@@ -37,6 +37,16 @@ void requestHandler::getFeatured(QByteArray data)
     }
 }
 
+void requestHandler::getStreamImage(QByteArray data, QString username, QString requestType)
+{
+    if(requestType == "featured")
+        emit(storeStreamImageData(data,"featured",username));
+    else if(requestType == "followed")
+        emit(storeStreamImageData(data,"followed",username));
+    else if(requestType == "search")
+        emit(storeStreamImageData(data,"search",username));
+}
+
 //Takes the follows request and makes the appropriate network call.
 void requestHandler::getFollows(QByteArray data)
 {
@@ -132,6 +142,11 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
     }
     else if (jsonType.contains("game"))
         this->getGame(data);
+    else if (jsonType.contains("streamImage:"))
+    {
+        QStringList name = jsonType.split(":");
+        this->getStreamImage(data,name[1],jsonType);
+    }
 
     networking.popRequestFromList();
 }
