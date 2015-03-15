@@ -24,6 +24,7 @@ public:
     bool checkConnection();
     void checkUsername(QString text);
     QString getSettingsValue(QString value);
+    void getStreamImage(QByteArray data, QString username, QString requestType);
     void makeFollowRequest(QString username);
     void makeFeaturedRequest();
     void makeRequest();
@@ -37,6 +38,7 @@ signals:
     void manageOnlineStreamers(QString);
     void storeIndex(QString requestType, QString username, int index);
     void storeStreamData(QStringList data, QString requestType);
+    void storeStreamImageData(QByteArray data, QString requestType, QString username);
     void truncateStreamData();
     void usernameDialogSignal(QString);
 

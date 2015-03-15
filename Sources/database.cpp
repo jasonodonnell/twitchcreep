@@ -267,6 +267,30 @@ void database::storeStreamData(QStringList streamData, QString requestType)
     }
 }
 
+void database::storeStreamImage(QByteArray data, QString username, QString requestType)
+{
+    if(checkDBConnection())
+    {
+        QString update = "";
+        QSqlQuery query(this->db);
+        if(requestType == "featured")
+        {
+            update = "UPDATE featured_data SET image = :image WHERE username = :username";
+        }
+        else if(requestType == "followed")
+        {
+            update = "UPDATE featured_data SET image = :image WHERE username = :username";
+        }
+        else if(requestType == "search")
+        {
+            update = "UPDATE featured_data SET image = :image WHERE username = :username";
+        }
+        query.prepare(update);
+        query.bindValue(":image",data);
+        query.bindValue(":username",username);
+    }
+}
+
 //Truncates the stream data, used to clear the database upon startup.  This might get changed in the future
 //to cache info.
 void database::truncateStreamData()

@@ -79,6 +79,14 @@ void networkOperations::makeRequest()
     }
 }
 
+void networkOperations::makeStreamImageRequest(QString username, QString url)
+{
+    QString objectName = "streamImage:" + username;
+    if(url.isEmpty())
+        url = "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png";
+    this->addRequestToList(objectName,url);
+}
+
 
 //Make the stream request based on the username passed in
 void networkOperations::makeStreamRequest(QString username)

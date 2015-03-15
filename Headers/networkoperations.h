@@ -24,6 +24,7 @@ public:
     void makeStreamRequest(QString);
     void makeStreamRequestFromList(QStringList usernames);
 
+    void makeStreamImageRequest(QString username, QString url);
 signals:
     void dataReady(QByteArray,QString);
 
