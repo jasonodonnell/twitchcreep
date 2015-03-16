@@ -211,7 +211,7 @@ void database::storeStreamData(QStringList streamData, QString requestType)
         int online = 1;
 
         QStringList streamData;
-        streamData << username << game << viewers << requestType;
+        streamData << username << game << viewers << requestType << logo;
 
         if(!checkIfStreamExists(username,requestType))
         {
@@ -274,22 +274,18 @@ void database::storeStreamImage(QByteArray data, QString username, QString reque
         QString update = "";
         QSqlQuery query(this->db);
         if(requestType == "featured")
-        {
             update = "UPDATE featured_data SET image = :image WHERE username = :username";
-        }
         else if(requestType == "followed")
-        {
-            update = "UPDATE featured_data SET image = :image WHERE username = :username";
-        }
+            update = "UPDATE followed_data SET image = :image WHERE username = :username";
         else if(requestType == "search")
-        {
-            update = "UPDATE featured_data SET image = :image WHERE username = :username";
-        }
+            update = "UPDATE search_data SET image = :image WHERE username = :username";
         query.prepare(update);
         query.bindValue(":image",data);
         query.bindValue(":username",username);
         if(!query.exec())
             qDebug() << query.lastError();
+        int index = this->retrieveIndex(requestType,username);
+        emit(updateIconImage(data,index,requestType));
     }
 }
 

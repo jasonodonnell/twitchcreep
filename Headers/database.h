@@ -18,16 +18,16 @@ public:
     QStringList getDisplayedOfflineStreams(QString requestType);
     void initTables();
     QString retrieveStatus(QString username, QString requestType);
-
-    void storeStreamImage(QByteArray data, QString username, QString requestType);
 public slots:
     void manageOnlineStreamers(QString requestType);
     void storeItemIndex(QString requestType, QString username, int index);
     void storeStreamData(QStringList streamData, QString requestType);
+    void storeStreamImage(QByteArray data, QString username, QString requestType);
     void truncateStreamData();
 signals:
     void addStreamToView(QStringList stream);
     void listViewClears();
+    void updateIconImage(QByteArray data,int index, QString requestType);
     void updateStreamInView(QStringList stream,int index);
 
 private:

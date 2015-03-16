@@ -37,16 +37,6 @@ void requestHandler::getFeatured(QByteArray data)
     }
 }
 
-void requestHandler::getStreamImage(QByteArray data, QString username, QString requestType)
-{
-    if(requestType == "featured")
-        emit(storeStreamImageData(data,"featured",username));
-    else if(requestType == "followed")
-        emit(storeStreamImageData(data,"followed",username));
-    else if(requestType == "search")
-        emit(storeStreamImageData(data,"search",username));
-}
-
 //Takes the follows request and makes the appropriate network call.
 void requestHandler::getFollows(QByteArray data)
 {
@@ -78,6 +68,12 @@ void requestHandler::getGame(QByteArray data)
 QString requestHandler::getSettingsValue(QString value)
 {
     return settings.value(value).toString();
+}
+
+void requestHandler::getStreamImage(QByteArray data, QString username, QString requestType)
+{
+    qDebug() << requestType;
+    emit(storeStreamImageData(data,username, requestType));
 }
 
 //Takes the usrername request and makes the appropriate network call.
@@ -118,6 +114,11 @@ void requestHandler::makeRequest()
     networking.makeRequest();
 }
 
+void requestHandler::makeStreamImageRequest(QString requestType, QString url, QString username)
+{
+    networking.makeStreamImageRequest(requestType,username,url);
+}
+
 //Make network request from a search value
 void requestHandler::makeSearchRequest(QString search)
 {
@@ -144,10 +145,11 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
         this->getGame(data);
     else if (jsonType.contains("streamImage:"))
     {
-        QStringList name = jsonType.split(":");
-        this->getStreamImage(data,name[1],jsonType);
+        QStringList request = jsonType.split(":");
+        QString username = request[1];
+        QString requestType = request[2];
+        this->getStreamImage(data,username,requestType);
     }
-
     networking.popRequestFromList();
 }
 

@@ -29,6 +29,7 @@ public:
     void makeFeaturedRequest();
     void makeRequest();
     void makeSearchRequest(QString search);
+    void makeStreamImageRequest(QString requestType, QString url, QString username);
     QByteArray readStreamImage(QString name);
     void setSettingsValue(QString setting, QString value);
     void storeItemIndex(QString requestType, QString username, int index);

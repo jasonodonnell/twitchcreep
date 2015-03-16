@@ -47,6 +47,7 @@ private slots:
     void on_tabWidget_currentChanged();
     void timedDataRequest();
     void timedNetworkRequest();
+    void updateIconImage(QByteArray data, int index, QString requestType);
     void updateItemInListView(QStringList streamData, int index);
 private:
     database db;
