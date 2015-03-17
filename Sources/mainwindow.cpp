@@ -46,7 +46,7 @@ void MainWindow::addItemToListView(QStringList streamData)
             ui->listWidget_3->sortItems();
         }
         this->updateItemIndex(requestType);
-        request.makeStreamImageRequest(requestType,logo,username);
+        //request.makeStreamImageRequest(requestType,logo,username);
     }
 }
 
@@ -86,10 +86,12 @@ void MainWindow::createSignalSlots()
 {
     connect((&db),SIGNAL(addStreamToView(QStringList)),this,SLOT(addItemToListView(QStringList)));
     connect((&db),SIGNAL(listViewClears()),this,SLOT(clearListViews()));
+    connect((&db),SIGNAL(makeImageRequest(QString,QString,QString)),this,SLOT(makeStreamImageRequest(QString,QString,QString)));
     connect((&db),SIGNAL(updateIconImage(QByteArray,int,QString)),this,SLOT(updateIconImage(QByteArray,int,QString)));
     connect((&db),SIGNAL(updateStreamInView(QStringList,int)),this,SLOT(updateItemInListView(QStringList,int)));
     connect((&request),SIGNAL(usernameDialogSignal(QString)),this,SLOT(usernameDialog(QString)));
     connect((&request),SIGNAL(clearFollowList()),this,SLOT(followListClear()));
+    connect((&request),SIGNAL(isImageSet(QString,QString)),&db,SLOT(checkStreamImage(QString,QString)));
     connect((&request),SIGNAL(manageOnlineStreamers(QString)),&db,SLOT(manageOnlineStreamers(QString)));
     connect((&request),SIGNAL(storeIndex(QString,QString,int)),&db,SLOT(storeItemIndex(QString,QString,int)));
     connect((&request),SIGNAL(storeStreamData(QStringList, QString)),&db,SLOT(storeStreamData(QStringList,QString)));
@@ -140,6 +142,11 @@ void MainWindow::enableMouseTracking()
 void MainWindow::followListClear()
 {
     ui->listWidget_3->clear();
+}
+
+void MainWindow::makeStreamImageRequest(QString requestType,QString logo,QString username)
+{
+    request.makeStreamImageRequest(requestType,logo,username);
 }
 
 //Launch browser with stream url on a double clicked item.
@@ -236,7 +243,6 @@ void MainWindow::timedNetworkRequest()
 void MainWindow::updateIconImage(QByteArray data, int index, QString requestType)
 {
     QPixmap image;
-    qDebug() << "Test";
     if(requestType == "featured")
         if(image.loadFromData(data,"PNG"))
             ui->listWidget->item(index)->setIcon(image);
@@ -255,22 +261,16 @@ void MainWindow::updateItemInListView(QStringList streamData,int index)
 {
     if(!streamData.isEmpty())
     {
-        if(streamData[3] == "featured")
-        {
-            QString displayName = streamData[0].replace(" ","");
-            QString game = streamData[1];
-            QString viewers = streamData[2];
-            QString stream = displayName + ": (" + viewers + ") " + game;
+        QString displayName = streamData[0].replace(" ","");
+        QString game = streamData[1];
+        QString viewers = streamData[2];
+        QString stream = displayName + ": (" + viewers + ") " + game;
+        QString requestType = streamData[3];
+        if(requestType == "featured")
             ui->listWidget->item(index)->setText(stream);
-        }
-        else if(streamData[3] == "followed")
-        {
-            QString displayName = streamData[0].replace(" ","");
-            QString game = streamData[1];
-            QString viewers = streamData[2];
-            QString stream = displayName + ": (" + viewers + ") " + game;
+        else if(requestType == "featured")
             ui->listWidget_2->item(index)->setText(stream);
-        }
+        //request.checkForImage(requestType,displayName);
     }
 }
 

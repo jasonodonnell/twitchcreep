@@ -34,8 +34,10 @@ public:
     void setSettingsValue(QString setting, QString value);
     void storeItemIndex(QString requestType, QString username, int index);
 
+    void checkForImage(QString requestType, QString username);
 signals:
     void clearFollowList();
+    void isImageSet(QString requestType, QString username);
     void manageOnlineStreamers(QString);
     void storeIndex(QString requestType, QString username, int index);
     void storeStreamData(QStringList data, QString requestType);

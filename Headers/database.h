@@ -24,9 +24,11 @@ public slots:
     void storeStreamData(QStringList streamData, QString requestType);
     void storeStreamImage(QByteArray data, QString username, QString requestType);
     void truncateStreamData();
+    void checkStreamImage(QString requestType, QString username);
 signals:
     void addStreamToView(QStringList stream);
     void listViewClears();
+    void makeImageRequest(QString requestType,QString logo,QString username);
     void updateIconImage(QByteArray data,int index, QString requestType);
     void updateStreamInView(QStringList stream,int index);
 
