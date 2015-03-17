@@ -38,6 +38,7 @@ private slots:
     void changeStatusBar();
     void clearListViews();
     void displayToolTip(QListWidgetItem* item);
+    void makeStreamImageRequest(QString requestType, QString logo, QString username);
     void onListItemDoubleClicked(QListWidgetItem* item);
     void on_actionAdd_User_triggered();
     void on_actionClear_User_triggered();

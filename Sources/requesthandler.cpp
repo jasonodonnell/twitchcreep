@@ -18,6 +18,11 @@ bool requestHandler::checkConnection()
     return networking.checkNetworkConnection();
 }
 
+void requestHandler::checkForImage(QString requestType,QString username)
+{
+    emit(isImageSet(requestType,username));
+}
+
 //Check if username exists, used in the UI
 void requestHandler::checkUsername(QString text)
 {
@@ -72,7 +77,6 @@ QString requestHandler::getSettingsValue(QString value)
 
 void requestHandler::getStreamImage(QByteArray data, QString username, QString requestType)
 {
-    qDebug() << requestType;
     emit(storeStreamImageData(data,username, requestType));
 }
 

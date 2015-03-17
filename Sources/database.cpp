@@ -49,6 +49,26 @@ bool database::checkIfStreamExists(QString username, QString requestType)
     return returnCode;
 }
 
+void database::checkStreamImage(QString requestType, QString username)
+{
+    QSqlQuery query(this->db);
+    if(requestType == "followed")
+        query.prepare("SELECT image,logo FROM followed_data WHERE username=:username");
+    else if(requestType == "featured")
+        query.prepare("SELECT image,logo FROM featured_data WHERE username=:username");
+    else if(requestType == "search")
+        query.prepare("SELECT image,logo FROM search_data WHERE username=:username");
+    query.bindValue(":username",username);
+    if(query.exec())
+    {
+        while(query.next())
+        {
+            if(!query.value( 0 ).isNull())
+                emit(makeImageRequest(requestType,query.value(1).toString(),username));
+        }
+    }
+}
+
 //Creates the table DDL for the app
 void database::createTables()
 {
