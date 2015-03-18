@@ -50,6 +50,7 @@ private slots:
     void timedNetworkRequest();
     void updateIconImage(QByteArray data, int index, QString requestType);
     void updateItemInListView(QStringList streamData, int index);
+    void timedBackgroundRequest();
 private:
     database db;
     timers timerManager;

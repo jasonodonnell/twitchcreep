@@ -97,6 +97,7 @@ void MainWindow::createSignalSlots()
     connect((&request),SIGNAL(storeStreamData(QStringList, QString)),&db,SLOT(storeStreamData(QStringList,QString)));
     connect((&request),SIGNAL(storeStreamImageData(QByteArray,QString,QString)),&db,SLOT(storeStreamImage(QByteArray,QString,QString)));
     connect((&request),SIGNAL(truncateStreamData()),&db,SLOT(truncateStreamData()));
+    connect((&timerManager),SIGNAL(backgroundRequest()),this,SLOT(timedBackgroundRequest()));
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
     connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
@@ -212,6 +213,37 @@ void MainWindow::styleItems()
     ui->listWidget->setPalette(p);
     ui->listWidget_2->setPalette(p);
     ui->listWidget_3->setPalette(p);
+}
+
+void MainWindow::timedBackgroundRequest()
+{
+    int tabIndex = ui->tabWidget->currentIndex();
+
+    if(tabIndex == 0)
+    {
+        QString username = request.getSettingsValue("username");
+        if(!username.isEmpty())
+            request.makeFollowRequest(username);
+        else
+        {
+            ui->listWidget_2->clear();
+            ui->listWidget_2->addItem("No Username Set");
+        }
+    }
+    else if(tabIndex == 1)
+        request.makeFeaturedRequest();
+    else
+    {
+        request.makeFeaturedRequest();
+        QString username = request.getSettingsValue("username");
+        if(!username.isEmpty())
+            request.makeFollowRequest(username);
+        else
+        {
+            ui->listWidget_2->clear();
+            ui->listWidget_2->addItem("No Username Set");
+        }
+    }
 }
 
 //Requests the data for the current open tab on a timer.
