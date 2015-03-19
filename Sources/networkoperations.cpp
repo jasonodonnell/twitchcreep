@@ -79,6 +79,7 @@ void networkOperations::makeRequest()
     }
 }
 
+//Makes a stream image request, if no logo url is set, the default icon will be downloaded.
 void networkOperations::makeStreamImageRequest(QString requestType, QString username, QString url)
 {
     QString objectName = "streamImage:" + username +":" + requestType;

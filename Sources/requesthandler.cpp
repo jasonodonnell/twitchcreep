@@ -18,6 +18,7 @@ bool requestHandler::checkConnection()
     return networking.checkNetworkConnection();
 }
 
+//Check to see if images are populated in the database.
 void requestHandler::checkForImage(QString requestType,QString username)
 {
     emit(isImageSet(requestType,username));

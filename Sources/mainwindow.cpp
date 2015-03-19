@@ -46,7 +46,7 @@ void MainWindow::addItemToListView(QStringList streamData)
             ui->listWidget_3->sortItems();
         }
         this->updateItemIndex(requestType);
-        //request.makeStreamImageRequest(requestType,logo,username);
+        request.makeStreamImageRequest(requestType,logo,username);
     }
 }
 
@@ -145,6 +145,7 @@ void MainWindow::followListClear()
     ui->listWidget_3->clear();
 }
 
+//
 void MainWindow::makeStreamImageRequest(QString requestType,QString logo,QString username)
 {
     request.makeStreamImageRequest(requestType,logo,username);
@@ -215,6 +216,8 @@ void MainWindow::styleItems()
     ui->listWidget_3->setPalette(p);
 }
 
+//This request will make the proper calls to get data for tabs that aren't currently opened.
+//Having this timer will quicken data access for the user.
 void MainWindow::timedBackgroundRequest()
 {
     int tabIndex = ui->tabWidget->currentIndex();
@@ -272,6 +275,7 @@ void MainWindow::timedNetworkRequest()
     request.makeRequest();
 }
 
+//Sets the image for a given icon.
 void MainWindow::updateIconImage(QByteArray data, int index, QString requestType)
 {
     QPixmap image;
