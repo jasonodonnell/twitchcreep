@@ -4,8 +4,8 @@ database::database(QObject *parent) : QObject(parent)
 {
     this->db = QSqlDatabase::addDatabase("QSQLITE");
     QString appDir = QCoreApplication::applicationDirPath();
-    appDir = appDir.append("/twitch.db");
-    this->db.setDatabaseName(appDir);
+    //appDir = appDir.append("/twitch.db");
+    this->db.setDatabaseName(":memory");
     this->initTables();
 }
 
@@ -49,6 +49,7 @@ bool database::checkIfStreamExists(QString username, QString requestType)
     return returnCode;
 }
 
+//Checks to see if a given username has image data.
 void database::checkStreamImage(QString requestType, QString username)
 {
     QSqlQuery query(this->db);
@@ -287,6 +288,7 @@ void database::storeStreamData(QStringList streamData, QString requestType)
     }
 }
 
+//Stores the icon image as a bytearray in the database.
 void database::storeStreamImage(QByteArray data, QString username, QString requestType)
 {
     if(checkDBConnection())
