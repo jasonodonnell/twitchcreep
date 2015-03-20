@@ -49,27 +49,6 @@ bool database::checkIfStreamExists(QString username, QString requestType)
     return returnCode;
 }
 
-//Checks to see if a given username has image data.
-void database::checkStreamImage(QString requestType, QString username)
-{
-    QSqlQuery query(this->db);
-    if(requestType == "followed")
-        query.prepare("SELECT image,logo FROM followed_data WHERE username=:username");
-    else if(requestType == "featured")
-        query.prepare("SELECT image,logo FROM featured_data WHERE username=:username");
-    else if(requestType == "search")
-        query.prepare("SELECT image,logo FROM search_data WHERE username=:username");
-    query.bindValue(":username",username);
-    if(query.exec())
-    {
-        while(query.next())
-        {
-            if(!query.value( 0 ).isNull())
-                emit(makeImageRequest(requestType,query.value(1).toString(),username));
-        }
-    }
-}
-
 //Creates the table DDL for the app
 void database::createTables()
 {
@@ -288,27 +267,11 @@ void database::storeStreamData(QStringList streamData, QString requestType)
     }
 }
 
-//Stores the icon image as a bytearray in the database.
-void database::storeStreamImage(QByteArray data, QString username, QString requestType)
+void database::truncateSearchData()
 {
-    if(checkDBConnection())
-    {
-        QString update = "";
-        QSqlQuery query(this->db);
-        if(requestType == "featured")
-            update = "UPDATE featured_data SET image = :image WHERE username = :username";
-        else if(requestType == "followed")
-            update = "UPDATE followed_data SET image = :image WHERE username = :username";
-        else if(requestType == "search")
-            update = "UPDATE search_data SET image = :image WHERE username = :username";
-        query.prepare(update);
-        query.bindValue(":image",data);
-        query.bindValue(":username",username);
-        if(!query.exec())
-            qDebug() << query.lastError();
-        int index = this->retrieveIndex(requestType,username);
-        emit(updateIconImage(data,index,requestType));
-    }
+    QSqlQuery query(this->db);
+    if(!query.exec("DELETE FROM search_data;"))
+        qDebug() << query.lastError();
 }
 
 //Truncates the stream data, used to clear the database upon startup.  This might get changed in the future

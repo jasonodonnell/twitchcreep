@@ -14,7 +14,6 @@ class requestHandler : public QThread
     void getFollows(QByteArray data);
     void getFollowsList(QByteArray data);
     void getGame(QByteArray data);
-    void getStreamImage(QByteArray data, QString name);
     void getUsername(QByteArray data, QString name);
 
 public:
@@ -24,24 +23,20 @@ public:
     bool checkConnection();
     void checkUsername(QString text);
     QString getSettingsValue(QString value);
-    void getStreamImage(QByteArray data, QString username, QString requestType);
     void makeFollowRequest(QString username);
     void makeFeaturedRequest();
     void makeRequest();
     void makeSearchRequest(QString search);
-    void makeStreamImageRequest(QString requestType, QString url, QString username);
-    QByteArray readStreamImage(QString name);
     void setSettingsValue(QString setting, QString value);
     void storeItemIndex(QString requestType, QString username, int index);
 
     void checkForImage(QString requestType, QString username);
 signals:
     void clearFollowList();
-    void isImageSet(QString requestType, QString username);
     void manageOnlineStreamers(QString);
     void storeIndex(QString requestType, QString username, int index);
     void storeStreamData(QStringList data, QString requestType);
-    void storeStreamImageData(QByteArray data, QString requestType, QString username);
+    void truncateSearchData();
     void truncateStreamData();
     void usernameDialogSignal(QString);
 

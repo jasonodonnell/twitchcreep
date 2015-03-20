@@ -18,12 +18,6 @@ bool requestHandler::checkConnection()
     return networking.checkNetworkConnection();
 }
 
-//Check to see if images are populated in the database.
-void requestHandler::checkForImage(QString requestType,QString username)
-{
-    emit(isImageSet(requestType,username));
-}
-
 //Check if username exists, used in the UI
 void requestHandler::checkUsername(QString text)
 {
@@ -76,11 +70,6 @@ QString requestHandler::getSettingsValue(QString value)
     return settings.value(value).toString();
 }
 
-void requestHandler::getStreamImage(QByteArray data, QString username, QString requestType)
-{
-    emit(storeStreamImageData(data,username, requestType));
-}
-
 //Takes the usrername request and makes the appropriate network call.
 void requestHandler::getUsername(QByteArray data, QString name)
 {
@@ -119,11 +108,6 @@ void requestHandler::makeRequest()
     networking.makeRequest();
 }
 
-void requestHandler::makeStreamImageRequest(QString requestType, QString url, QString username)
-{
-    networking.makeStreamImageRequest(requestType,username,url);
-}
-
 //Make network request from a search value
 void requestHandler::makeSearchRequest(QString search)
 {
@@ -147,15 +131,11 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
         this->getUsername(data,name[1]);
     }
     else if (jsonType.contains("game"))
-        this->getGame(data);
-    else if (jsonType.contains("streamImage:"))
     {
-        QStringList request = jsonType.split(":");
-        QString username = request[1];
-        QString requestType = request[2];
-        this->getStreamImage(data,username,requestType);
+        emit(truncateSearchData());
+        this->getGame(data);
     }
-    networking.popRequestFromList();
+    //networking.popRequestFromList();
 }
 
 //Set the value of a given setting

@@ -38,7 +38,6 @@ private slots:
     void changeStatusBar();
     void clearListViews();
     void displayToolTip(QListWidgetItem* item);
-    void makeStreamImageRequest(QString requestType, QString logo, QString username);
     void onListItemDoubleClicked(QListWidgetItem* item);
     void on_actionAdd_User_triggered();
     void on_actionClear_User_triggered();
@@ -48,7 +47,6 @@ private slots:
     void on_tabWidget_currentChanged();
     void timedDataRequest();
     void timedNetworkRequest();
-    void updateIconImage(QByteArray data, int index, QString requestType);
     void updateItemInListView(QStringList streamData, int index);
     void timedBackgroundRequest();
 private:
@@ -56,11 +54,11 @@ private:
     timers timerManager;
     Ui::MainWindow *ui;
     void createSignalSlots();
+    void configureGUI();
     void enableMouseTracking();
     void searchTabRequest();
     void styleItems();
     void updateItemIndex(QString requestType);
-    void configureGUI();
 };
 
 #endif // MAINWINDOW_H
