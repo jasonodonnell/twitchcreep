@@ -75,17 +75,9 @@ void networkOperations::makeRequest()
             this->setObjectName(requestInfo[0]);
             QString url = requestInfo[1];
             networkManager->get(QNetworkRequest(QUrl(url)));
+            this->popRequestFromList();
         }
     }
-}
-
-//Makes a stream image request, if no logo url is set, the default icon will be downloaded.
-void networkOperations::makeStreamImageRequest(QString requestType, QString username, QString url)
-{
-    QString objectName = "streamImage:" + username +":" + requestType;
-    if(url.isEmpty())
-        url = "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png";
-    this->addRequestToList(objectName,url);
 }
 
 

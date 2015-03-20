@@ -46,7 +46,6 @@ void MainWindow::addItemToListView(QStringList streamData)
             ui->listWidget_3->sortItems();
         }
         this->updateItemIndex(requestType);
-        request.makeStreamImageRequest(requestType,logo,username);
     }
 }
 
@@ -86,17 +85,14 @@ void MainWindow::createSignalSlots()
 {
     connect((&db),SIGNAL(addStreamToView(QStringList)),this,SLOT(addItemToListView(QStringList)));
     connect((&db),SIGNAL(listViewClears()),this,SLOT(clearListViews()));
-    connect((&db),SIGNAL(makeImageRequest(QString,QString,QString)),this,SLOT(makeStreamImageRequest(QString,QString,QString)));
-    connect((&db),SIGNAL(updateIconImage(QByteArray,int,QString)),this,SLOT(updateIconImage(QByteArray,int,QString)));
     connect((&db),SIGNAL(updateStreamInView(QStringList,int)),this,SLOT(updateItemInListView(QStringList,int)));
     connect((&request),SIGNAL(usernameDialogSignal(QString)),this,SLOT(usernameDialog(QString)));
     connect((&request),SIGNAL(clearFollowList()),this,SLOT(followListClear()));
-    connect((&request),SIGNAL(isImageSet(QString,QString)),&db,SLOT(checkStreamImage(QString,QString)));
     connect((&request),SIGNAL(manageOnlineStreamers(QString)),&db,SLOT(manageOnlineStreamers(QString)));
     connect((&request),SIGNAL(storeIndex(QString,QString,int)),&db,SLOT(storeItemIndex(QString,QString,int)));
     connect((&request),SIGNAL(storeStreamData(QStringList, QString)),&db,SLOT(storeStreamData(QStringList,QString)));
-    connect((&request),SIGNAL(storeStreamImageData(QByteArray,QString,QString)),&db,SLOT(storeStreamImage(QByteArray,QString,QString)));
     connect((&request),SIGNAL(truncateStreamData()),&db,SLOT(truncateStreamData()));
+    connect((&request),SIGNAL(truncateSearchData()),&db,SLOT(truncateSearchData()));
     connect((&timerManager),SIGNAL(backgroundRequest()),this,SLOT(timedBackgroundRequest()));
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
@@ -143,12 +139,6 @@ void MainWindow::enableMouseTracking()
 void MainWindow::followListClear()
 {
     ui->listWidget_3->clear();
-}
-
-//
-void MainWindow::makeStreamImageRequest(QString requestType,QString logo,QString username)
-{
-    request.makeStreamImageRequest(requestType,logo,username);
 }
 
 //Launch browser with stream url on a double clicked item.
@@ -275,22 +265,6 @@ void MainWindow::timedNetworkRequest()
     request.makeRequest();
 }
 
-//Sets the image for a given icon.
-void MainWindow::updateIconImage(QByteArray data, int index, QString requestType)
-{
-    QPixmap image;
-    if(requestType == "featured")
-        if(image.loadFromData(data,"PNG"))
-            ui->listWidget->item(index)->setIcon(image);
-        else if(image.loadFromData(data,"JPEG"))
-            ui->listWidget->item(index)->setIcon(image);
-    else if(requestType == "followed")
-        if(image.loadFromData(data,"PNG"))
-            ui->listWidget_2->item(index)->setIcon(image);
-        else if(image.loadFromData(data,"JPEG"))
-            ui->listWidget_2->item(index)->setIcon(image);
-}
-
 //Update items in the list view.  When the database updates an entry in the db, it'll fire
 //a signal to activate this update.
 void MainWindow::updateItemInListView(QStringList streamData,int index)
@@ -306,7 +280,6 @@ void MainWindow::updateItemInListView(QStringList streamData,int index)
             ui->listWidget->item(index)->setText(stream);
         else if(requestType == "featured")
             ui->listWidget_2->item(index)->setText(stream);
-        //request.checkForImage(requestType,displayName);
     }
 }
 
