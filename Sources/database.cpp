@@ -3,8 +3,6 @@
 database::database(QObject *parent) : QObject(parent)
 {
     this->db = QSqlDatabase::addDatabase("QSQLITE");
-    QString appDir = QCoreApplication::applicationDirPath();
-    //appDir = appDir.append("/twitch.db");
     this->db.setDatabaseName(":memory");
     this->initTables();
 }
