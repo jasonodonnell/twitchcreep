@@ -101,7 +101,6 @@ QStringList database::getDisplayedOfflineStreams(QString requestType)
 void database::initTables()
 {
     this->createTables();
-    this->truncateStreamData();
 }
 
 //Clears online users when adding the updated data.  This is how we figure out who
