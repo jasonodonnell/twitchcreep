@@ -110,7 +110,7 @@ void MainWindow::displayToolTip(QListWidgetItem *item)
     if(item->isSelected())
     {
         QStringList username = item->text().split(":");
-        if(username[0] != "No Username Set")
+        if(username[0] != "No Username Set" || username[0] != "Notfound")
         {
             int tabIndex = ui->tabWidget->currentIndex();
             QString requestType;
@@ -147,7 +147,7 @@ void MainWindow::followListClear()
 void MainWindow::onListItemDoubleClicked(QListWidgetItem *item)
 {
     QStringList username = item->text().split(":");
-    if(username[0] != "No Username Set")
+    if(username[0] != "No Username Set" && username[0] != "Notfound")
     {
         QString url = "http://www.twitch.tv/" + username[0];
         QDesktopServices::openUrl(url);
