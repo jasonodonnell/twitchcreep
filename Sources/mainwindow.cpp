@@ -61,7 +61,6 @@ void MainWindow::changeStatusBar()
 
     QString status = "Network: " + networkStatus;
     statusBar()->showMessage(status);
-
 }
 
 //Clears the list views (featured, followed and search)
@@ -111,16 +110,19 @@ void MainWindow::displayToolTip(QListWidgetItem *item)
     if(item->isSelected())
     {
         QStringList username = item->text().split(":");
-        int tabIndex = ui->tabWidget->currentIndex();
-        QString requestType;
-        if(tabIndex == 0)
-            requestType = "featured";
-        else if(tabIndex == 1)
-            requestType = "followed";
-        else if(tabIndex == 2)
-            requestType = "search";
-        QString status = db.retrieveStatus(username[0], requestType);
-        QWidget::setToolTip(status);
+        if(username[0] != "No Username Set" || username[0] != "Notfound")
+        {
+            int tabIndex = ui->tabWidget->currentIndex();
+            QString requestType;
+            if(tabIndex == 0)
+                requestType = "featured";
+            else if(tabIndex == 1)
+                requestType = "followed";
+            else if(tabIndex == 2)
+                requestType = "search";
+            QString status = db.retrieveStatus(username[0], requestType);
+            QWidget::setToolTip(status);
+        }
     }
     else
         QWidget::setToolTip("");
@@ -145,8 +147,11 @@ void MainWindow::followListClear()
 void MainWindow::onListItemDoubleClicked(QListWidgetItem *item)
 {
     QStringList username = item->text().split(":");
-    QString url = "http://www.twitch.tv/" + username[0];
-    QDesktopServices::openUrl(url);
+    if(username[0] != "No Username Set" && username[0] != "Notfound")
+    {
+        QString url = "http://www.twitch.tv/" + username[0];
+        QDesktopServices::openUrl(url);
+    }
 }
 
 //Adds a new username to QSettings
