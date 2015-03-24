@@ -13,21 +13,21 @@ public:
     ~timers();
 
 signals:
+    void backgroundRequest();
     void checkConnection();
     void networkRequest();
-    void backgroundRequest();
     void requestData();
-public slots:
 
 private slots:
     void dataRequest();
     void makeNetworkRequest();
-    void networkConnection();
     void makeNetworkRequestUnopenedTabs();
+    void networkConnection();
+
 private:
+    QTimer *backgroundRequestTimer = new QTimer(this);
     QTimer *connectionTimer = new QTimer(this);
     QTimer *networkRequestTimer = new QTimer(this);
-    QTimer *backgroundRequestTimer = new QTimer(this);
     QTimer *requestTimer = new QTimer(this);
     void createTimerSignals();
     void startTimers();

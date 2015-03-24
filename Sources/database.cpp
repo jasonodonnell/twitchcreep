@@ -249,6 +249,7 @@ void database::storeStreamData(QStringList streamData, QString requestType)
     }
 }
 
+//Truncate the search data after a new search is made
 void database::truncateSearchData()
 {
     QSqlQuery query(this->db);
