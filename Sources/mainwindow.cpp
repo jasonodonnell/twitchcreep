@@ -71,6 +71,7 @@ void MainWindow::clearListViews()
     ui->listWidget_3->clear();
 }
 
+//Configure look and feel of the GUI
 void MainWindow::configureGUI()
 {
     this->createSignalSlots();

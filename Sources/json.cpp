@@ -138,4 +138,3 @@ QStringList json::getStreamerFollowedList(QByteArray data)
     }
     return streamers;
 }
-
