@@ -19,18 +19,16 @@ class requestHandler : public QThread
 public:
     explicit requestHandler(QObject *parent = 0);
     ~requestHandler();
-
+    QString getSettingsValue(QString value);
     bool checkConnection();
     void checkUsername(QString text);
-    QString getSettingsValue(QString value);
     void makeFollowRequest(QString username);
     void makeFeaturedRequest();
     void makeRequest();
     void makeSearchRequest(QString search);
     void setSettingsValue(QString setting, QString value);
     void storeItemIndex(QString requestType, QString username, int index);
-
-    void checkForImage(QString requestType, QString username);
+    
 signals:
     void clearFollowList();
     void manageOnlineStreamers(QString);
