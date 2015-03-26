@@ -2,12 +2,11 @@
 #define REQUESTHANDLER_H
 
 #include <QObject>
-#include <QThread>
 #include <QCoreApplication>
 #include "json.h"
 #include "networkoperations.h"
 
-class requestHandler : public QThread
+class requestHandler : public QObject
 {
     Q_OBJECT
     void getFeatured(QByteArray data);
@@ -19,10 +18,9 @@ class requestHandler : public QThread
 public:
     explicit requestHandler(QObject *parent = 0);
     ~requestHandler();
-
+    QString getSettingsValue(QString value);
     bool checkConnection();
     void checkUsername(QString text);
-    QString getSettingsValue(QString value);
     void makeFollowRequest(QString username);
     void makeFeaturedRequest();
     void makeRequest();
@@ -30,7 +28,6 @@ public:
     void setSettingsValue(QString setting, QString value);
     void storeItemIndex(QString requestType, QString username, int index);
 
-    void checkForImage(QString requestType, QString username);
 signals:
     void clearFollowList();
     void manageOnlineStreamers(QString);
