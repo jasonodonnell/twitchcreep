@@ -4,7 +4,7 @@ requestHandler::requestHandler(QObject *parent) : QObject(parent)
 {
     connect((&networking),SIGNAL(dataReady(QByteArray,QString)),this,SLOT(requestProcess(QByteArray,QString)));
     QString settingsDir = QCoreApplication::applicationDirPath() + "/twitchCreep.conf";
-    settings.setPath(QSettings::IniFormat,QSettings::SystemScope,settingsDir);
+    settings.setPath(QSettings::NativeFormat,QSettings::UserScope,settingsDir);
 }
 
 requestHandler::~requestHandler()
