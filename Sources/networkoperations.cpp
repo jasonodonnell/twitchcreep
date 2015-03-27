@@ -11,7 +11,8 @@ networkOperations::~networkOperations()
 
 }
 
-//Adds request to a queue
+//Adds request to a queue, this is used to throttle requests going through the network managr
+//to ensure data isn't confused.
 void networkOperations::addRequestToList(QString requestType, QString url)
 {
     QStringList requestList;
@@ -26,7 +27,8 @@ bool networkOperations::checkNetworkConnection()
     return mgr.isOnline();
 }
 
-//Check if username exists.
+//Check if username exists in twitch.  This is used for checking username entered for
+//followed query.
 void networkOperations::checkUsernameRequest(QString username)
 {
     QString url = "https://api.twitch.tv/kraken/users/" + username + "?client_id=" + appId;
@@ -43,7 +45,7 @@ void networkOperations::doneReading(QNetworkReply *reply)
     emit(dataReady(replyData,requestType));
 }
 
-//Makes a featured stream request.
+//Makes a featured stream request by adding a request to the request queue.
 void networkOperations::makeFeaturedRequest()
 {
     QString url = "https://api.twitch.tv/kraken/streams/featured?client_id=" + appId;
