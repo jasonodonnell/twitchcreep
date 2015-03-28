@@ -41,6 +41,7 @@ void MainWindow::addItemToListView(QStringList streamData)
         }
         else if(requestType == "search")
         {
+            ui->listWidget_3->clear();
             if(!username.isEmpty())
                 ui->listWidget_3->addItem(stream);
             ui->listWidget_3->sortItems();
