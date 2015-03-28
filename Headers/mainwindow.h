@@ -11,6 +11,7 @@
 #include <QStringList>
 #include <QToolTip>
 #include <QSystemTrayIcon>
+#include <QCoreApplication>
 #include "timers.h"
 #include "requesthandler.h"
 #include "database.h"
