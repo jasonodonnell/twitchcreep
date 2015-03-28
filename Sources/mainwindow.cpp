@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
     this->configureGUI();
+    this->showMessage();
 }
 
 MainWindow::~MainWindow()
@@ -199,6 +200,11 @@ void MainWindow::searchTabRequest()
     QString search = ui->lineEdit->text();
     if(!search.isEmpty())
         request.makeSearchRequest(search);
+}
+
+void MainWindow::showMessage()
+{
+    sysTray.showMessage("Hello","World",QSystemTrayIcon::Information,151000);
 }
 
 //Apply styles to various views.

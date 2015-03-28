@@ -11,7 +11,6 @@
 #include <QStringList>
 #include <QToolTip>
 #include <QSystemTrayIcon>
-#include <QCoreApplication>
 #include "timers.h"
 #include "requesthandler.h"
 #include "database.h"
@@ -54,12 +53,14 @@ private:
     database db;
     timers timerManager;
     Ui::MainWindow *ui;
+    QSystemTrayIcon sysTray;
     void createSignalSlots();
     void configureGUI();
     void enableMouseTracking();
     void searchTabRequest();
     void styleItems();
     void updateItemIndex(QString requestType);
+    void showMessage();
 };
 
 #endif // MAINWINDOW_H
