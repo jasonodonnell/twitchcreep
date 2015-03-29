@@ -8,7 +8,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
     this->configureGUI();
-    this->showMessage();
 }
 
 MainWindow::~MainWindow()
@@ -76,10 +75,13 @@ void MainWindow::clearListViews()
 //Configure look and feel of the GUI
 void MainWindow::configureGUI()
 {
+    QString icon = QCoreApplication::applicationDirPath() + "/icon.png";
     this->createSignalSlots();
     this->changeStatusBar();
     this->styleItems();
     this->enableMouseTracking();
+    sysTray.setIcon(QIcon(icon));
+    sysTray.show();
 }
 
 //Creates signals and slots for the mainwindow.
@@ -204,7 +206,7 @@ void MainWindow::searchTabRequest()
 
 void MainWindow::showMessage()
 {
-    sysTray.showMessage("Hello","World",QSystemTrayIcon::Information,151000);
+    sysTray.showMessage("Hello","World",QSystemTrayIcon::Critical,151000);
 }
 
 //Apply styles to various views.
