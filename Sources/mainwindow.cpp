@@ -305,21 +305,21 @@ void MainWindow::updateItemIndex(QString requestType)
     if(requestType == "featured")
     {
         int count = ui->listWidget->count();
-        for(int i = 0; i < count; i++)
+        for(int itemCount = 0; itemCount < count; itemCount++)
         {
-            QString item = ui->listWidget->item(i)->text();
+            QString item = ui->listWidget->item(itemCount)->text();
             QStringList stream = item.split(":");
-            request.storeItemIndex(requestType,stream[0],i);
+            request.storeItemIndex(requestType,stream[0],itemCount);
         }
     }
     else if(requestType == "followed")
     {
         int count = ui->listWidget_2->count();
-        for(int i = 0; i < count; i++)
+        for(int itemCount = 0; itemCount < count; itemCount++)
         {
-            QString item = ui->listWidget_2->item(i)->text();
+            QString item = ui->listWidget_2->item(itemCount)->text();
             QStringList stream = item.split(":");
-            request.storeItemIndex(requestType,stream[0],i);
+            request.storeItemIndex(requestType,stream[0],itemCount);
         }
     }
 }
