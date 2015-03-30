@@ -41,7 +41,7 @@ private slots:
     void onListItemDoubleClicked(QListWidgetItem* item);
     void on_actionAdd_User_triggered();
     void on_actionClear_User_triggered();
-    void on_actionExit_triggered();
+    void on_Quit_triggered();
     void on_lineEdit_returnPressed();
     void on_pushButton_pressed();
     void on_tabWidget_currentChanged();
@@ -49,6 +49,7 @@ private slots:
     void timedNetworkRequest();
     void updateItemInListView(QStringList streamData, int index);
     void timedBackgroundRequest();
+
 private:
     database db;
     timers timerManager;

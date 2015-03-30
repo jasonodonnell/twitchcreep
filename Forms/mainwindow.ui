@@ -127,7 +127,7 @@
     </property>
     <addaction name="actionAdd_User"/>
     <addaction name="actionClear_User"/>
-    <addaction name="actionExit"/>
+    <addaction name="Quit"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -145,7 +145,7 @@
     <string>Add User</string>
    </property>
   </action>
-  <action name="actionExit">
+  <action name="Quit">
    <property name="text">
     <string>Exit</string>
    </property>

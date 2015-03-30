@@ -80,6 +80,7 @@ void MainWindow::configureGUI()
     this->changeStatusBar();
     this->styleItems();
     this->enableMouseTracking();
+    //this->menuBar()->setNativeMenuBar(false);
     sysTray.setIcon(QIcon(icon));
     sysTray.show();
 }
@@ -189,10 +190,9 @@ void MainWindow::on_tabWidget_currentChanged()
     this->timedDataRequest();
 }
 
-//Exit app when close is clicked.
-void MainWindow::on_actionExit_triggered()
+void MainWindow::on_Quit_triggered()
 {
-    this->~MainWindow();
+    this->close();
 }
 
 //Requests search string when submitted (through enter or clicking the button)
