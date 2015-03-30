@@ -29,10 +29,10 @@ QList<QStringList> json::getFeaturedStreamData(QByteArray data)
     QJsonObject json = jsonData.object();
     QJsonArray array = json["featured"].toArray();
     if (!array.isEmpty())
-        for(int i = 0; i != array.count(); ++i)
+        for(int streamItem = 0; streamItem != array.count(); ++streamItem)
         {
             QStringList streamer;
-            QJsonObject featured = array[i].toObject();
+            QJsonObject featured = array[streamItem].toObject();
             QJsonValue streamVal = featured.value("stream");
             QJsonObject streamObj = streamVal.toObject();
 
@@ -62,10 +62,10 @@ QList<QStringList> json::getGameStreamData(QByteArray data)
 
     if (!array.isEmpty())
     {
-        for(int i = 0; i != array.count(); ++i)
+        for(int streamItem = 0; streamItem != array.count(); ++streamItem)
         {
             QStringList streamer;
-            QJsonObject gameObj = array[i].toObject();
+            QJsonObject gameObj = array[streamItem].toObject();
             QString viewers = QString::number(gameObj.value("viewers").toInt());
 
             QJsonValue channelVal = gameObj.value("channel");
@@ -127,9 +127,9 @@ QStringList json::getStreamerFollowedList(QByteArray data)
     QJsonObject json = jsonData.object();
     QJsonArray array = json["follows"].toArray();
     QStringList streamers;
-    for(int i = 0; i != array.count(); ++i)
+    for(int streamItem = 0; streamItem != array.count(); ++streamItem)
     {
-        QJsonObject follows = array[i].toObject();
+        QJsonObject follows = array[streamItem].toObject();
         QJsonValue streamersVal =  follows.value("_links");
         QJsonObject streamerObj = streamersVal.toObject();
         QString streamer = streamerObj.value("self").toString();

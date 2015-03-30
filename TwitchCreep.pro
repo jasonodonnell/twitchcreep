@@ -28,3 +28,5 @@ HEADERS  += Headers/database.h \
     Headers/timers.h \
 
 FORMS    += Forms/mainwindow.ui
+
+RESOURCES +=
