@@ -25,6 +25,8 @@ void MainWindow::addItemToListView(QStringList streamData)
         QString game = streamData[1];
         QString viewers = streamData[2];
         QString stream = username + ": (" + viewers + ") " + game;
+        if(stream.contains("Notfound"))
+            stream = "Not Found or Offline";
         QString requestType = streamData[3];
         QString logo = streamData[4];
         if(requestType == "featured")
@@ -41,7 +43,6 @@ void MainWindow::addItemToListView(QStringList streamData)
         }
         else if(requestType == "search")
         {
-            ui->listWidget_3->clear();
             if(!username.isEmpty())
                 ui->listWidget_3->addItem(stream);
             ui->listWidget_3->sortItems();
@@ -116,7 +117,7 @@ void MainWindow::displayToolTip(QListWidgetItem *item)
     if(item->isSelected())
     {
         QStringList username = item->text().split(":");
-        if(username[0] != "No Username Set" || username[0] != "Notfound")
+        if(username[0] != "No Username Set" || username[0] != "Not Found or Offline")
         {
             int tabIndex = ui->tabWidget->currentIndex();
             QString requestType;
@@ -153,7 +154,7 @@ void MainWindow::followListClear()
 void MainWindow::onListItemDoubleClicked(QListWidgetItem *item)
 {
     QStringList username = item->text().split(":");
-    if(username[0] != "No Username Set" && username[0] != "Notfound")
+    if(username[0] != "No Username Set" && username[0] != "Not Found or Offline")
     {
         QString url = "http://www.twitch.tv/" + username[0];
         QDesktopServices::openUrl(url);
@@ -182,6 +183,7 @@ void MainWindow::on_lineEdit_returnPressed()
 void MainWindow::on_pushButton_pressed()
 {
     this->searchTabRequest();
+    ui->listWidget_3->clear();
 }
 
 //Tab switched signal
