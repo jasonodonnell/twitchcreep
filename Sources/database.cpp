@@ -182,7 +182,7 @@ void database::storeItemIndex(QString requestType, QString username, int index)
 //or update an existing item signals.
 void database::storeStreamData(QStringList streamData, QString requestType)
 {
-    if(streamData[0] != "")
+    if(streamData[0] != "" || streamData[0] != "Notfound")
     {
         QString username = streamData[0].replace(" ","");
         QString game = streamData[1];
