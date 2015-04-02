@@ -26,6 +26,7 @@ public:
 
 signals:
     void dataReady(QByteArray,QString);
+    void removeOfflineStreamers();
 
 public slots:
     void doneReading(QNetworkReply *reply);

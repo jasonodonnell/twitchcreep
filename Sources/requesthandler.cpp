@@ -3,6 +3,7 @@
 requestHandler::requestHandler(QObject *parent) : QObject(parent)
 {
     connect((&networking),SIGNAL(dataReady(QByteArray,QString)),this,SLOT(requestProcess(QByteArray,QString)));
+    connect((&networking),SIGNAL(removeOfflineStreamers()),this,SLOT(removeOfflineStreamers()));
     QString settingsDir = QCoreApplication::applicationDirPath() + "/twitchCreep.conf";
     settings.setPath(QSettings::NativeFormat,QSettings::UserScope,settingsDir);
 }
@@ -29,20 +30,17 @@ void requestHandler::getFeatured(QByteArray data)
 {
     QList<QStringList> streamerList;
     QStringList streamData;
-    emit(manageOnlineStreamers("featured"));
     streamerList << jsonParser.getFeaturedStreamData(data);
     foreach(streamData, streamerList)
-    {
         emit(storeStreamData(streamData, "featured"));
-    }
 }
 
 //Takes the follows request and makes the appropriate network call.
 void requestHandler::getFollows(QByteArray data)
 {
     QStringList follows;
-    emit(manageOnlineStreamers("followed"));
     follows = jsonParser.getStreamerFollowedList(data);
+    follows << "End";
     networking.makeStreamRequestFromList(follows);
 }
 
@@ -59,7 +57,6 @@ void requestHandler::getGame(QByteArray data)
 {
     QList<QStringList> search = jsonParser.getGameStreamData(data);
     QStringList searchData;
-    emit(manageOnlineStreamers("search"));
     foreach(searchData, search)
         emit(storeStreamData(searchData, "search"));
 }
@@ -112,6 +109,11 @@ void requestHandler::makeRequest()
 void requestHandler::makeSearchRequest(QString search)
 {
     networking.makeGameRequest(search);
+}
+
+void requestHandler::removeOfflineStreamers()
+{
+    emit(deleteOfflineStreamersFromDB());
 }
 
 //Slot where data requests are processed.  When a request is made, the object

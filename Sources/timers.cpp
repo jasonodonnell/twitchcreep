@@ -29,8 +29,8 @@ void timers::startTimers()
 {
     requestTimer->start(3000);
     connectionTimer->start(5000);
-    networkRequestTimer->start(150);
-    backgroundRequestTimer->start(5000);
+    networkRequestTimer->start(10);
+    backgroundRequestTimer->start(2000);
 }
 
 //Request data on a timer.

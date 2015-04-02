@@ -95,6 +95,7 @@ void MainWindow::createSignalSlots()
     connect((&request),SIGNAL(usernameDialogSignal(QString)),this,SLOT(usernameDialog(QString)));
     connect((&request),SIGNAL(clearFollowList()),this,SLOT(followListClear()));
     connect((&request),SIGNAL(manageOnlineStreamers(QString)),&db,SLOT(manageOnlineStreamers(QString)));
+    connect((&request),SIGNAL(deleteOfflineStreamersFromDB()),&db,SLOT(removeOfflineStreamers()));
     connect((&request),SIGNAL(storeIndex(QString,QString,int)),&db,SLOT(storeItemIndex(QString,QString,int)));
     connect((&request),SIGNAL(storeStreamData(QStringList, QString)),&db,SLOT(storeStreamData(QStringList,QString)));
     connect((&request),SIGNAL(truncateStreamData()),&db,SLOT(truncateStreamData()));

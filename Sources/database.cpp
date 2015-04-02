@@ -124,6 +124,15 @@ void database::manageOnlineStreamers(QString requestType)
     }
 }
 
+void database::removeOfflineStreamers()
+{
+    QSqlQuery query(this->db);
+    query.prepare("SELECT username, itemIndex FROM followed_data WHERE online=0");
+    if(query.exec())
+        while(query.next())
+            qDebug() << query.value(0).toString();
+}
+
 //Retrieves the stream status for the tooltip.
 int database::retrieveIndex(QString requestType, QString username)
 {
