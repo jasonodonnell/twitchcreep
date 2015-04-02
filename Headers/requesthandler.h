@@ -30,6 +30,7 @@ public:
 
 signals:
     void clearFollowList();
+    void deleteOfflineStreamersFromDB();
     void manageOnlineStreamers(QString);
     void storeIndex(QString requestType, QString username, int index);
     void storeStreamData(QStringList data, QString requestType);
@@ -40,6 +41,8 @@ signals:
 public slots:
     void requestProcess(QByteArray data, QString jsonType);
 
+private slots:
+    void removeOfflineStreamers();
 private:
     json jsonParser;
     networkOperations networking;

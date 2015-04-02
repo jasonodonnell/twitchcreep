@@ -20,6 +20,7 @@ public:
     QString retrieveStatus(QString username, QString requestType);
 public slots:
     void manageOnlineStreamers(QString requestType);
+    void removeOfflineStreamers();
     void storeItemIndex(QString requestType, QString username, int index);
     void storeStreamData(QStringList streamData, QString requestType);
     void truncateSearchData();

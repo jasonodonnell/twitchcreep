@@ -95,11 +95,13 @@ void networkOperations::makeStreamRequestFromList(QStringList usernames)
 {
     foreach(QString username,usernames)
     {
-        if(!username.isEmpty())
+        if(!username.isEmpty() && username != "End")
         {
             QString url = "https://api.twitch.tv/kraken/streams/" + username + "?client_id=" + appId;;
             this->addRequestToList("followsList",url);
         }
+        else
+            emit(removeOfflineStreamers());
     }
 }
 
