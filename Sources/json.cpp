@@ -10,6 +10,8 @@ json::~json()
 
 }
 
+//Check if username is real or not.  Used in setting th username for
+//twitch creep.
 bool json::checkUsernameExists(QByteArray data)
 {
     QJsonDocument jsonData = QJsonDocument::fromJson(data);

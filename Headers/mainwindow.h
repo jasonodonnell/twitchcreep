@@ -45,10 +45,10 @@ private slots:
     void on_lineEdit_returnPressed();
     void on_pushButton_pressed();
     void on_tabWidget_currentChanged();
+    void timedBackgroundRequest();
     void timedDataRequest();
     void timedNetworkRequest();
     void updateItemInListView(QStringList streamData, int index);
-    void timedBackgroundRequest();
 
 private:
     database db;
@@ -59,9 +59,9 @@ private:
     void configureGUI();
     void enableMouseTracking();
     void searchTabRequest();
+    void showMessage();
     void styleItems();
     void updateItemIndex(QString requestType);
-    void showMessage();
 };
 
 #endif // MAINWINDOW_H

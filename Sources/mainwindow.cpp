@@ -193,6 +193,8 @@ void MainWindow::on_tabWidget_currentChanged()
     this->timedDataRequest();
 }
 
+
+//Quit application, used to be on_Exit, but osx likes Quit better (implements cmd-q natively)
 void MainWindow::on_Quit_triggered()
 {
     this->close();
@@ -207,6 +209,7 @@ void MainWindow::searchTabRequest()
         request.makeSearchRequest(search);
 }
 
+//Show notification message from system tray
 void MainWindow::showMessage()
 {
     sysTray.showMessage("Hello","World",QSystemTrayIcon::Critical,151000);
