@@ -124,6 +124,7 @@ void database::manageOnlineStreamers(QString requestType)
     }
 }
 
+//Get list of streamers currently offline.
 void database::removeOfflineStreamers()
 {
     QSqlQuery query(this->db);

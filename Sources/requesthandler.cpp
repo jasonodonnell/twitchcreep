@@ -111,6 +111,8 @@ void requestHandler::makeSearchRequest(QString search)
     networking.makeGameRequest(search);
 }
 
+
+//Remove the offline streams from the listview.
 void requestHandler::removeOfflineStreamers()
 {
     emit(deleteOfflineStreamersFromDB());
