@@ -27,6 +27,7 @@ public slots:
     void truncateStreamData();
 signals:
     void addStreamToView(QStringList stream);
+    void deleteStreamerFromListView(int itemIndex);
     void listViewClears();
     void updateStreamInView(QStringList stream,int index);
 private:

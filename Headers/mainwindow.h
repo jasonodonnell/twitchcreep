@@ -50,6 +50,7 @@ private slots:
     void timedNetworkRequest();
     void updateItemInListView(QStringList streamData, int index);
 
+    void removeOfflineStreamer(int itemIndex);
 private:
     database db;
     timers timerManager;
