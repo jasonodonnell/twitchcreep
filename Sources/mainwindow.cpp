@@ -90,6 +90,7 @@ void MainWindow::configureGUI()
 void MainWindow::createSignalSlots()
 {
     connect((&db),SIGNAL(addStreamToView(QStringList)),this,SLOT(addItemToListView(QStringList)));
+    connect((&db),SIGNAL(deleteStreamerFromListView(int)),this,SLOT(removeOfflineStreamer(int)));
     connect((&db),SIGNAL(listViewClears()),this,SLOT(clearListViews()));
     connect((&db),SIGNAL(updateStreamInView(QStringList,int)),this,SLOT(updateItemInListView(QStringList,int)));
     connect((&request),SIGNAL(usernameDialogSignal(QString)),this,SLOT(usernameDialog(QString)));
@@ -198,6 +199,11 @@ void MainWindow::on_tabWidget_currentChanged()
 void MainWindow::on_Quit_triggered()
 {
     this->close();
+}
+
+void MainWindow::removeOfflineStreamer(int itemIndex)
+{
+    delete ui->listWidget_2->item(itemIndex);
 }
 
 //Requests search string when submitted (through enter or clicking the button)
