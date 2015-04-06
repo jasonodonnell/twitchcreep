@@ -139,7 +139,6 @@ void requestHandler::requestProcess(QByteArray data, QString jsonType)
         emit(truncateSearchData());
         this->getGame(data);
     }
-    //networking.popRequestFromList();
 }
 
 //Set the value of a given setting

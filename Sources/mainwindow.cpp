@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->tabWidget->setCurrentIndex(0);
     this->configureGUI();
 }
 
@@ -76,12 +75,12 @@ void MainWindow::clearListViews()
 //Configure look and feel of the GUI
 void MainWindow::configureGUI()
 {
+    ui->tabWidget->setCurrentIndex(0);
     QString icon = QCoreApplication::applicationDirPath() + "/icon.png";
     this->createSignalSlots();
     this->changeStatusBar();
     this->styleItems();
     this->enableMouseTracking();
-    //this->menuBar()->setNativeMenuBar(false);
     sysTray.setIcon(QIcon(icon));
     sysTray.show();
 }
