@@ -60,7 +60,6 @@ private:
     void configureGUI();
     void enableMouseTracking();
     void searchTabRequest();
-    void showMessage();
     void styleItems();
     void updateItemIndex(QString requestType);
 };
