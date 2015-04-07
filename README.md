@@ -5,6 +5,11 @@ To do this I'm using the twitch api: https://github.com/justintv/twitch-api
 
 This is my first time building an application with QT, so a lot of the code is messy and experimental.  Comments and criticism appreciated!
 
+##Suported Platforms:
+#Windows 7
+#Mac OSX (10.8+)
+#Linux support to come (untested)
+
 ##Screen captures:
 
 Featured: http://i.imgur.com/sCN6Mt8.jpg (now with notifications!)
