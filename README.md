@@ -7,7 +7,9 @@ This is my first time building an application with QT, so a lot of the code is m
 
 ##Suported Platforms:
 Windows 7
+
 Mac OSX (10.8+)
+
 Linux support to come (untested)
 
 ##Screen captures:
