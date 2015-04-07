@@ -7,7 +7,7 @@ This is my first time building an application with QT, so a lot of the code is m
 
 ##Screen captures:
 
-Featured: http://i.imgur.com/NAyRokh.png
+Featured: http://i.imgur.com/sCN6Mt8.jpg (now with notifications!)
 
 Followed: http://imgur.com/WLVlo7V.png
 
@@ -17,3 +17,6 @@ Search User: http://i.imgur.com/hxdP49h.png
 
 ##Instructions to Compile
 Compiled with QT Creator, tested with Clang and Mingw
+
+##Dependencies
+For OSX to show followed online notifications, growl must be installed and enabled (10.8+)
