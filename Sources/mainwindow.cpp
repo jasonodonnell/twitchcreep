@@ -41,7 +41,7 @@ void MainWindow::addItemToListView(QStringList streamData)
             {
                 ui->listWidget_2->addItem(stream);
                 QString message = username + " is online!\nPlaying: " + game;
-                sysTray.showMessage("Followed", message,QSystemTrayIcon::Critical);
+                sysTray.showMessage("Following", message,QSystemTrayIcon::Critical);
             }
             ui->listWidget_2->sortItems();
         }
