@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->configureGUI();
+
 }
 
 MainWindow::~MainWindow()
@@ -37,7 +38,11 @@ void MainWindow::addItemToListView(QStringList streamData)
         else if(requestType == "followed")
         {
             if(!username.isEmpty())
+            {
                 ui->listWidget_2->addItem(stream);
+                QString message = username + " is online!\nPlaying: " + game;
+                sysTray.showMessage("Followed", message,QSystemTrayIcon::Critical);
+            }
             ui->listWidget_2->sortItems();
         }
         else if(requestType == "search")
@@ -212,12 +217,6 @@ void MainWindow::searchTabRequest()
     QString search = ui->lineEdit->text();
     if(!search.isEmpty())
         request.makeSearchRequest(search);
-}
-
-//Show notification message from system tray
-void MainWindow::showMessage()
-{
-    sysTray.showMessage("Hello","World",QSystemTrayIcon::Critical,151000);
 }
 
 //Apply styles to various views.
