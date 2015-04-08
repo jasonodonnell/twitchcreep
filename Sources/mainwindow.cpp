@@ -351,3 +351,9 @@ void MainWindow::usernameDialog(QString dialogType)
             request.checkUsername(text);
     }
 }
+
+void MainWindow::on_Options_triggered()
+{
+    Dialog *d = new Dialog();
+    d->show();
+}

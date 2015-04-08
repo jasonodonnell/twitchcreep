@@ -1,6 +1,5 @@
     #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
 #include <QMainWindow>
 #include <QDebug>
 #include <QListView>
@@ -11,6 +10,8 @@
 #include <QStringList>
 #include <QToolTip>
 #include <QSystemTrayIcon>
+#include <QWidget>
+#include "dialog.h"
 #include "timers.h"
 #include "requesthandler.h"
 #include "database.h"
@@ -43,14 +44,15 @@ private slots:
     void on_actionClear_User_triggered();
     void on_Quit_triggered();
     void on_lineEdit_returnPressed();
+    void on_Options_triggered();
     void on_pushButton_pressed();
     void on_tabWidget_currentChanged();
+    void removeOfflineStreamer(int itemIndex);
     void timedBackgroundRequest();
     void timedDataRequest();
     void timedNetworkRequest();
     void updateItemInListView(QStringList streamData, int index);
 
-    void removeOfflineStreamer(int itemIndex);
 private:
     database db;
     timers timerManager;
