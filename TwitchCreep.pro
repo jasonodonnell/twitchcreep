@@ -18,7 +18,8 @@ SOURCES += Sources/database.cpp \
     Sources/mainwindow.cpp \
     Sources/networkoperations.cpp \
     Sources/requesthandler.cpp \
-    Sources/timers.cpp
+    Sources/timers.cpp \
+    Sources/dialog.cpp
 
 HEADERS  += Headers/database.h \
     Headers/json.h \
@@ -26,7 +27,9 @@ HEADERS  += Headers/database.h \
     Headers/networkoperations.h \
     Headers/requesthandler.h \
     Headers/timers.h \
+    Headers/dialog.h
 
-FORMS    += Forms/mainwindow.ui
+FORMS    += Forms/mainwindow.ui \
+    Forms/dialog.ui
 
 RESOURCES +=
