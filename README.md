@@ -27,3 +27,4 @@ Compiled with QT Creator, tested with Clang and Mingw
 
 ##Dependencies
 For OSX to show followed online notifications, growl must be installed and enabled (10.8+)
+
