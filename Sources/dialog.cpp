@@ -8,7 +8,9 @@ Dialog::Dialog(QWidget *parent) :
     ui->setupUi(this);
     this->getStartupSetting();
     if(this->getStartupSetting() == "true")
-        ui->checkBox->setChecked(true);
+        ui->bootCheckBox->setChecked(true);
+    if(this->getNotificationSetting() == "true")
+        ui->notificationCheckBox->setChecked(true);
 }
 
 Dialog::~Dialog()
@@ -25,12 +27,26 @@ QString Dialog::getStartupSetting()
         return answer;
 }
 
+QString Dialog::getNotificationSetting()
+{
+    QString answer = request.getSettingsValue("notification");
+    if(answer.isNull())
+        return "false";
+    else
+        return answer;
+}
+
 void Dialog::on_buttonBox_accepted()
 {
-    if(ui->checkBox->isChecked())
+    if(ui->bootCheckBox->isChecked())
         request.setSettingsValue("boot","true");
     else
         request.setSettingsValue("boot","false");
+
+    if(ui->notificationCheckBox->isChecked())
+        request.setSettingsValue("notification","true");
+    else
+        request.setSettingsValue("notification","false");
 }
 
 void Dialog::on_buttonBox_rejected()

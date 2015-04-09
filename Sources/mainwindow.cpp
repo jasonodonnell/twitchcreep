@@ -40,8 +40,12 @@ void MainWindow::addItemToListView(QStringList streamData)
             if(!username.isEmpty())
             {
                 ui->listWidget_2->addItem(stream);
-                QString message = username + " is online!\nPlaying: " + game;
-                sysTray.showMessage("Following", message,QSystemTrayIcon::Critical);
+                QString notificationSetting = request.getSettingsValue("notification");
+                if(notificationSetting == "false" || notificationSetting.isNull())
+                {
+                    QString message = username + " is online!\nPlaying: " + game;
+                    sysTray.showMessage("Following", message,QSystemTrayIcon::Critical);
+                }
             }
             ui->listWidget_2->sortItems();
         }
