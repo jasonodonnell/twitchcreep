@@ -26,6 +26,7 @@ private:
     Ui::Dialog *ui;
     QString getStartupSetting();
     requestHandler request;
+    QString getNotificationSetting();
 };
 
 #endif // DIALOG_H
