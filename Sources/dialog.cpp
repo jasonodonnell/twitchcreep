@@ -5,7 +5,11 @@ Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);  
+    Qt::WindowFlags flags = windowFlags();
+    Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
+    flags = flags & (~helpFlag);
+    setWindowFlags(flags);
     if(this->getNotificationSetting() == "true")
         ui->notificationCheckBox->setChecked(true);
 }
