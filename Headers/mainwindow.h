@@ -10,7 +10,6 @@
 #include <QStringList>
 #include <QToolTip>
 #include <QSystemTrayIcon>
-#include <QWidget>
 #include "dialog.h"
 #include "timers.h"
 #include "requesthandler.h"
