@@ -2,7 +2,6 @@
 #define DATABASE_H
 #include <QObject>
 #include <QDebug>
-#include <QSql>
 #include <QtSql>
 
 class database : public QObject
