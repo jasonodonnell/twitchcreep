@@ -8,7 +8,6 @@ timers::timers(QObject *parent) : QObject(parent)
     this->makeNetworkRequestUnopenedTabs();
     this->networkConnection();
     this->startTimers();
-
 }
 
 timers::~timers()

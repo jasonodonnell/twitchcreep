@@ -24,6 +24,7 @@ private slots:
 private:
     Ui::Dialog *ui;
     requestHandler request;
+    void configureDialog();
     QString getNotificationSetting();
 };
 

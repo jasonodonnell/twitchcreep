@@ -5,7 +5,19 @@ Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog)
 {
-    ui->setupUi(this);  
+    ui->setupUi(this);
+    this->configureDialog();
+}
+
+Dialog::~Dialog()
+{
+    delete ui;
+}
+
+//Configure how dialog looks and such.  The flag is to remove the ? button from windows.
+//Check if the box should be checked by default.
+void Dialog::configureDialog()
+{
     Qt::WindowFlags flags = windowFlags();
     Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
     flags = flags & (~helpFlag);
@@ -14,11 +26,7 @@ Dialog::Dialog(QWidget *parent) :
         ui->notificationCheckBox->setChecked(true);
 }
 
-Dialog::~Dialog()
-{
-    delete ui;
-}
-
+//Check the saved setting for notification display
 QString Dialog::getNotificationSetting()
 {
     QString answer = request.getSettingsValue("notification");
@@ -28,6 +36,7 @@ QString Dialog::getNotificationSetting()
         return answer;
 }
 
+//When Ok is pressed in the dialog, save results.
 void Dialog::on_buttonBox_accepted()
 {
     if(ui->notificationCheckBox->isChecked())
@@ -36,6 +45,7 @@ void Dialog::on_buttonBox_accepted()
         request.setSettingsValue("notification","false");
 }
 
+//Destroy the dialog on cancel
 void Dialog::on_buttonBox_rejected()
 {
     delete ui;
