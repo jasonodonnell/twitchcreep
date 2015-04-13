@@ -188,6 +188,13 @@ void MainWindow::on_lineEdit_returnPressed()
     this->searchTabRequest();
 }
 
+//Open options dialog when options are selected
+void MainWindow::on_Options_triggered()
+{
+    Dialog *d = new Dialog();
+    d->show();
+}
+
 //Submit button
 void MainWindow::on_pushButton_pressed()
 {
@@ -353,10 +360,4 @@ void MainWindow::usernameDialog(QString dialogType)
         if(ok && !text.isEmpty())
             request.checkUsername(text);
     }
-}
-
-void MainWindow::on_Options_triggered()
-{
-    Dialog *d = new Dialog();
-    d->show();
 }
