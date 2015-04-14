@@ -22,7 +22,8 @@ bool requestHandler::checkConnection()
 //Check if username exists, used in the UI
 void requestHandler::checkUsername(QString text)
 {
-    networking.checkUsernameRequest(text);
+    if(!text.isEmpty())
+        networking.checkUsernameRequest(text);
 }
 
 //Takes the featured request and makes the appropriate network call.
@@ -30,7 +31,8 @@ void requestHandler::getFeatured(QByteArray data)
 {
     QList<QStringList> streamerList;
     QStringList streamData;
-    streamerList << jsonParser.getFeaturedStreamData(data);
+    if(!data.isNull())
+        streamerList << jsonParser.getFeaturedStreamData(data);
     foreach(streamData, streamerList)
         emit(storeStreamData(streamData, "featured"));
 }
@@ -39,7 +41,8 @@ void requestHandler::getFeatured(QByteArray data)
 void requestHandler::getFollows(QByteArray data)
 {
     QStringList follows;
-    follows = jsonParser.getStreamerFollowedList(data);
+    if(!data.isNull())
+        follows = jsonParser.getStreamerFollowedList(data);
     follows << "End";
     networking.makeStreamRequestFromList(follows);
 }
@@ -47,7 +50,9 @@ void requestHandler::getFollows(QByteArray data)
 //Takes the follow list and makes the appropriate network calls.
 void requestHandler::getFollowsList(QByteArray data)
 {
-    QStringList streamData = jsonParser.getStreamData(data);
+    QStringList streamData;
+    if(!data.isNull())
+        streamData = jsonParser.getStreamData(data);
     if(!streamData.isEmpty())
         emit(storeStreamData(streamData, "followed"));
 }
@@ -55,7 +60,9 @@ void requestHandler::getFollowsList(QByteArray data)
 //Get games from the search query
 void requestHandler::getGame(QByteArray data)
 {
-    QList<QStringList> search = jsonParser.getGameStreamData(data);
+    QList<QStringList> search;
+    if(!data.isNull())
+        search = jsonParser.getGameStreamData(data);
     QStringList searchData;
     foreach(searchData, search)
         emit(storeStreamData(searchData, "search"));
@@ -64,15 +71,17 @@ void requestHandler::getGame(QByteArray data)
 //Retrieve value of a given setting
 QString requestHandler::getSettingsValue(QString value)
 {
-    return settings.value(value).toString();
+    if(!value.isNull())
+        return settings.value(value).toString();
 }
 
 //Takes the usrername request and makes the appropriate network call.
 void requestHandler::getUsername(QByteArray data, QString name)
 {
     bool exists;
-    exists = jsonParser.checkUsernameExists(data);
-    if(exists)
+    if(!data.isNull())
+        exists = jsonParser.checkUsernameExists(data);
+    if(exists && !name.isNull())
     {
         settings.setValue("username",name);
         emit(truncateStreamData());
@@ -108,7 +117,8 @@ void requestHandler::makeRequest()
 //Make network request from a search value
 void requestHandler::makeSearchRequest(QString search)
 {
-    networking.makeGameRequest(search);
+    if(!search.isEmpty())
+        networking.makeGameRequest(search);
 }
 
 
@@ -123,32 +133,37 @@ void requestHandler::removeOfflineStreamers()
 //data.  From here it is directed to the appropriate member function.
 void requestHandler::requestProcess(QByteArray data, QString jsonType)
 {
-    if (jsonType == "follows")
-        this->getFollows(data);
-    else if (jsonType == "followsList")
-        this->getFollowsList(data);
-    else if (jsonType == "featured")
-        this->getFeatured(data);
-    else if (jsonType.contains("usernameCheck:"))
+    if(!data.isEmpty())
     {
-        QStringList name = jsonType.split(":");
-        this->getUsername(data,name[1]);
-    }
-    else if (jsonType.contains("game"))
-    {
-        emit(truncateSearchData());
-        this->getGame(data);
+        if (jsonType == "follows")
+            this->getFollows(data);
+        else if (jsonType == "followsList")
+            this->getFollowsList(data);
+        else if (jsonType == "featured")
+            this->getFeatured(data);
+        else if (jsonType.contains("usernameCheck:"))
+        {
+            QStringList name = jsonType.split(":");
+            this->getUsername(data,name[1]);
+        }
+        else if (jsonType.contains("game"))
+        {
+            emit(truncateSearchData());
+            this->getGame(data);
+        }
     }
 }
 
 //Set the value of a given setting
 void requestHandler::setSettingsValue(QString setting, QString value)
 {
-    settings.setValue(setting,value);
+    if(!setting.isNull() && !value.isNull())
+        settings.setValue(setting,value);
 }
 
 //Store the index of an item from the view
 void requestHandler::storeItemIndex(QString requestType, QString username, int index)
 {
-    emit(storeIndex(requestType,username,index));
+    if(!requestType.isEmpty() && !username.isNull())
+        emit(storeIndex(requestType,username,index));
 }
