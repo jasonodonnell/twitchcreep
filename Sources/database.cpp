@@ -141,6 +141,7 @@ void database::removeOfflineStreamers()
 //Retrieves the stream status for the tooltip.
 int database::retrieveIndex(QString requestType, QString username)
 {
+    //Set index to a negative value by default just incase.
     int indexValue = -1;
     QSqlQuery query(this->db);
     if(requestType == "featured")
@@ -159,12 +160,14 @@ QString database::retrieveStatus(QString username,QString requestType)
 {
     QString status;
     QSqlQuery query(this->db);
+
     if(requestType == "featured")
         query.prepare("SELECT status FROM featured_data WHERE username=:username");
     else if(requestType == "followed")
         query.prepare("SELECT status FROM followed_data WHERE username=:username");
     else if(requestType == "search")
         query.prepare("SELECT status FROM search_data WHERE username=:username");
+
     query.bindValue(":username",username);
     if(query.exec())
         while(query.next())
