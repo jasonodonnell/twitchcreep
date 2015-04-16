@@ -37,6 +37,7 @@ private slots:
     void addItemToListView(QStringList);
     void changeStatusBar();
     void clearListViews();
+    void clearSearchView();
     void displayToolTip(QListWidgetItem* item);
     void onListItemDoubleClicked(QListWidgetItem* item);
     void on_actionAdd_User_triggered();
@@ -51,7 +52,6 @@ private slots:
     void timedDataRequest();
     void timedNetworkRequest();
     void updateItemInListView(QStringList streamData, int index);
-
 private:
     database db;
     timers timerManager;

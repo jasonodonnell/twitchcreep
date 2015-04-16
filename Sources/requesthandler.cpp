@@ -64,6 +64,7 @@ void requestHandler::getGame(QByteArray data)
     if(!data.isNull())
         search = jsonParser.getGameStreamData(data);
     QStringList searchData;
+    emit(clearSearchList());
     foreach(searchData, search)
         emit(storeStreamData(searchData, "search"));
 }
