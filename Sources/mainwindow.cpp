@@ -80,6 +80,11 @@ void MainWindow::clearListViews()
     ui->listWidget_3->clear();
 }
 
+void MainWindow::clearSearchView()
+{
+    ui->listWidget_3->clear();
+}
+
 //Configure look and feel of the GUI
 void MainWindow::configureGUI()
 {
@@ -102,6 +107,7 @@ void MainWindow::createSignalSlots()
     connect((&db),SIGNAL(updateStreamInView(QStringList,int)),this,SLOT(updateItemInListView(QStringList,int)));
     connect((&request),SIGNAL(usernameDialogSignal(QString)),this,SLOT(usernameDialog(QString)));
     connect((&request),SIGNAL(clearFollowList()),this,SLOT(followListClear()));
+    connect((&request),SIGNAL(clearSearchList()),this,SLOT(clearSearchView()));
     connect((&request),SIGNAL(manageOnlineStreamers(QString)),&db,SLOT(manageOnlineStreamers(QString)));
     connect((&request),SIGNAL(deleteOfflineStreamersFromDB()),&db,SLOT(removeOfflineStreamers()));
     connect((&request),SIGNAL(storeIndex(QString,QString,int)),&db,SLOT(storeItemIndex(QString,QString,int)));

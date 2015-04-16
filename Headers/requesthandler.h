@@ -30,6 +30,7 @@ public:
 
 signals:
     void clearFollowList();
+    void clearSearchList();
     void deleteOfflineStreamersFromDB();
     void manageOnlineStreamers(QString);
     void storeIndex(QString requestType, QString username, int index);
