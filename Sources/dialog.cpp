@@ -24,6 +24,18 @@ void Dialog::configureDialog()
     setWindowFlags(flags);
     if(this->getNotificationSetting() == "true")
         ui->notificationCheckBox->setChecked(true);
+    if(this->getNotificationSetting() == "true")
+        ui->notificationCheckBox->setChecked(true);
+}
+
+//Check the saved setting for notification display
+QString Dialog::getBootSetting()
+{
+    QString answer = request.getSettingsValue("boot");
+    if(answer.isNull())
+        return "false";
+    else
+        return answer;
 }
 
 //Check the saved setting for notification display
