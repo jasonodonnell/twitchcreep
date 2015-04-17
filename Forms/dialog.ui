@@ -22,7 +22,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QCheckBox" name="bootCheckBox">
      <property name="text">
       <string>Start On Boot?</string>
      </property>

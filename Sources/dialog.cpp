@@ -24,8 +24,8 @@ void Dialog::configureDialog()
     setWindowFlags(flags);
     if(this->getNotificationSetting() == "true")
         ui->notificationCheckBox->setChecked(true);
-    if(this->getNotificationSetting() == "true")
-        ui->notificationCheckBox->setChecked(true);
+    if(this->getBootSetting() == "true")
+        ui->bootCheckBox->setChecked(true);
 }
 
 //Check the saved setting for notification display
@@ -55,6 +55,11 @@ void Dialog::on_buttonBox_accepted()
         request.setSettingsValue("notification","true");
     else
         request.setSettingsValue("notification","false");
+
+    if(ui->bootCheckBox->isChecked())
+        request.setSettingsValue("boot","true");
+    else
+        request.setSettingsValue("boot","false");
 }
 
 //Destroy the dialog on cancel
