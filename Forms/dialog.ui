@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>184</width>
-    <height>70</height>
+    <height>98</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,6 +18,13 @@
     <widget class="QCheckBox" name="notificationCheckBox">
      <property name="text">
       <string>Disable Notifications</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBox">
+     <property name="text">
+      <string>Start On Boot?</string>
      </property>
     </widget>
    </item>
