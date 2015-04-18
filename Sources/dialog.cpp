@@ -28,7 +28,7 @@ void Dialog::configureDialog()
         ui->bootCheckBox->setChecked(true);
 }
 
-//Check the saved setting for notification display
+//Check the saved setting for booting the app on start
 QString Dialog::getBootSetting()
 {
     QString answer = request.getSettingsValue("boot");
