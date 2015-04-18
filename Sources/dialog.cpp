@@ -22,8 +22,10 @@ void Dialog::configureDialog()
     Qt::WindowFlags helpFlag = Qt::WindowContextHelpButtonHint;
     flags = flags & (~helpFlag);
     setWindowFlags(flags);
+    //Set the notification display to checked if true
     if(this->getNotificationSetting() == "true")
         ui->notificationCheckBox->setChecked(true);
+    //Set the boot at start to checked if true
     if(this->getBootSetting() == "true")
         ui->bootCheckBox->setChecked(true);
 }
