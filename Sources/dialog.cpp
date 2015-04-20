@@ -25,19 +25,6 @@ void Dialog::configureDialog()
     //Set the notification display to checked if true
     if(this->getNotificationSetting() == "true")
         ui->notificationCheckBox->setChecked(true);
-    //Set the boot at start to checked if true
-    if(this->getBootSetting() == "true")
-        ui->bootCheckBox->setChecked(true);
-}
-
-//Check the saved setting for booting the app on start
-QString Dialog::getBootSetting()
-{
-    QString answer = request.getSettingsValue("boot");
-    if(answer.isNull())
-        return "false";
-    else
-        return answer;
 }
 
 //Check the saved setting for notification display
@@ -57,11 +44,6 @@ void Dialog::on_buttonBox_accepted()
         request.setSettingsValue("notification","true");
     else
         request.setSettingsValue("notification","false");
-
-    if(ui->bootCheckBox->isChecked())
-        request.setSettingsValue("boot","true");
-    else
-        request.setSettingsValue("boot","false");
 }
 
 //Destroy the dialog on cancel
