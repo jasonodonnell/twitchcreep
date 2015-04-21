@@ -51,9 +51,6 @@ bool database::checkIfStreamExists(QString username, QString requestType)
 //Creates the table DDL for the app
 void database::createTables()
 {
-    QString drop_followed = "DROP TABLE IF EXISTS followed_data;";
-    QString drop_featured = "DROP TABLE IF EXISTS featured_data;";
-    QString drop_search = "DROP TABLE IF EXISTS search_data;";
     QString followed_data = "CREATE TABLE IF NOT EXISTS followed_data (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
     followed_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL, itemIndex INT);");
     QString featured_data = "CREATE TABLE IF NOT EXISTS featured_data (oid INTEGER PRIMARY KEY, username STRING, game STRING, viewers INT, ";
@@ -62,12 +59,6 @@ void database::createTables()
     search_data.append("status STRING, logo STRING, url STRING, image BLOB, online BOOL, itemIndex INT);");
 
     QSqlQuery query(this->db);
-    if(!query.exec(drop_followed))
-        qDebug() << query.lastError();
-    if(!query.exec(drop_featured))
-        qDebug() << query.lastError();
-    if(!query.exec(drop_search))
-        qDebug() << query.lastError();
     if(!query.exec(followed_data))
         qDebug() << query.lastError();
     if(!query.exec(featured_data))

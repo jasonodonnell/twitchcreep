@@ -108,18 +108,15 @@ void networkOperations::makeStreamRequest(QString username)
 //Makes the stream requests from a list of streamer usernames.
 void networkOperations::makeStreamRequestFromList(QStringList usernames)
 {
-    if(!usernames.isEmpty())
+    foreach(QString username,usernames)
     {
-        foreach(QString username,usernames)
+        if(!username.isEmpty() && username != "End")
         {
-            if(!username.isEmpty() && username != "End")
-            {
-                QString url = "https://api.twitch.tv/kraken/streams/" + username + "?client_id=" + appId;;
-                this->addRequestToList("followsList",url);
-            }
-            else
-                emit(removeOfflineStreamers());
+            QString url = "https://api.twitch.tv/kraken/streams/" + username + "?client_id=" + appId;;
+            this->addRequestToList("followsList",url);
         }
+        else
+            emit(removeOfflineStreamers());
     }
 }
 
