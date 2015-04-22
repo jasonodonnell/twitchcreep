@@ -47,7 +47,6 @@ private slots:
 private:
     json jsonParser;
     networkOperations networking;
-    QSettings settings;
 };
 
 #endif // REQUESTHANDLER_H
