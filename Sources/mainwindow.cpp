@@ -319,7 +319,7 @@ void MainWindow::updateItemInListView(QStringList streamData,int index)
         QString requestType = streamData[3];
         if(requestType == "featured")
             ui->listWidget->item(index)->setText(stream);
-        else if(requestType == "featured")
+        else if(requestType == "followed")
             ui->listWidget_2->item(index)->setText(stream);
     }
 }
