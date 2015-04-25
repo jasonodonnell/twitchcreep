@@ -240,7 +240,6 @@ void database::storeStreamData(QStringList streamData, QString requestType)
             else if(requestType == "search")
                 update = "UPDATE search_data SET game = :game,";
             QString values = "viewers = :viewers, status = :status, online = :online WHERE username = :username";
-
             QString queryString = update+values;
             query.prepare(queryString);
             query.bindValue(":game", game);
