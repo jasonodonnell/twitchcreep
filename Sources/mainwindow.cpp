@@ -89,7 +89,7 @@ void MainWindow::clearSearchView()
 void MainWindow::configureGUI()
 {
     ui->tabWidget->setCurrentIndex(0);
-    QString icon = QCoreApplication::applicationDirPath() + "/icon.png";
+    QString icon = QCoreApplication::applicationDirPath() + "/icon_revised.png";
     this->createSignalSlots();
     this->changeStatusBar();
     this->styleItems();
