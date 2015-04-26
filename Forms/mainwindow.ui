@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Twitch Creep</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../build-TwitchCreep-Desktop_Qt_5_4_0_clang_64bit-Debug/icon_revised.png</normaloff>../../build-TwitchCreep-Desktop_Qt_5_4_0_clang_64bit-Debug/icon_revised.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
