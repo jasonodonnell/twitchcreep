@@ -32,4 +32,5 @@ HEADERS  += Headers/database.h \
 FORMS    += Forms/mainwindow.ui \
     Forms/dialog.ui
 
-RESOURCES +=
+RESOURCES += \
+    icons.qrc

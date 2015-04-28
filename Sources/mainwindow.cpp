@@ -89,12 +89,11 @@ void MainWindow::clearSearchView()
 void MainWindow::configureGUI()
 {
     ui->tabWidget->setCurrentIndex(0);
-    QString icon = QCoreApplication::applicationDirPath() + "/icon_revised.png";
     this->createSignalSlots();
     this->changeStatusBar();
     this->styleItems();
     this->enableMouseTracking();
-    sysTray.setIcon(QIcon(icon));
+    sysTray.setIcon(QIcon(":/icons/icon_revised.png"));
     sysTray.show();
 }
 
