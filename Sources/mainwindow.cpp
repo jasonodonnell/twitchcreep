@@ -93,6 +93,7 @@ void MainWindow::configureGUI()
     this->changeStatusBar();
     this->styleItems();
     this->enableMouseTracking();
+    this->setWindowIcon(QIcon(":/icons/icon_revised.png"));
     sysTray.setIcon(QIcon(":/icons/icon_revised.png"));
     sysTray.show();
 }
@@ -117,6 +118,7 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(checkConnection()),this,SLOT(changeStatusBar()));
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
     connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
+    connect((&sysTray),SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(on_systray_clicked(QSystemTrayIcon::ActivationReason)));
     connect((ui->listWidget),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_2),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_3),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
@@ -205,6 +207,11 @@ void MainWindow::on_pushButton_pressed()
 {
     this->searchTabRequest();
     ui->listWidget_3->clear();
+}
+
+void MainWindow::on_systray_clicked(QSystemTrayIcon::ActivationReason clicked)
+{
+    qDebug() << "Test";
 }
 
 //Tab switched signal

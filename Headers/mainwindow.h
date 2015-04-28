@@ -46,6 +46,7 @@ private slots:
     void on_lineEdit_returnPressed();
     void on_Options_triggered();
     void on_pushButton_pressed();
+    void on_systray_clicked(QSystemTrayIcon::ActivationReason clicked);
     void on_tabWidget_currentChanged();
     void removeOfflineStreamer(int itemIndex);
     void timedBackgroundRequest();
