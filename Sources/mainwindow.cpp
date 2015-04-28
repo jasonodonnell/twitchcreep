@@ -211,7 +211,8 @@ void MainWindow::on_pushButton_pressed()
 
 void MainWindow::on_systray_clicked(QSystemTrayIcon::ActivationReason clicked)
 {
-    qDebug() << "Test";
+    if(QSystemTrayIcon::MiddleClick)
+        qDebug() << "Clicked";
 }
 
 //Tab switched signal
