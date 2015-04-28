@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Options</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../../icon_revised.png</normaloff>../../../icon_revised.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QCheckBox" name="notificationCheckBox">
