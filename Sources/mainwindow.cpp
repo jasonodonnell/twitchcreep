@@ -89,13 +89,13 @@ void MainWindow::clearSearchView()
 void MainWindow::configureGUI()
 {
     ui->tabWidget->setCurrentIndex(0);
-    this->createSignalSlots();
     this->changeStatusBar();
     this->styleItems();
     this->enableMouseTracking();
     this->setWindowIcon(QIcon(":/icons/icon_revised.png"));
     sysTray.setIcon(QIcon(":/icons/icon_revised.png"));
     sysTray.show();
+    this->createSignalSlots();
 }
 
 //Creates signals and slots for the mainwindow.
@@ -211,8 +211,8 @@ void MainWindow::on_pushButton_pressed()
 
 void MainWindow::on_systray_clicked(QSystemTrayIcon::ActivationReason clicked)
 {
-    if(QSystemTrayIcon::MiddleClick)
-        qDebug() << "Clicked";
+    if(clicked)
+        this->showContextMenu();
 }
 
 //Tab switched signal
@@ -240,6 +240,15 @@ void MainWindow::searchTabRequest()
     QString search = ui->lineEdit->text();
     if(!search.isEmpty())
         request.makeSearchRequest(search);
+}
+
+void MainWindow::showContextMenu()
+{
+    QMenu * trayIconMenu = new QMenu(this);
+    QAction * quitAction = new QAction(tr("&Quit"), this);
+    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+    trayIconMenu->addAction(quitAction);
+    sysTray.setContextMenu(trayIconMenu);
 }
 
 //Apply styles to various views.
