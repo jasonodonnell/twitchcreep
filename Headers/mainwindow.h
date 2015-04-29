@@ -10,6 +10,7 @@
 #include <QStringList>
 #include <QToolTip>
 #include <QSystemTrayIcon>
+#include <QMenu>
 #include "dialog.h"
 #include "timers.h"
 #include "requesthandler.h"
@@ -64,6 +65,7 @@ private:
     void searchTabRequest();
     void styleItems();
     void updateItemIndex(QString requestType);
+    void showContextMenu();
 };
 
 #endif // MAINWINDOW_H
