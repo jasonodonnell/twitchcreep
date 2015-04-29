@@ -11,6 +11,7 @@
 #include <QToolTip>
 #include <QSystemTrayIcon>
 #include <QMenu>
+#include "about.h"
 #include "dialog.h"
 #include "timers.h"
 #include "requesthandler.h"
@@ -54,6 +55,10 @@ private slots:
     void timedDataRequest();
     void timedNetworkRequest();
     void updateItemInListView(QStringList streamData, int index);
+    void on_actionAbout_triggered();
+
+    void on_actionReport_Bug_triggered();
+
 private:
     database db;
     timers timerManager;
@@ -66,6 +71,7 @@ private:
     void styleItems();
     void updateItemIndex(QString requestType);
     void showContextMenu();
+    void aboutDialog();
 };
 
 #endif // MAINWINDOW_H
