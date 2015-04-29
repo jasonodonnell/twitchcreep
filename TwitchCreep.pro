@@ -12,7 +12,7 @@ TARGET = TwitchCreep
 TEMPLATE = app
 
 
-SOURCES += Sources/about.cpp \
+SOURCES += \
     Sources/database.cpp \
     Sources/dialog.cpp \
     Sources/json.cpp \
@@ -22,7 +22,7 @@ SOURCES += Sources/about.cpp \
     Sources/requesthandler.cpp \
     Sources/timers.cpp \
 
-HEADERS  += Headers/about.h \
+HEADERS  += \
     Headers/database.h \
     Headers/dialog.h \
     Headers/json.h \
@@ -31,7 +31,7 @@ HEADERS  += Headers/about.h \
     Headers/requesthandler.h \
     Headers/timers.h
 
-FORMS    += Forms/about.ui \
+FORMS    += \
     Forms/mainwindow.ui \
     Forms/dialog.ui
 

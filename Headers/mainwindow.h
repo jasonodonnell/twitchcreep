@@ -11,7 +11,6 @@
 #include <QToolTip>
 #include <QSystemTrayIcon>
 #include <QMenu>
-#include "about.h"
 #include "dialog.h"
 #include "timers.h"
 #include "requesthandler.h"
@@ -71,7 +70,6 @@ private:
     void styleItems();
     void updateItemIndex(QString requestType);
     void showContextMenu();
-    void aboutDialog();
 };
 
 #endif // MAINWINDOW_H
