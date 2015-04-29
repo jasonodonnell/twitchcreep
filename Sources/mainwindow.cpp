@@ -14,12 +14,6 @@ MainWindow::~MainWindow()
     QApplication::quit();
 }
 
-void MainWindow::aboutDialog()
-{
-    About *a = new About();
-    a->show();
-}
-
 //Adds items to the list view when database fires the additem signal.  This is fired
 //when a new item is inserted into the database.
 void MainWindow::addItemToListView(QStringList streamData)
@@ -186,7 +180,7 @@ void MainWindow::onListItemDoubleClicked(QListWidgetItem *item)
 
 void MainWindow::on_actionAbout_triggered()
 {
-    this->aboutDialog();
+    QDesktopServices::openUrl(QUrl("http://www.github.com/dwaligon/twitchcreep"));
 }
 
 
