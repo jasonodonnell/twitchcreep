@@ -41,12 +41,15 @@ private slots:
     void clearSearchView();
     void displayToolTip(QListWidgetItem* item);
     void onListItemDoubleClicked(QListWidgetItem* item);
+    void on_actionAbout_triggered();
     void on_actionAdd_User_triggered();
     void on_actionClear_User_triggered();
-    void on_Quit_triggered();
+    void on_actionReport_Bug_triggered();
     void on_lineEdit_returnPressed();
+    void on_messageBox_clicked();
     void on_Options_triggered();
     void on_pushButton_pressed();
+    void on_Quit_triggered();
     void on_systray_clicked(QSystemTrayIcon::ActivationReason clicked);
     void on_tabWidget_currentChanged();
     void removeOfflineStreamer(int itemIndex);
@@ -54,10 +57,6 @@ private slots:
     void timedDataRequest();
     void timedNetworkRequest();
     void updateItemInListView(QStringList streamData, int index);
-    void on_actionAbout_triggered();
-
-    void on_actionReport_Bug_triggered();
-
 private:
     database db;
     timers timerManager;

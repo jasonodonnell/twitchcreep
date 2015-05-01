@@ -119,6 +119,7 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
     connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
     connect((&sysTray),SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(on_systray_clicked(QSystemTrayIcon::ActivationReason)));
+    connect((&sysTray),SIGNAL(QSystemTrayIcon::messageClicked()),this,SLOT(test()));
     connect((ui->listWidget),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_2),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_3),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
@@ -150,6 +151,7 @@ void MainWindow::displayToolTip(QListWidgetItem *item)
     else
         QWidget::setToolTip("");
 }
+
 
 //Enables mouse tracking. this is required to show tooltips.
 void MainWindow::enableMouseTracking()
@@ -202,6 +204,11 @@ void MainWindow::on_lineEdit_returnPressed()
     this->searchTabRequest();
 }
 
+void MainWindow::on_messageBox_clicked()
+{
+    //Adding code here for launching the stream when messagebox is clicked
+}
+
 //Open options dialog when options are selected
 void MainWindow::on_Options_triggered()
 {
@@ -223,6 +230,7 @@ void MainWindow::on_actionReport_Bug_triggered()
 
 void MainWindow::on_systray_clicked(QSystemTrayIcon::ActivationReason clicked)
 {
+    qDebug() << "Clicked";
     if(clicked)
         this->showContextMenu();
 }
