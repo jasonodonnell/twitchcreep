@@ -66,9 +66,10 @@ private:
     void configureGUI();
     void enableMouseTracking();
     void searchTabRequest();
+    void showContextMenu();
+    void showMessage(QString username, QString message);
     void styleItems();
     void updateItemIndex(QString requestType);
-    void showContextMenu();
 };
 
 #endif // MAINWINDOW_H

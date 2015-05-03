@@ -39,12 +39,7 @@ void MainWindow::addItemToListView(QStringList streamData)
             if(!username.isEmpty())
             {
                 ui->listWidget_2->addItem(stream);
-                QString notificationSetting = request.getSettingsValue("notification");
-                if(notificationSetting == "false" || notificationSetting.isNull())
-                {
-                    QString message = username + " is online!\nPlaying: " + game;
-                    sysTray.showMessage("Following", message,QSystemTrayIcon::Information);
-                }
+                this->showMessage(username,game);
             }
             ui->listWidget_2->sortItems();
         }
@@ -119,7 +114,9 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
     connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
     connect((&sysTray),SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(on_systray_clicked(QSystemTrayIcon::ActivationReason)));
-    connect((&sysTray),SIGNAL(QSystemTrayIcon::messageClicked()),this,SLOT(test()));
+    #ifdef Q_WS_WIN
+        connect((&sysTray),SIGNAL(QSystemTrayIcon::messageClicked()),this,SLOT(test()));
+    #endif
     connect((ui->listWidget),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_2),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_3),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
@@ -269,6 +266,16 @@ void MainWindow::showContextMenu()
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     trayIconMenu->addAction(quitAction);
     sysTray.setContextMenu(trayIconMenu);
+}
+
+void MainWindow::showMessage(QString username, QString game)
+{
+    QString notificationSetting = request.getSettingsValue("notification");
+    if(notificationSetting == "false" || notificationSetting.isNull())
+    {
+        QString message = username + " is online!\nPlaying: " + game;
+        sysTray.showMessage("Following", message,QSystemTrayIcon::Information);
+    }
 }
 
 //Apply styles to various views.
