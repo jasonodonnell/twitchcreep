@@ -75,6 +75,7 @@ void MainWindow::clearListViews()
     ui->listWidget_3->clear();
 }
 
+//Clear the search list widget (invoked when search is made)
 void MainWindow::clearSearchView()
 {
     ui->listWidget_3->clear();
@@ -114,6 +115,7 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
     connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
     connect((&sysTray),SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(on_systray_clicked(QSystemTrayIcon::ActivationReason)));
+    //Only windows systray messages fire clicked events, so just enabling this for windows.
     #ifdef Q_WS_WIN
         connect((&sysTray),SIGNAL(QSystemTrayIcon::messageClicked()),this,SLOT(test()));
     #endif
@@ -176,7 +178,7 @@ void MainWindow::onListItemDoubleClicked(QListWidgetItem *item)
     }
 }
 
-
+//Slot for when about button is clicked in help
 void MainWindow::on_actionAbout_triggered()
 {
     QDesktopServices::openUrl(QUrl("http://www.github.com/dwaligon/twitchcreep"));
@@ -220,14 +222,15 @@ void MainWindow::on_pushButton_pressed()
     ui->listWidget_3->clear();
 }
 
+//Slot for when report bug button is clicked in Help
 void MainWindow::on_actionReport_Bug_triggered()
 {
     QDesktopServices::openUrl(QUrl("http://www.github.com/dwaligon/twitchcreep/issues"));
 }
 
+//Show menu for systray when clicked (exit button)
 void MainWindow::on_systray_clicked(QSystemTrayIcon::ActivationReason clicked)
 {
-    qDebug() << "Clicked";
     if(clicked)
         this->showContextMenu();
 }
@@ -245,6 +248,7 @@ void MainWindow::on_Quit_triggered()
     this->close();
 }
 
+//Removes streamer from listwidget if they're offline.
 void MainWindow::removeOfflineStreamer(int itemIndex)
 {
     delete ui->listWidget_2->item(itemIndex);
@@ -259,6 +263,7 @@ void MainWindow::searchTabRequest()
         request.makeSearchRequest(search);
 }
 
+//Dislay the context menu when systray is clicked (exit)
 void MainWindow::showContextMenu()
 {
     QMenu * trayIconMenu = new QMenu(this);
@@ -268,6 +273,7 @@ void MainWindow::showContextMenu()
     sysTray.setContextMenu(trayIconMenu);
 }
 
+//Show popup message when followed streamer comes online
 void MainWindow::showMessage(QString username, QString game)
 {
     QString notificationSetting = request.getSettingsValue("notification");
