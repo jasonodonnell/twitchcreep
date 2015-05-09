@@ -115,10 +115,6 @@ void MainWindow::createSignalSlots()
     connect((&timerManager),SIGNAL(networkRequest()),this,SLOT(timedNetworkRequest()));
     connect((&timerManager),SIGNAL(requestData()),this,SLOT(timedDataRequest()));
     connect((&sysTray),SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(on_systray_clicked(QSystemTrayIcon::ActivationReason)));
-    //Only windows systray messages fire clicked events, so just enabling this for windows.
-    #ifdef Q_WS_WIN
-        connect((&sysTray),SIGNAL(QSystemTrayIcon::messageClicked()),this,SLOT(test()));
-    #endif
     connect((ui->listWidget),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_2),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
     connect((ui->listWidget_3),SIGNAL(itemEntered(QListWidgetItem*)),this,SLOT(displayToolTip(QListWidgetItem*)));
@@ -191,21 +187,23 @@ void MainWindow::on_actionAdd_User_triggered()
     this->usernameDialog("new");
 }
 
+
 //Clears username out of qsettings
 void MainWindow::on_actionClear_User_triggered()
 {
     request.setSettingsValue("username","");
 }
 
+//Slot for when report bug button is clicked in Help
+void MainWindow::on_actionReport_Bug_triggered()
+{
+    QDesktopServices::openUrl(QUrl("http://www.github.com/dwaligon/twitchcreep/issues"));
+}
+
 //Enter pressed on the search window
 void MainWindow::on_lineEdit_returnPressed()
 {
     this->searchTabRequest();
-}
-
-void MainWindow::on_messageBox_clicked()
-{
-    //Adding code here for launching the stream when messagebox is clicked
 }
 
 //Open options dialog when options are selected
@@ -215,17 +213,17 @@ void MainWindow::on_Options_triggered()
     d->show();
 }
 
+//Quit application, used to be on_Exit, but osx likes Quit better (implements cmd-q natively)
+void MainWindow::on_Quit_triggered()
+{
+    this->close();
+}
+
 //Submit button
 void MainWindow::on_pushButton_pressed()
 {
     this->searchTabRequest();
     ui->listWidget_3->clear();
-}
-
-//Slot for when report bug button is clicked in Help
-void MainWindow::on_actionReport_Bug_triggered()
-{
-    QDesktopServices::openUrl(QUrl("http://www.github.com/dwaligon/twitchcreep/issues"));
 }
 
 //Show menu for systray when clicked (exit button)
@@ -239,13 +237,6 @@ void MainWindow::on_systray_clicked(QSystemTrayIcon::ActivationReason clicked)
 void MainWindow::on_tabWidget_currentChanged()
 {
     this->timedDataRequest();
-}
-
-
-//Quit application, used to be on_Exit, but osx likes Quit better (implements cmd-q natively)
-void MainWindow::on_Quit_triggered()
-{
-    this->close();
 }
 
 //Removes streamer from listwidget if they're offline.
