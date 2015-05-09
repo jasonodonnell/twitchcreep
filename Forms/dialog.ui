@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>184</width>
-    <height>70</height>
+    <height>98</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,6 +26,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="liveCheckbox">
+     <property name="text">
+      <string>Use Livestreamer</string>
+     </property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignHCenter">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

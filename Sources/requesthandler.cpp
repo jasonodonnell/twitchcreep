@@ -17,6 +17,11 @@ bool requestHandler::checkConnection()
     return networking.checkNetworkConnection();
 }
 
+bool requestHandler::checkForLiveStreamer()
+{
+    return QDir("C:\Program Files (x86)\Livestreamer").exists();
+}
+
 //Check if username exists, used in the UI
 void requestHandler::checkUsername(QString text)
 {

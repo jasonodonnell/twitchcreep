@@ -25,7 +25,29 @@ void Dialog::configureDialog()
     //Set the notification display to checked if true
     if(this->getNotificationSetting() == "true")
         ui->notificationCheckBox->setChecked(true);
+    ui->liveCheckbox->setEnabled(false);
+    #ifdef Q_WS_WIN
+        if(request.checkForLiveStreamer())
+        {
+            ui->liveCheckbox->setEnabled(true);
+            if(this->getLivestreamSetting() == "true")
+                ui->liveCheckbox->setChecked(true);
+        }
+        else
+            ui->liveCheckbox->setEnabled(false);
+    #endif
 }
+
+//Check the saved setting for notification display
+QString Dialog::getLivestreamSetting()
+{
+    QString answer = request.getSettingsValue("livestream");
+    if(answer.isNull())
+        return "false";
+    else
+        return answer;
+}
+
 
 //Check the saved setting for notification display
 QString Dialog::getNotificationSetting()
