@@ -92,6 +92,7 @@ void MainWindow::configureGUI()
     sysTray.setIcon(QIcon(":/icons/icon_revised.png"));
     sysTray.show();
     this->createSignalSlots();
+
 }
 
 //Creates signals and slots for the mainwindow.

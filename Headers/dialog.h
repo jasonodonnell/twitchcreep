@@ -26,6 +26,7 @@ private:
     requestHandler request;
     void configureDialog();
     QString getNotificationSetting();
+    QString getLivestreamSetting();
 };
 
 #endif // DIALOG_H
