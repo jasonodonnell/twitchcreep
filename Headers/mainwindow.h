@@ -46,7 +46,6 @@ private slots:
     void on_actionClear_User_triggered();
     void on_actionReport_Bug_triggered();
     void on_lineEdit_returnPressed();
-    void on_messageBox_clicked();
     void on_Options_triggered();
     void on_pushButton_pressed();
     void on_Quit_triggered();
