@@ -33,7 +33,7 @@ public slots:
     void popRequestFromList();
 
 private:
-    QString appId = "t4wqbkwgdox7xzbt6fd5ldwls37b6fh";
+    QString appId;
     QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
     QList<QStringList> requests;
     void addRequestToList(QString requestType, QString url);

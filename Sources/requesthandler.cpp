@@ -19,7 +19,7 @@ bool requestHandler::checkConnection()
 
 bool requestHandler::checkForLiveStreamer()
 {
-    return QDir("C:\Program Files (x86)\Livestreamer").exists();
+    return QDir("C:\\Program Files (x86)\\Livestreamer").exists();
 }
 
 //Check if username exists, used in the UI
@@ -76,15 +76,14 @@ void requestHandler::getGame(QByteArray data)
 QString requestHandler::getSettingsValue(QString value)
 {
     QSettings settings("WizWerks","TwitchCreep");
-    if(!value.isNull())
-        return settings.value(value).toString();
+    return settings.value(value).toString();
 }
 
 //Takes the usrername request and makes the appropriate network call.
 void requestHandler::getUsername(QByteArray data, QString name)
 {
     QSettings settings("WizWerks","TwitchCreep");
-    bool exists;
+    bool exists = false;
     if(!data.isNull())
         exists = jsonParser.checkUsernameExists(data);
     if(exists && !name.isNull())
@@ -127,6 +126,13 @@ void requestHandler::makeSearchRequest(QString search)
         networking.makeGameRequest(search);
 }
 
+//
+void requestHandler::openWithLivestreamer(QStringList arguments)
+{
+    QString livestreamerDir = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
+    QProcess *myProcess = new QProcess(this);
+    myProcess->start(livestreamerDir, arguments);
+}
 
 //Remove the offline streams from the listview.
 void requestHandler::removeOfflineStreamers()
