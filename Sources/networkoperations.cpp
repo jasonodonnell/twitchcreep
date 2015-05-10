@@ -4,6 +4,7 @@ networkOperations::networkOperations(QObject *parent) : QObject(parent)
 {
     //Signal-slot connection for network reply, when its finished, activates doneReading (passess the reply)
     connect(networkManager,SIGNAL(finished(QNetworkReply*)),this,SLOT(doneReading(QNetworkReply*)));
+    appId = "t4wqbkwgdox7xzbt6fd5ldwls37b6fh";
 }
 
 networkOperations::~networkOperations()

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QCoreApplication>
 #include <QDir>
+#include <QProcess>
 #include "json.h"
 #include "networkoperations.h"
 
@@ -29,6 +30,7 @@ public:
     void makeSearchRequest(QString search);
     void setSettingsValue(QString setting, QString value);
     void storeItemIndex(QString requestType, QString username, int index);
+    void openWithLivestreamer(QStringList arguments);
 signals:
     void clearFollowList();
     void clearSearchList();
