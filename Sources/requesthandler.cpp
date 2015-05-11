@@ -19,7 +19,16 @@ bool requestHandler::checkConnection()
 
 bool requestHandler::checkForLiveStreamer()
 {
-    return QDir("C:\\Program Files (x86)\\Livestreamer").exists();
+    QString livestreamerDir;
+    #ifdef __linux__
+        livestreamerDir = "/usr/local/bin/livestreamer";
+    #elif _WIN32
+        livestreamerDir = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
+    #else
+        livestreamerDir = "/usr/local/bin/livestreamer";
+    #endif
+    QFileInfo livestreamerFile(livestreamerDir);
+    return livestreamerFile.exists();
 }
 
 //Check if username exists, used in the UI
@@ -129,7 +138,14 @@ void requestHandler::makeSearchRequest(QString search)
 //
 void requestHandler::openWithLivestreamer(QStringList arguments)
 {
-    QString livestreamerDir = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
+    QString livestreamerDir;
+    #ifdef __linux__
+        livestreamerDir = "/usr/local/bin/livestreamer";
+    #elif _WIN32
+        livestreamerDir = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
+    #else
+        livestreamerDir = "/usr/local/bin/livestreamer";
+    #endif
     QProcess *myProcess = new QProcess(this);
     myProcess->start(livestreamerDir, arguments);
 }
