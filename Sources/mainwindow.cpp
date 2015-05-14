@@ -171,7 +171,14 @@ void MainWindow::onListItemDoubleClicked(QListWidgetItem *item)
     if(username[0] != "No Username Set" && username[0] != "Not Found or Offline")
     {
         QString url = "http://www.twitch.tv/" + username[0];
-        QDesktopServices::openUrl(url);
+        if(request.getSettingsValue("livestream") == "true")
+        {
+            QStringList arguments;
+            arguments << url << "best";
+            request.openWithLivestreamer(arguments);
+        }
+        else
+            QDesktopServices::openUrl(url);
     }
 }
 

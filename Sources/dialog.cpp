@@ -64,6 +64,10 @@ void Dialog::on_buttonBox_accepted()
         request.setSettingsValue("notification","true");
     else
         request.setSettingsValue("notification","false");
+    if(ui->liveCheckbox->isChecked())
+        request.setSettingsValue("livestream","true");
+    else
+        request.setSettingsValue("livestream","false");
 }
 
 //Destroy the dialog on cancel
