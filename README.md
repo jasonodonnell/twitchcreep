@@ -14,13 +14,17 @@ Linux support to come (untested)
 
 ##Screen captures:
 
-Featured: http://i.imgur.com/sCN6Mt8.jpg (now with notifications!)
+Featured: 
+![alt tag](http://i.imgur.com/sCN6Mt8.jpg)
 
-Followed: http://imgur.com/WLVlo7V.png
+Followed: 
+![alt tag](http://imgur.com/WLVlo7V.png)
 
-Search Game: http://i.imgur.com/UDYDqKc.png
+Search Game: 
+![alt tag](http://i.imgur.com/UDYDqKc.png)
 
-Search User: http://i.imgur.com/hxdP49h.png
+Search User: 
+![alt tag](http://i.imgur.com/hxdP49h.png)
 
 ##Instructions to Compile
 Compiled with QT Creator, tested with Clang and Mingw
