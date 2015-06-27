@@ -17,7 +17,7 @@ networkOperations::~networkOperations()
 void networkOperations::addRequestToList(QString requestType, QString url)
 {
     QStringList requestList;
-    if(!requestType.isEmpty() && !requestType.isEmpty())
+    if(!requestType.isEmpty() && !url.isEmpty())
     {
         requestList << requestType << url;
         requests << requestList;
